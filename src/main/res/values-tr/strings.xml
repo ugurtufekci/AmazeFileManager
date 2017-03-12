@@ -40,6 +40,9 @@
   <string name="properties">Özellikler</string>
   <string name="copyingapk">Apk kopyalanıyor</string>
   <string name="addbook">Yer işareti ekle</string>
+
+  <string name="trash">Çöp kutusu</string>
+
   <string name="delbook">Yer işaretini sil</string>
   <string name="addtobook">Yer işaretlerine ekle</string>
   <string name="enterpath">Yolu gir</string>

@@ -224,6 +224,7 @@
     <string name="changelog">Changelog</string>
     <string name="fullChangelog">Full Changelog</string>
     <string name="ok">OK</string>
+    <string name="password">Password</string>
     <string name="chooseUI">Choose Item UI</string>
     <string name="ui">Interface</string>
     <string name="general">General</string>
@@ -353,7 +354,7 @@
     <string name="smb_con">SMB Connection</string>
     <string name="smb_server">Server IP Address</string>
     <string name="username">Username</string>
-    <string name="password">Password</string>
+    <string name="lock">Lock</string>
     <string name="anonymous">Anonymous</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="extstorage">External Storage</string>

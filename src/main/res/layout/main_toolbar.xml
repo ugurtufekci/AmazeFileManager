@@ -325,6 +325,7 @@
             android:choiceMode="singleChoice"
             android:dividerHeight="0dip"
             android:scrollbars="none"/>
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="9dp"
@@ -334,7 +335,7 @@
             android:src="@color/divider"
             android:background="@android:color/transparent"
             android:layout_above="@+id/ftpbutton"
-            android:id="@+id/divider1"></ImageView>
+            android:id="@+id/divider1" />
         <RelativeLayout
             android:id="@+id/ftpbutton"
             android:layout_width="fill_parent"
