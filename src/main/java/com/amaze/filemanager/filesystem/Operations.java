@@ -80,7 +80,8 @@ public class Operations {
                     DocumentFile parentDirectory = RootHelper.getDocumentFile(file.getParent(), context, false);
                     if (parentDirectory.isDirectory())  {
                         parentDirectory.createDirectory(file.getName());
-                        errorCallBack.done(file, true);
+                      errorCallBack.done(file, true);
+
                     } else errorCallBack.done(file, false);
                     return null;
                 } else {

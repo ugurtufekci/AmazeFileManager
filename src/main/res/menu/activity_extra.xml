@@ -76,4 +76,13 @@
         android:orderInCategory="9999"
         android:icon="@drawable/ic_action_cancel_light" />
 
+
+
+    <item
+        android:id="@+id/trash"
+        android:title="Trash"
+        android:visible="true"
+        android:icon="@drawable/ic_delete_white_36dp"/>
+
+
 </menu>
