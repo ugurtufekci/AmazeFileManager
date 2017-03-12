@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
@@ -21,7 +22,12 @@
         android:title="@string/delete" />
     <item
         android:id="@+id/rename"
-        android:title="@string/rename" />
+        android:title="@string/rename"
+        android:checkable="false"
+        tools:checkable="false" />
+    <item
+        android:id="@+id/lock"
+        android:title="@string/lock" />
     <item
         android:id="@+id/about"
         android:title="@string/properties"/>

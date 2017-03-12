@@ -286,6 +286,16 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
+    /*
+    MainActicityHelper need operation.lock
+    Operation.lock
+    */
+    public static void lock(final HFile oldFile, final HFile newFile, final boolean rootMode,
+                              final Context context, final ErrorCallBack errorCallBack){
+
+
+
+    }
 
     public static int checkFolder(final File folder, Context context) {
         boolean lol= Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
