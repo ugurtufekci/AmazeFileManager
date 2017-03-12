@@ -743,7 +743,7 @@ public class Main extends android.support.v4.app.Fragment {
                     rename(f);
                     mode.finish();
                     return true;
-<<<<<<< HEAD
+
                 case R.id.label:
 
                     final ActionMode u = mode;
@@ -774,7 +774,7 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
 
 
-=======
+
                 /*
                 LOCK
                 */
@@ -788,7 +788,6 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
                 */
->>>>>>> 0aa5d9939781c3cadf4f3374c88b8e61ffb4a567
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());
@@ -811,14 +810,14 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
                 case R.id.cut:
-                   /* MAIN_ACTIVITY.COPY_PATH = null;
+                    MAIN_ACTIVITY.COPY_PATH = null;
                     ArrayList<BaseFile> copie = new ArrayList<>();
                     for (int i3 = 0; i3 < plist.size(); i3++) {
                         copie.add(LIST_ELEMENTS.get(plist.get(i3)).generateBaseFile());
                     }
                     MAIN_ACTIVITY.MOVE_PATH = copie;
                     MAIN_ACTIVITY.supportInvalidateOptionsMenu();
-                    mode.finish();*/
+                    mode.finish();
                     return true;
                 case R.id.compress:
                     ArrayList<BaseFile> copies1 = new ArrayList<>();

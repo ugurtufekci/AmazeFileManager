@@ -86,14 +86,8 @@ public class Operations {
                     if (parentDirectory.isDirectory())  {
 
                         parentDirectory.createDirectory(file.getName());
-<<<<<<< HEAD
                         errorCallBack.done(file, true);
 
-                      //  FileUtil.mkdir(file.getFile(), context);
-=======
-                      errorCallBack.done(file, true);
-
->>>>>>> 0aa5d9939781c3cadf4f3374c88b8e61ffb4a567
                     } else errorCallBack.done(file, false);
                     return null;
                 } else {
