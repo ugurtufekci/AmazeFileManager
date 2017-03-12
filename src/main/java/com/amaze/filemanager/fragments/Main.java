@@ -706,16 +706,8 @@ public class Main extends android.support.v4.app.Fragment {
                     }
                     return true;*/
                 case R.id.delete:
-                   // utils.deleteFiles(LIST_ELEMENTS, ma, plist, utilsProvider.getAppTheme());
+                    utils.deleteFiles(LIST_ELEMENTS, ma, plist, utilsProvider.getAppTheme());
 
-                    MAIN_ACTIVITY.COPY_PATH = null;
-                    ArrayList<BaseFile> copie = new ArrayList<>();
-                    for (int i3 = 0; i3 < plist.size(); i3++) {
-                        copie.add(LIST_ELEMENTS.get(plist.get(i3)).generateBaseFile());
-                    }
-                    MAIN_ACTIVITY.MOVE_PATH = copie;
-                    MAIN_ACTIVITY.supportInvalidateOptionsMenu();
-                    mode.finish();
 
                     return true;
                 case R.id.share:
