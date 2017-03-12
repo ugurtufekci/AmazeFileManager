@@ -276,6 +276,10 @@ public class MainActivityHelper {
             }
         });
     }
+    //empty metod for compile Main.java
+    public void lock(OpenMode mode, String oldPath, String newPath, final Activity context, boolean rootmode) {
+
+    }
 
     public int checkFolder(final File folder, Context context) {
         boolean lol= Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
@@ -310,7 +314,7 @@ public class MainActivityHelper {
     /**
      * Helper method to start Compress service
      * @param file the new compressed file
-     * @param b list of {@link BaseFile} to be compressed
+     * @param baseFiles list of {@link BaseFile} to be compressed
      */
     public void compressFiles(File file, ArrayList<BaseFile> baseFiles) {
         int mode = checkFolder(file.getParentFile(), mainActivity);

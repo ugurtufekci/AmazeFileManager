@@ -726,6 +726,19 @@ public class Main extends android.support.v4.app.Fragment {
                     rename(f);
                     mode.finish();
                     return true;
+                /*
+                LOCK
+                */
+                /*case R.id.lock:
+
+                    final ActionMode n = mode;
+                    final BaseFile g;
+                    g = (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    lock(g);
+                    mode.finish();
+                    return true;
+                */
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());
@@ -1122,6 +1135,44 @@ public class Main extends android.support.v4.app.Fragment {
         });
         a.positiveText(R.string.save);
         a.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        a.positiveColor(color).negativeColor(color).widgetColor(color);
+        a.build().show();
+    }
+    /*
+    lock builder
+    */
+    public void lock(final BaseFile f) {
+        MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+        String name = f.getName();
+        a.input("", name, false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+        a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+        a.title(getResources().getString(R.string.lock));
+        a.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+                String name = materialDialog.getInputEditText().getText().toString();
+                if (f.isSmb())
+                    if (f.isDirectory() && !name.endsWith("/"))
+                        name = name + "/";
+
+                MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
+                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+            }
+
+            @Override
+            public void onNegative(MaterialDialog materialDialog) {
+
+                materialDialog.cancel();
+            }
+        });
+        a.positiveText(R.string.ok);
+
         int color = Color.parseColor(fabSkin);
         a.positiveColor(color).negativeColor(color).widgetColor(color);
         a.build().show();

@@ -124,7 +124,8 @@ public class Layoutelements implements Parcelable {
     }
 
     public void setImageId(BitmapDrawable imageId){this.imageId=imageId;}
-    public String getDesc() {
+    public String getDesc()
+    {
         return desc.toString();
     }
 
@@ -143,7 +144,8 @@ public class Layoutelements implements Parcelable {
 
     public boolean isDirectory() {
         return isDirectory;}
-    public BaseFile generateBaseFile(){
+    public BaseFile generateBaseFile()
+    {
         BaseFile baseFile=new BaseFile(getDesc(),getPermissions(),getDate1(),longSize,isDirectory());
         baseFile.setMode(mode);
         baseFile.setName(title);

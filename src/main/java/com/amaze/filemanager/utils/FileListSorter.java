@@ -32,63 +32,106 @@ public class FileListSorter implements Comparator<Layoutelements> {
     private int asc = 1;
     int sort = 0;
 boolean rootMode;
-    public FileListSorter(int dir, int sort, int asc,boolean rootMode) {
+    public FileListSorter(int dir, int sort, int asc,boolean rootMode)
+    {
         this.dirsOnTop = dir;
         this.asc = asc;
         this.sort = sort;
         this.rootMode=rootMode;
     }
 
-     boolean isDirectory(Layoutelements path){
-    return path.isDirectory();}
+     boolean isDirectory(Layoutelements path)
+     {
+
+         return path.isDirectory();
+     }
     @Override
-    public int compare(Layoutelements file1, Layoutelements file2) {
-File f1;if(!file1.hasSymlink()){
-        f1=new File(file1.getDesc());}else {  f1=new File(file1.getSymlink());}
-        File f2;if(!file2.hasSymlink()){
-            f2=new File(file2.getDesc());}else {  f2=new File(file1.getSymlink());}
-        if (dirsOnTop == 0) {
-            if (isDirectory(file1) && !isDirectory(file2)) {
+    public int compare(Layoutelements file1, Layoutelements file2)
+    {
+        File f1;
+        if(!file1.hasSymlink())    //Layoutelemnts içinde symlink e sahip olup olmadıgını kontrol ediyor.
+        {
+        f1=new File(file1.getDesc());  //sahip degilse getDesc ile toStringini alıyor
+        }
+        else
+        {
+            f1=new File(file1.getSymlink());
+        }
+        File f2;                            //aynı işlemler file 2 için yapılıyor.
+        if(!file2.hasSymlink())
+        {
+            f2=new File(file2.getDesc());
+        }else
+        {
+            f2=new File(file1.getSymlink());
+        }
+        if (dirsOnTop == 0) //filelların üstte oldugu kısım ( file1 directory ise file 2 degil ise  bu false cunku ustteki file idi).
+        {
+            if (isDirectory(file1) && !isDirectory(file2))
+            {
                 return -1;
 
-
-            } else if (isDirectory(file2) && !isDirectory(file1)) {
+            } else if (isDirectory(file2) && !isDirectory(file1))   //1. 2. den büyükse yani directory üstteyse.
+            {
                 return 1;
             } //else {return 1;}
-        } else if (dirsOnTop == 1) {
-            if (isDirectory(file1) && !isDirectory(file2)) {
+        }
+        else if (dirsOnTop == 1)
+        {
+            if (isDirectory(file1) && !isDirectory(file2))
+            {
                 return 1;
 
-
-            } else if (isDirectory(file2) && !isDirectory(file1)) {
+            }
+            else if (isDirectory(file2) && !isDirectory(file1))
+            {
                 return -1;
-            }else{return 1;}
-        } else {
+            }
+            else
+            {
+                return 1;
+            }
+        } else
+        {
+
         }
 
-        if (sort == 0) {
+        if (sort == 0)   //name
+        {
             return asc * file1.getTitle().compareToIgnoreCase(file2.getTitle());
-        } else if (sort == 1) {
+        }
+        else if (sort == 1) //last modified
+        {
             return asc * Long.valueOf(file1.getDate1()).compareTo(Long.valueOf(file2.getDate1()));
-        } else if (sort == 2) {
-            if (f1.isFile() && f2.isFile()) {
+        } else if (sort == 2) //size
+        {
+            if (f1.isFile() && f2.isFile())
+            {
                 return asc * Long.valueOf(file1.getlongSize()).compareTo(Long.valueOf(file2.getlongSize()));
-            } else {
+            }
+            else
+            {
                 return file1.getTitle().compareToIgnoreCase(file2.getTitle());
             }
         }
-        else if(sort ==3){
-if(f1.isFile() && f2.isFile()){
+        else if(sort ==3) //type
+        {
+            if(f1.isFile() && f2.isFile()){
             final String ext_a = getExtension(file1.getTitle());
             final String ext_b = getExtension(file2.getTitle());
 
 
             final int res = asc*ext_a.compareTo(ext_b);
-            if (res == 0) {
+            if (res == 0)
+            {
                 return asc * file1.getTitle().compareToIgnoreCase(file2.getTitle());
             }
-            return res;}
-            else{return  file1.getTitle().compareToIgnoreCase(file2.getTitle());}
+            return res;
+            }
+            else
+            {
+                return  file1.getTitle().compareToIgnoreCase(file2.getTitle());
+            }
         }
 
 
@@ -96,8 +139,10 @@ if(f1.isFile() && f2.isFile()){
 
     }
 
-     static String getExtension(String a) {
+     static String getExtension(String a)
+     {
         return a.substring(a.lastIndexOf(".") + 1).toLowerCase();
-    }
+
+     }
 
 }

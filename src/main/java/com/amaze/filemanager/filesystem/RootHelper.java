@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
-
+//ugur permission isfile is directory
 public class RootHelper {
 
     /**
@@ -351,8 +351,10 @@ public class RootHelper {
     }
 
     static boolean isDirectory(BaseFile path) {
-        if (path.getPermisson().startsWith("d")) return true;
-        else return new File(path.getPath()).isDirectory();
+        if (path.getPermisson().startsWith("d"))
+            return true;
+        else
+            return new File(path.getPath()).isDirectory();
     }
 
     /**
