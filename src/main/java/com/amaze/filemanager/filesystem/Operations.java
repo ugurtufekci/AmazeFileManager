@@ -71,16 +71,24 @@ public class Operations {
                     }
                     errorCallBack.done(file,file.exists());
                     return null;
-                } else if (file.isOtgFile()) {
+                }
+
+
+
+                else if (file.isOtgFile()) {
 
                     // first check whether new directory already exists
                     DocumentFile directoryToCreate = RootHelper.getDocumentFile(file.getPath(), context, false);
-                    if (directoryToCreate!=null) errorCallBack.exists(file);
-
+                    if (directoryToCreate!=null)
+                        errorCallBack.exists(file);
+//*************************** ***********************************************************************************
                     DocumentFile parentDirectory = RootHelper.getDocumentFile(file.getParent(), context, false);
                     if (parentDirectory.isDirectory())  {
+
                         parentDirectory.createDirectory(file.getName());
                         errorCallBack.done(file, true);
+
+                      //  FileUtil.mkdir(file.getFile(), context);
                     } else errorCallBack.done(file, false);
                     return null;
                 } else {
@@ -116,7 +124,9 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
-    public static void mkfile(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack){
+    public static void mkfile(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack)
+    {
+        // IS it okey ?
         if(file==null || errorCallBack==null)return;
         new AsyncTask<Void,Void,Void>(){
             @Override
@@ -292,8 +302,8 @@ public class Operations {
 
             boolean ext = FileUtil.isOnExtSdCard(folder, context);
             if (ext) {
-
-                if (!folder.exists() || !folder.isDirectory()) {
+              //  if (!folder.exists() || !folder.isDirectory()) { orjinal
+                if (folder.exists() || !folder.isDirectory()) {
                     return 0;
                 }
 

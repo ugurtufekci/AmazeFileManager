@@ -93,6 +93,7 @@
     <string name="openparent">Open Parent Directory</string>
     <string name="openwith">Open with</string>
     <string name="share">Share</string>
+    <string name="label">Label</string>
     <string name="about">About</string>
     <string name="extract">Extract</string>
     <string name="compress">Compress</string>
@@ -106,6 +107,8 @@
     <string name="uimode">UI Mode</string>
     <string name="directorysort">Directory Sort Mode</string>
     <string name="sortby">Sort By</string>
+    <string name="post">Post</string>
+    <string name="pre">Pre</string>
     <string name="theme">Theme</string>
     <string name="skin">Skin</string>
     <string name="random">Random Skin</string>

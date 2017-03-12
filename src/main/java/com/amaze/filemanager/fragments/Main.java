@@ -726,6 +726,36 @@ public class Main extends android.support.v4.app.Fragment {
                     rename(f);
                     mode.finish();
                     return true;
+                case R.id.label:
+
+                    final ActionMode u = mode;
+                    final BaseFile o;
+                    o = (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    rename(o);
+                    mode.finish();
+                    return true;
+
+
+                case R.id.post:
+                    final ActionMode a = mode;
+                    final BaseFile g;
+                    g = (LIST_ELEMENTS.get(
+                        (plist.get(0)))).generateBaseFile();
+                    rename(g);
+                    mode.finish();
+                    return true;
+
+                case R.id.pre:
+                    final ActionMode t = mode;
+                    final BaseFile h;
+                    g = (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    rename(g);
+                    mode.finish();
+                    return true;
+
+
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());

@@ -2,10 +2,37 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+
     <item
         android:id="@+id/open_with"
         android:title="@string/openwith"
         />
+
+    <item
+        android:visible="true"
+        android:id="@+id/label"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/label">
+
+
+
+        <menu>
+
+            <item
+                android:visible="true"
+                android:id="@+id/post"
+                android:title="@string/post"
+
+                />
+
+            <item
+                android:visible="true"
+                android:id="@+id/pre"
+                android:title="@string/pre" />
+        </menu>
+
+    </item>
     <item
         android:id="@+id/cut"
         android:title="@string/cut"
@@ -36,4 +63,5 @@
     <item
         android:id="@+id/book"
         android:title="@string/addtobook" />
+
 </menu>
