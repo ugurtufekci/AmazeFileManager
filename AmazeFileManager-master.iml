@@ -65,14 +65,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/fdroid/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fdroid/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/fdroid/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFdroid/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFdroid/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFdroid/assets" type="java-test-resource" />
@@ -81,6 +73,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFdroid/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFdroid/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestFdroid/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testFdroid/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/build-types/debug/assets" type="java-resource" />
