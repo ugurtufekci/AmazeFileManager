@@ -21,13 +21,8 @@
         android:id="@+id/share"
         android:title="@string/share" />
 
-<<<<<<< HEAD
-</menu>
-=======
-
-
-
 
 </menu>
 
->>>>>>> 0aa5d9939781c3cadf4f3374c88b8e61ffb4a567
+
+
