@@ -774,6 +774,10 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> fb27ed6d4f49256a3db8405ed998066aa7bd42f4
                 /*
                 LOCK
                 */
@@ -787,7 +791,10 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
                 */
+<<<<<<< HEAD
 
+=======
+>>>>>>> fb27ed6d4f49256a3db8405ed998066aa7bd42f4
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());
