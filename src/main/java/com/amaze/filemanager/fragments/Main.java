@@ -67,6 +67,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
+
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.Recycleradapter;
@@ -776,24 +777,6 @@ public class Main extends android.support.v4.app.Fragment {
 
 
 
-
-
-
-
-
-                /*
-                LOCK
-                */
-                /*case R.id.lock:
-
-                    final ActionMode n = mode;
-                    final BaseFile g;
-                    g = (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    lock(g);
-                    mode.finish();
-                    return true;
-                */
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());

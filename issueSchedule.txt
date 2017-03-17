@@ -1,3 +1,14 @@
+
+Aybike Aydemir 
+
 12.03.2017
 
-label - post - pre 
+label - post - pre etiketleri anamenuye eklendi 
+parentdirectory ile içinde yaratılan dosyanın aynı isimde olması sorunu hala devam ediyor.
+değişiklik yapılanlar : main , string.xml , app_options.xm.l
+
+14.03.2017
+
+Search e post pre other seçeneklerinin eklenmesi
+
+
