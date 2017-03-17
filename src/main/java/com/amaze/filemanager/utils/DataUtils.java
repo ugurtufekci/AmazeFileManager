@@ -1,5 +1,6 @@
 package com.amaze.filemanager.utils;
 
+import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.ui.drawer.Item;
 
 import java.util.ArrayList;
@@ -12,10 +13,19 @@ import java.util.List;
 
 //Central data being used across activity,fragments and classes
 public class DataUtils {
-    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>();
+    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
+    , trash = new ArrayList<>();
+
     public static List<String> storages=new ArrayList<>();
+<<<<<<< HEAD
     public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid";
     public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9;
+=======
+    public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
+    ,TRASH = "Table3";
+
+    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7;
+>>>>>>> 2d2e9f4acc7a88fc229810fa9b0bc993ef6d8814
     public static ArrayList<Item> list=new ArrayList<>();
     public static ArrayList<String[]> servers=new ArrayList<>(),books=new ArrayList<>(),accounts=new ArrayList<>();
 
@@ -50,6 +60,9 @@ public class DataUtils {
         servers=new ArrayList<>();
         books=new ArrayList<>();
         accounts=new ArrayList<>();
+
+         trash = new ArrayList<>();
+
     }
     public static void registerOnDataChangedListener(DataChangeListener dataChangeListener){
         DataUtils.dataChangeListener=dataChangeListener;
@@ -116,6 +129,20 @@ public class DataUtils {
         if(dataChangeListener!=null)
             dataChangeListener.onHistoryAdded(i);
     }
+
+
+    //*************************************
+
+    public static void addTrashFile(String i)
+    {
+        trash.add(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onTrashAdded(i);
+    }
+    //******************************
+
+
+
     public static void sortBook(){
         Collections.sort(books,new BookSorter());
     }
@@ -175,6 +202,18 @@ public class DataUtils {
             dataChangeListener.onHistoryCleared();
     }
 
+    //******************************
+
+    public static void clearTrash() {
+        trash=new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onTrashCleared();
+    }
+
+
+
+    //********************************
+
     public static List<String> getStorages() {
         return storages;
     }
@@ -195,7 +234,12 @@ public class DataUtils {
         void onHiddenFileAdded(String path);
         void onHiddenFileRemoved(String path);
         void onHistoryAdded(String path);
+
+         void onTrashAdded(String path);
+
         void onBookAdded(String path[],boolean refreshdrawer);
         void onHistoryCleared();
+
+        void onTrashCleared();
     }
 }

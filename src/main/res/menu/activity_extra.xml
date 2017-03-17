@@ -101,10 +101,21 @@
 
 
     <item
+        android:visible="true"
+        app:showAsAction="ifRoom"
         android:id="@+id/trash"
         android:title="Trash"
-        android:visible="true"
-        android:icon="@drawable/ic_delete_white_36dp"/>
+
+
+
+
+       />
+
+
+
+
+
+
 
 
 </menu>

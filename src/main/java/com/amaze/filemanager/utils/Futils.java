@@ -600,11 +600,20 @@ public class Futils {
     }
 
     public void deleteFiles(ArrayList<Layoutelements> a, final Main b, List<Integer> pos, AppTheme appTheme) {
+
+
+
         final MaterialDialog.Builder c = new MaterialDialog.Builder(b.getActivity());
         c.title(b.getResources().getString(R.string.confirm));
         String names = "";
         final ArrayList<BaseFile> todelete = new ArrayList<>();
         for (int i = 0; i < pos.size(); i++) {
+
+                //********************************************
+                DataUtils.addTrashFile(a.get(pos.get(i)).toString());
+
+                //**************************************
+
             todelete.add(a.get(pos.get(i)).generateBaseFile());
             names = names + "\n" + (i + 1) + ". " + a.get(pos.get(i)).getTitle();
         }
@@ -1189,6 +1198,45 @@ public class Futils {
         x.show();
 
     }
+
+    //********************************************
+
+
+    public void showTrashDialog(final Main m, AppTheme appTheme) {
+        final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
+        a.positiveText("Cancel");
+
+        a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+        a.negativeText("Clear");
+        a.negativeColor(Color.parseColor(BaseActivity.accentSkin));
+        a.title("Trash");
+        a.onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                DataUtils.clearTrash();
+            }
+        });
+
+        a.theme(appTheme.getMaterialDialogTheme());
+
+        a.autoDismiss(true);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.trash),null,true);
+        a.adapter(adapter, null);
+
+        MaterialDialog x= a.build();
+        adapter.updateDialog(x);
+        x.show();
+
+    }
+
+
+
+
+
+    //**************************************
+
+
+
 
     public void showHiddenDialog(final Main m, AppTheme appTheme) {
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());

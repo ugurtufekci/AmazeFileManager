@@ -67,6 +67,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
+
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.Recycleradapter;
@@ -597,6 +598,7 @@ public class Main extends android.support.v4.app.Fragment {
                     showOption(R.id.openwith, menu);
                     showOption(R.id.share, menu);
 
+
                     File x = new File(LIST_ELEMENTS.get(adapter.getCheckedItemPositions().get(0))
 
                             .getDesc());
@@ -763,6 +765,7 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
 
 
+<<<<<<< HEAD
 /*
               case R.id.lock:
 
@@ -774,6 +777,8 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 */
+=======
+>>>>>>> 2d2e9f4acc7a88fc229810fa9b0bc993ef6d8814
 
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
@@ -822,7 +827,6 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 
-/*****************************************************/
 
 
 
@@ -947,6 +951,7 @@ public class Main extends android.support.v4.app.Fragment {
                         utils.openFile(new File(l.getDesc()), (MainActivity) getActivity());
                     }
                     DataUtils.addHistoryFile(l.getDesc());
+
                 }
             } else {
 
