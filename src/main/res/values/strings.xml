@@ -59,6 +59,8 @@
     <string name="newhomedirectory">New Home Directory</string>
     <string name="rename">Rename</string>
     <string name="save">Save</string>
+    <string name="preLabel">PreLabel</string>
+    <string name="postLabel">PostLabel</string>
     <string name="renameerror">Rename Unsuccessful</string>
     <string name="renamed">Rename Successful</string>
     <string name="bookmarksadded">Bookmarks Added</string>

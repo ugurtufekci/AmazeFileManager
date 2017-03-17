@@ -707,6 +707,12 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                             case R.id.rename:
                                 main.rename(rowItem.generateBaseFile());
                                 return true;
+                            case R.id.post:
+                                main.rename(rowItem.generateBaseFile());
+                                return true;
+                            case R.id.pre:
+                                main.rename(rowItem.generateBaseFile());
+                                return true;
                             case R.id.cpy:
                                 MainActivity MAIN_ACTIVITY = main.MAIN_ACTIVITY;
                                 main.MAIN_ACTIVITY.MOVE_PATH = null;

@@ -187,7 +187,7 @@ public class Main extends android.support.v4.app.Fragment {
 
     }
 
-    @Override
+  @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -744,57 +744,37 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 
-                case R.id.label:
-
-                    final ActionMode u = mode;
-                    final BaseFile o;
-                    o = (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    rename(o);
-                    mode.finish();
-                    return true;
-
-
                 case R.id.post:
                     final ActionMode a = mode;
                     final BaseFile g;
                     g = (LIST_ELEMENTS.get(
                         (plist.get(0)))).generateBaseFile();
-                    rename(g);
+                    post(g);
                     mode.finish();
                     return true;
 
                 case R.id.pre:
                     final ActionMode t = mode;
                     final BaseFile h;
-                    g = (LIST_ELEMENTS.get(
+                    h = (LIST_ELEMENTS.get(
                             (plist.get(0)))).generateBaseFile();
-                    rename(g);
+                    pre(h);
                     mode.finish();
                     return true;
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> fb27ed6d4f49256a3db8405ed998066aa7bd42f4
-                /*
-                LOCK
-                */
-                /*case R.id.lock:
+/*
+              case R.id.lock:
 
                     final ActionMode n = mode;
-                    final BaseFile g;
-                    g = (LIST_ELEMENTS.get(
+                    final BaseFile j;
+                    j= (LIST_ELEMENTS.get(
                             (plist.get(0)))).generateBaseFile();
-                    lock(g);
+                    lock(j);
                     mode.finish();
                     return true;
-                */
-<<<<<<< HEAD
+*/
 
-=======
->>>>>>> fb27ed6d4f49256a3db8405ed998066aa7bd42f4
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());
@@ -1164,14 +1144,85 @@ public class Main extends android.support.v4.app.Fragment {
 
     }
 
-    /**
-     * Show dialog to rename a file
-     * @param f the file to rename
-     */
+
+    public void post(final BaseFile p) {
+
+        MaterialDialog.Builder b = new MaterialDialog.Builder(getActivity());
+        String name = p.getName();
+
+        b.input("",name, false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+        b.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+         b.title(getResources().getString(R.string.postLabel));
+        b.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+                String name = materialDialog.getInputEditText().getText().toString();
+                if (p.isSmb())
+                    if (p.isDirectory() && !name.endsWith("/"))
+                        name = name + "/";
+
+                MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
+                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+            }
+
+            @Override
+            public void onNegative(MaterialDialog materialDialog) {
+
+                materialDialog.cancel();
+            }
+        });
+        b.positiveText(R.string.save);
+        b.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        b.positiveColor(color).negativeColor(color).widgetColor(color);
+        b.build().show();
+    }
+    public void pre(final BaseFile w) {
+
+        MaterialDialog.Builder c = new MaterialDialog.Builder(getActivity());
+        String name = w.getName();
+
+        c.input("", name, false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+        c.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+        c.title(getResources().getString(R.string.preLabel));
+        c.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+                String name = materialDialog.getInputEditText().getText().toString();
+                if (w.isSmb())
+                    if (w.isDirectory() && !name.endsWith("/"))
+                        name = name + "/";
+
+                MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
+                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+            }
+
+            @Override
+            public void onNegative(MaterialDialog materialDialog) {
+
+                materialDialog.cancel();
+            }
+        });
+        c.positiveText(R.string.save);
+        c.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        c.positiveColor(color).negativeColor(color).widgetColor(color);
+        c.build().show();
+    }
     public void rename(final BaseFile f) {
         MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
         String name = f.getName();
-        a.input("", name, false, new MaterialDialog.InputCallback() {
+        a.input("", "  ", false, new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
