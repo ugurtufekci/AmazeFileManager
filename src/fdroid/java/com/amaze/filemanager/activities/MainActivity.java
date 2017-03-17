@@ -47,6 +47,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -174,7 +175,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public LinearLayout pathbar;
     public FrameLayout buttonBarFrame;
     public boolean isDrawerLocked = false;
-    HistoryManager history, grid;
+    HistoryManager history, grid,trash;
     Futils utils;
 
     MainActivity mainActivity = this;
@@ -268,6 +269,16 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         history = new HistoryManager(this, "Table2");
         history.initializeTable(DataUtils.HISTORY, 0);
         history.initializeTable(DataUtils.HIDDEN, 0);
+
+
+        //******************************************************
+        trash = new HistoryManager(this,"Table3");
+        trash.initializeTable(DataUtils.TRASH, 0);
+        trash.initializeTable(DataUtils.HIDDEN, 0);
+
+        //*****************************************************
+
+
         grid = new HistoryManager(this, "listgridmodes");
         grid.initializeTable(DataUtils.LIST, 0);
         grid.initializeTable(DataUtils.GRID, 0);
@@ -906,6 +917,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.search).setVisible(true);
             menu.findItem(R.id.home).setVisible(true);
             menu.findItem(R.id.history).setVisible(true);
+
+            //*************************
+            menu.findItem(R.id.trash).setVisible(true);
+
+
             menu.findItem(R.id.sethome).setVisible(true);
 
             menu.findItem(R.id.item10).setVisible(true);
@@ -923,6 +939,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
+
+            //***************************
+            menu.findItem(R.id.trash).setVisible(false);
+
+
             menu.findItem(R.id.extract).setVisible(false);
             if (f.contains("ProcessViewer")) menu.findItem(R.id.item10).setVisible(false);
             else {
@@ -949,6 +970,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
+
+            //*******************************
+            menu.findItem(R.id.trash).setVisible(false);
+
             menu.findItem(R.id.item10).setVisible(false);
             menu.findItem(R.id.hiddenitems).setVisible(false);
             menu.findItem(R.id.view).setVisible(false);
@@ -1012,6 +1037,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 if (ma != null)
                     utils.showHistoryDialog(ma, getAppTheme());
                 break;
+
+            //****************************
+
+            case R.id.trash:
+                if(ma != null)
+                    utils.showTrashDialog(ma, getAppTheme());
+            break;
+
+            //*******************
             case R.id.sethome:
                 if (ma == null) return super.onOptionsItemSelected(item);
                 final Main main = ma;
@@ -1380,6 +1414,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             mainFragment=null;*/
     }
 
+
+
+
     /**
      * Closes the interactive shell and threads associated
      */
@@ -1533,6 +1570,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         super.onStop();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         if (requestCode == image_selector_request_code) {
             if (Sp != null && intent != null && intent.getData() != null) {
@@ -1571,6 +1609,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             switch (operation) {
                 case DataUtils.DELETE://deletion
                     new DeleteTask(null, mainActivity).execute((oparrayList));
+
+
+
                     break;
                 case DataUtils.COPY://copying
                     Intent intent1 = new Intent(con, CopyService.class);
@@ -2621,6 +2662,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         history.addPath(null, path, DataUtils.HIDDEN, 0);
     }
 
+
+
     @Override
     public void onHiddenFileRemoved(String path) {
         history.removePath(path, DataUtils.HIDDEN);
@@ -2630,6 +2673,19 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void onHistoryAdded(String path) {
         history.addPath(null, path, DataUtils.HISTORY, 0);
     }
+
+
+//*************************************
+
+
+
+    @Override
+    public void onTrashAdded(String path) {
+        trash.addPath(null, path, DataUtils.TRASH, 0);
+    }
+//**************************************
+
+
 
     @Override
     public void onBookAdded(String[] path, boolean refreshdrawer) {
@@ -2642,6 +2698,18 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void onHistoryCleared() {
         history.clear(DataUtils.HISTORY);
     }
+
+
+//*************************************************
+
+    // çöp kutusu boşaltma ;
+    @Override
+    public void onTrashCleared() {
+        trash.clear(DataUtils.TRASH);
+    }
+//**************************************************
+
+
 
     @Override
     public void delete(String title, String path) {
