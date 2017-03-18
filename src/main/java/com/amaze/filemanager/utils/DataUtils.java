@@ -17,15 +17,12 @@ public class DataUtils {
     , trash = new ArrayList<>();
 
     public static List<String> storages=new ArrayList<>();
-<<<<<<< HEAD
-    public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid";
-    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9;
-=======
+
+    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9,TEST=10;
+
     public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
     ,TRASH = "Table3";
 
-    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7;
->>>>>>> 2d2e9f4acc7a88fc229810fa9b0bc993ef6d8814
     public static ArrayList<Item> list=new ArrayList<>();
     public static ArrayList<String[]> servers=new ArrayList<>(),books=new ArrayList<>(),accounts=new ArrayList<>();
 

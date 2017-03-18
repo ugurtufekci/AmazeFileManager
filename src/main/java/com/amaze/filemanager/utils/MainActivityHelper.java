@@ -214,7 +214,7 @@ public class MainActivityHelper {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         mainActivity.startActivityForResult(intent, 3);
     }
-    public void rename(OpenMode mode, String oldPath, String newPath, final Activity context, boolean rootmode) {
+    public void rename(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
         final Toast toast=Toast.makeText(context, context.getString(R.string.renaming),
                 Toast.LENGTH_SHORT);
         toast.show();
@@ -225,7 +225,7 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
                         if (toast != null) toast.cancel();
-                        Toast.makeText(mainActivity, context.getString(R.string.fileexist),
+                       Toast.makeText(mainActivity, context.getString(R.string.fileexist),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -280,17 +280,17 @@ public class MainActivityHelper {
             }
         });
     }
-    public void post(OpenMode mode, String oldPath, String newPath, final Activity context, boolean rootmode) {
-        final Toast toast=Toast.makeText(context, context.getString(R.string.postLabel),
-                Toast.LENGTH_SHORT);
-        toast.show();
-        Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+    public void post(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+        final Toast z=Toast.makeText(context, context.getString(R.string.postLabel), Toast.LENGTH_SHORT);
+        z.show();
+        Operations.post(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
             public void exists(HFile file) {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (toast != null) toast.cancel();
+                        if (z != null) z.cancel();
+
                         Toast.makeText(mainActivity, context.getString(R.string.fileexist),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -307,10 +307,10 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (toast != null) toast.cancel();
+                        if (z != null) z.cancel();
                         mainActivity.oppathe = file.getPath();
                         mainActivity.oppathe1 = file1.getPath();
-                        mainActivity.operation = DataUtils.RENAME;
+                        mainActivity.operation = DataUtils.POST;
                         guideDialogForLEXA(mainActivity.oppathe1);
                     }
                 });
@@ -338,7 +338,7 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
 
-                        if (toast != null) toast.cancel();
+                        if (z != null) z.cancel();
                         Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
                                 + file.getName(), Toast.LENGTH_LONG).show();
                     }
@@ -346,9 +346,8 @@ public class MainActivityHelper {
             }
         });
     }
-    public void pre(OpenMode mode, String oldPath, String newPath, final Activity context, boolean rootmode) {
-        final Toast toast=Toast.makeText(context, context.getString(R.string.preLabel),
-                Toast.LENGTH_SHORT);
+    public void pre(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+        final Toast toast=Toast.makeText(context, context.getString(R.string.preLabel),Toast.LENGTH_SHORT);
         toast.show();
         Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
@@ -356,6 +355,8 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+
                         if (toast != null) toast.cancel();
                         Toast.makeText(mainActivity, context.getString(R.string.fileexist),
                                 Toast.LENGTH_SHORT).show();
@@ -376,7 +377,7 @@ public class MainActivityHelper {
                         if (toast != null) toast.cancel();
                         mainActivity.oppathe = file.getPath();
                         mainActivity.oppathe1 = file1.getPath();
-                        mainActivity.operation = DataUtils.RENAME;
+                        mainActivity.operation = DataUtils.POST;
                         guideDialogForLEXA(mainActivity.oppathe1);
                     }
                 });

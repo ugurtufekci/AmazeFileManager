@@ -14,3 +14,7 @@ Search e post pre other seçeneklerinin eklenmesi
 17.03.2017
 
 Label seceneğindeki pos ve pre ye Rename deki özelliklerin aynısı eklendi. Suan çalışma şekli Rename ile aynı *Düzeltilicek
+
+19.03.2017
+
+"Label seceneğindeki pos ve pre renameden bağımsız farklı algoritmalarla çalışıyor.SelectAll seçeneğinde de düzeltilicel.Renamedeki boşluk girildiğinde de kabul olması düzeltildi.#14"

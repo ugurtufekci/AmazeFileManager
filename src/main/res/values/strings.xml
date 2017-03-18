@@ -65,6 +65,7 @@
     <string name="renamed">Rename Successful</string>
     <string name="bookmarksadded">Bookmarks Added</string>
     <string name="fileexist">File with same name already exists </string>
+    <string name= "whitespace">File name can not be left blank</string>
     <string name="filecreated">File Created</string>
     <string name="searchpath">Search Path</string>
     <string name="enterfile">Enter File Name</string>

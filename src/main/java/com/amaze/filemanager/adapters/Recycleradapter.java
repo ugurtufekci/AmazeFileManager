@@ -705,13 +705,13 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                                 utilsProvider.getFutils().shareFiles(arrayList, main.MAIN_ACTIVITY, utilsProvider.getAppTheme(), Color.parseColor(main.fabSkin));
                                 return true;
                             case R.id.rename:
-                                main.rename(rowItem.generateBaseFile());
+                                 main.rename(rowItem.generateBaseFile());
                                 return true;
                             case R.id.post:
-                                main.rename(rowItem.generateBaseFile());
+                                main.post(rowItem.generateBaseFile());
                                 return true;
                             case R.id.pre:
-                                main.rename(rowItem.generateBaseFile());
+                                main.pre(rowItem.generateBaseFile());
                                 return true;
                             case R.id.cpy:
                                 MainActivity MAIN_ACTIVITY = main.MAIN_ACTIVITY;
