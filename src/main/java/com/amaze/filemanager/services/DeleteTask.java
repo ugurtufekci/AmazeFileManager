@@ -71,6 +71,7 @@ public class DeleteTask extends AsyncTask<ArrayList<BaseFile>, String, Boolean> 
             for (BaseFile a : files) {
                 DocumentFile documentFile = RootHelper.getDocumentFile(a.getPath(), cd, false);
                  b = documentFile.delete();
+
             }
         } else {
 

@@ -67,6 +67,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
+
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.Recycleradapter;
@@ -124,6 +125,9 @@ public class Main extends android.support.v4.app.Fragment {
     public OpenMode openMode = OpenMode.FILE;
     public android.support.v7.widget.RecyclerView listView;
 
+
+
+
     public boolean GO_BACK_ITEM, SHOW_THUMBS, COLORISE_ICONS, SHOW_DIVIDERS;
 
     /**
@@ -178,20 +182,31 @@ public class Main extends android.support.v4.app.Fragment {
      */
     private boolean mRetainSearchTask = false;
 
+
+
     public Main() {
 
     }
 
-    @Override
+  @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         MAIN_ACTIVITY = (MainActivity) getActivity();
         utilsProvider = MAIN_ACTIVITY;
         utils = utilsProvider.getFutils();
 
+
+
+
         setRetainInstance(true);
         no = getArguments().getInt("no", 1);
         home = getArguments().getString("home");
+
+
+
         CURRENT_PATH = getArguments().getString("lastpath");
         Sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         hidemode = Sp.getInt("hidemode", 0);
@@ -583,6 +598,7 @@ public class Main extends android.support.v4.app.Fragment {
                     showOption(R.id.openwith, menu);
                     showOption(R.id.share, menu);
 
+
                     File x = new File(LIST_ELEMENTS.get(adapter.getCheckedItemPositions().get(0))
 
                             .getDesc());
@@ -693,6 +709,8 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;*/
                 case R.id.delete:
                     utils.deleteFiles(LIST_ELEMENTS, ma, plist, utilsProvider.getAppTheme());
+
+
                     return true;
                 case R.id.share:
                     ArrayList<File> arrayList = new ArrayList<File>();
@@ -717,15 +735,49 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.invalidate();
 
                     return true;
+
                 case R.id.rename:
 
-                    final ActionMode m = mode;
-                    final BaseFile f;
+                     ActionMode m = mode;
+                   BaseFile f;
                     f = (LIST_ELEMENTS.get(
                             (plist.get(0)))).generateBaseFile();
                     rename(f);
                     mode.finish();
                     return true;
+
+                case R.id.post:
+                    ActionMode a = mode;
+                     BaseFile g;
+                    g = (LIST_ELEMENTS.get(
+                        (plist.get(0)))).generateBaseFile();
+                    post(g);
+                    mode.finish();
+                    return true;
+
+
+                case R.id.pre:
+                   ActionMode t = mode;
+                    BaseFile h;
+                    h = (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    pre(h);
+                    mode.finish();
+                    return true;
+
+
+/*
+              case R.id.lock:
+
+                    final ActionMode n = mode;
+                    final BaseFile j;
+                    j= (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    lock(j);
+                    mode.finish();
+                    return true;
+*/
+
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());
@@ -772,6 +824,12 @@ public class Main extends android.support.v4.app.Fragment {
                     addShortcut(LIST_ELEMENTS.get(plist.get(0)));
                     mode.finish();
                     return true;
+
+
+
+
+
+
                 default:
                     return false;
             }
@@ -891,6 +949,7 @@ public class Main extends android.support.v4.app.Fragment {
                         utils.openFile(new File(l.getDesc()), (MainActivity) getActivity());
                     }
                     DataUtils.addHistoryFile(l.getDesc());
+
                 }
             } else {
 
@@ -1088,14 +1147,120 @@ public class Main extends android.support.v4.app.Fragment {
 
     }
 
-    /**
-     * Show dialog to rename a file
-     * @param f the file to rename
-     */
-    public void rename(final BaseFile f) {
+
+
+
+    public void post(final BaseFile p) {
+
+        MaterialDialog.Builder b = new MaterialDialog.Builder(getActivity());
+        final String nameOrjinal = p.getName();
+
+        b.input("","", false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog material, CharSequence charSequence) {
+
+            }
+        });
+        b.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+        b.title(getResources().getString(R.string.postLabel));
+        b.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+
+                String name = materialDialog.getInputEditText().getText().toString();
+                if(name.trim().length() != 0) {
+                    name = nameOrjinal + "+" + name;
+                    if (p.isSmb())
+                        if (p.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
+                else
+                {
+                    name =nameOrjinal;
+                    if (p.isSmb())
+                        if (p.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+
+                }
+            }
+
+            @Override
+            public void onNegative(MaterialDialog material) {
+
+                material.cancel();
+            }
+        });
+        b.build().show();
+        b.positiveText(R.string.save);
+        b.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        b.positiveColor(color).negativeColor(color).widgetColor(color);
+
+    }
+    public void pre(final BaseFile w) {
+
+        MaterialDialog.Builder c = new MaterialDialog.Builder(getActivity());
+        final String orjinalName = w.getName();
+
+        c.input("", "", false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+        c.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+        c.title(getResources().getString(R.string.preLabel));
+        c.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+
+                String name = materialDialog.getInputEditText().getText().toString();
+                if (name.trim().length() != 0) {
+                    //"+";
+
+                    name = name +"+"+ orjinalName;
+                    if (w.isSmb())
+                        if (w.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
+                else
+                {
+                    name = orjinalName;
+                    if (w.isSmb())
+                        if (w.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+
+                }
+            }
+            @Override
+            public void onNegative(MaterialDialog materialDialog) {
+
+                materialDialog.cancel();
+            }
+        });
+        c.positiveText(R.string.save);
+        c.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        c.positiveColor(color).negativeColor(color).widgetColor(color);
+        c.build().show();
+    }
+
+    public void rename( final BaseFile f) {
         MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-        String name = f.getName();
-        a.input("", name, false, new MaterialDialog.InputCallback() {
+        final String orjinalName = f.getName();
+        a.input("", orjinalName, false, new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
@@ -1107,12 +1272,24 @@ public class Main extends android.support.v4.app.Fragment {
             @Override
             public void onPositive(MaterialDialog materialDialog) {
                 String name = materialDialog.getInputEditText().getText().toString();
-                if (f.isSmb())
-                    if (f.isDirectory() && !name.endsWith("/"))
-                        name = name + "/";
+                if(name.trim().length()!=0) {
+                    if (f.isSmb())
+                        if (f.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
 
-                MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                    MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
+                else
+                {
+                    name =orjinalName;
+                    if (f.isSmb())
+                        if (f.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
             }
 
             @Override
@@ -1123,6 +1300,44 @@ public class Main extends android.support.v4.app.Fragment {
         });
         a.positiveText(R.string.save);
         a.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        a.positiveColor(color).negativeColor(color).widgetColor(color);
+        a.build().show();
+    }
+    /*
+    lock builder
+    */
+    public void lock(final BaseFile f) {
+        MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+        String name = f.getName();
+        a.input("", name, false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+        a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+        a.title(getResources().getString(R.string.lock));
+        a.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+                String name = materialDialog.getInputEditText().getText().toString();
+                if (f.isSmb())
+                    if (f.isDirectory() && !name.endsWith("/"))
+                        name = name + "/";
+
+                MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
+                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+            }
+
+            @Override
+            public void onNegative(MaterialDialog materialDialog) {
+
+                materialDialog.cancel();
+            }
+        });
+        a.positiveText(R.string.ok);
+
         int color = Color.parseColor(fabSkin);
         a.positiveColor(color).negativeColor(color).widgetColor(color);
         a.build().show();

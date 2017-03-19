@@ -29,7 +29,29 @@
         android:id="@+id/search"
         android:title="@string/search"
         android:icon="@drawable/ic_action_search"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:visible="true"
+                android:id="@+id/post"
+                android:title="@string/post"
+
+                />
+
+            <item
+                android:visible="true"
+                android:id="@+id/pre"
+                android:title="@string/pre" />
+            <item
+                android:visible="true"
+                android:id="@+id/other"
+                android:title="@string/other" />
+
+        </menu>
+
+    </item>
     <item android:id="@+id/home"
         android:title="@string/home"
         app:showAsAction="ifRoom"
@@ -75,5 +97,25 @@
         android:title="@string/exit"
         android:orderInCategory="9999"
         android:icon="@drawable/ic_action_cancel_light" />
+
+
+
+    <item
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:id="@+id/trash"
+        android:title="Trash"
+
+
+
+
+       />
+
+
+
+
+
+
+
 
 </menu>

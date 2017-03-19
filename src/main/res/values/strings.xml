@@ -59,10 +59,13 @@
     <string name="newhomedirectory">New Home Directory</string>
     <string name="rename">Rename</string>
     <string name="save">Save</string>
+    <string name="preLabel">PreLabel</string>
+    <string name="postLabel">PostLabel</string>
     <string name="renameerror">Rename Unsuccessful</string>
     <string name="renamed">Rename Successful</string>
     <string name="bookmarksadded">Bookmarks Added</string>
     <string name="fileexist">File with same name already exists </string>
+    <string name= "whitespace">File name can not be left blank</string>
     <string name="filecreated">File Created</string>
     <string name="searchpath">Search Path</string>
     <string name="enterfile">Enter File Name</string>
@@ -93,6 +96,7 @@
     <string name="openparent">Open Parent Directory</string>
     <string name="openwith">Open with</string>
     <string name="share">Share</string>
+    <string name="label">Label</string>
     <string name="about">About</string>
     <string name="extract">Extract</string>
     <string name="compress">Compress</string>
@@ -106,6 +110,8 @@
     <string name="uimode">UI Mode</string>
     <string name="directorysort">Directory Sort Mode</string>
     <string name="sortby">Sort By</string>
+    <string name="post">Post</string>
+    <string name="pre">Pre</string>
     <string name="theme">Theme</string>
     <string name="skin">Skin</string>
     <string name="random">Random Skin</string>
@@ -221,6 +227,7 @@
     <string name="changelog">Changelog</string>
     <string name="fullChangelog">Full Changelog</string>
     <string name="ok">OK</string>
+    <string name="password">Password</string>
     <string name="chooseUI">Choose Item UI</string>
     <string name="ui">Interface</string>
     <string name="general">General</string>
@@ -350,7 +357,7 @@
     <string name="smb_con">SMB Connection</string>
     <string name="smb_server">Server IP Address</string>
     <string name="username">Username</string>
-    <string name="password">Password</string>
+    <string name="lock">Lock</string>
     <string name="anonymous">Anonymous</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="extstorage">External Storage</string>
@@ -570,5 +577,6 @@
     <string name="error_busybox">Busybox not found. Closing interactive shell.</string>
     <string name="service_timer">Time Elapsed</string>
     <string name="please_wait">Please Wait</string>
+    <string name="restore" />
 </resources>
 

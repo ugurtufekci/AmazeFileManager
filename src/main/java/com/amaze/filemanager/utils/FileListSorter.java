@@ -32,6 +32,7 @@ public class FileListSorter implements Comparator<Layoutelements> {
 
     private int asc = 1;
     int sort = 0;
+
     boolean rootMode;
 
     boolean hasExtension=true;
@@ -105,10 +106,12 @@ public class FileListSorter implements Comparator<Layoutelements> {
 
             } else if (isDirectory(file2) && !isDirectory(file1)) {
 
+
                 return 1;
 
             }
         }
+
         else if (dirsOnTop == 1) {          // Directoryler üstte ise
 
             if (isDirectory(file1) && !isDirectory(file2)) {
@@ -138,9 +141,11 @@ public class FileListSorter implements Comparator<Layoutelements> {
 
         else if (sort == 2) {   // SIZE
 
+
             if (!hasExtension) // IF DOES NOT HAVE EXTENSION THEN IT IS A FOLDER OR APP
 
             {
+
                 return asc * Long.valueOf(file1.getlongSize()).compareTo(Long.valueOf(file2.getlongSize()));
             }
             else
@@ -148,9 +153,14 @@ public class FileListSorter implements Comparator<Layoutelements> {
                 return file1.getTitle().compareToIgnoreCase(file2.getTitle());
             }
         }
-        else if(sort ==3){      // TYPE
+
+        else if(sort ==3) //type
+        {
+
+
 
             if(!hasExtension){  // IF DOES NOT HAVE EXTENSION THEN IT IS A FOLDER OR APP
+
 
 
                 ext_a = getExtension(file1.getTitle());
@@ -173,6 +183,7 @@ public class FileListSorter implements Comparator<Layoutelements> {
             {
                 return  file1.getTitle().compareToIgnoreCase(file2.getTitle());
             }
+
         }
 
 
@@ -180,9 +191,11 @@ public class FileListSorter implements Comparator<Layoutelements> {
 
     }
 
+
      static String getExtension(String a) {
 
          return a.substring(a.lastIndexOf(".") + 1).toLowerCase();
     }
+
 
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/open"
         android:title="@string/open" />
@@ -18,4 +20,9 @@
     <item
         android:id="@+id/share"
         android:title="@string/share" />
+
+
 </menu>
+
+
+
