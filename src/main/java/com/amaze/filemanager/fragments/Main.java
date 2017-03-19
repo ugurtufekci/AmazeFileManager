@@ -1314,7 +1314,7 @@ public class Main extends android.support.v4.app.Fragment {
             if (mFile[i].isDirectory()) {
                 folder_count++;
                 Layoutelements layoutelements = new Layoutelements(folder, name, mFile[i].getPath(),
-                        "", "", "", 0, false, mFile[i].lastModified() + "", true);
+                        "", "", "", 0, false, mFile[i].lastModified() + "", true , OpenMode.FILE);
                 layoutelements.setMode(OpenMode.SMB);
                 searchHelper.add(layoutelements.generateBaseFile());
                 a.add(layoutelements);
@@ -1325,7 +1325,7 @@ public class Main extends android.support.v4.app.Fragment {
                             Icons.loadMimeIcon(mFile[i].getPath(), !IS_LIST, res), name,
                             mFile[i].getPath(), "", "", Formatter.formatFileSize(getContext(),
                             mFile[i].length()), mFile[i].length(), false,
-                            mFile[i].lastModified() + "", false);
+                            mFile[i].lastModified() + "", false , OpenMode.FILE);
                     layoutelements.setMode(OpenMode.SMB);
                     searchHelper.add(layoutelements.generateBaseFile());
                     a.add(layoutelements);
