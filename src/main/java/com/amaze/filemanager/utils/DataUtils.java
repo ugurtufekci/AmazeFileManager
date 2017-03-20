@@ -1,6 +1,5 @@
 package com.amaze.filemanager.utils;
 
-import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.ui.drawer.Item;
 
 import java.util.ArrayList;
@@ -15,6 +14,8 @@ import java.util.List;
 public class DataUtils {
     public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
     , trash = new ArrayList<>();
+
+
 
     public static List<String> storages=new ArrayList<>();
     public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
