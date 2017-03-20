@@ -30,6 +30,7 @@ public class BaseFile extends HFile implements Parcelable {
         this.path = path;
         this.permisson = permisson;
 
+
     }
 
     @Override
@@ -111,6 +112,9 @@ public class BaseFile extends HFile implements Parcelable {
         public BaseFile[] newArray(int size) {
             return new BaseFile[size];
         }
+
+
+
     };
 
     @Override

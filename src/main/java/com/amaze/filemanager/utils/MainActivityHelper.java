@@ -322,6 +322,9 @@ public class MainActivityHelper {
             mainActivity.oppathe = (file.getPath());
             mainActivity.operation = DataUtils.COMPRESS;
             mainActivity.oparrayList = baseFiles;
+
+
+
         } else if (mode == 1) {
             Intent intent2 = new Intent(mainActivity, ZipTask.class);
             intent2.putExtra(ZipTask.KEY_COMPRESS_PATH, file.getPath());
@@ -487,6 +490,11 @@ public class MainActivityHelper {
             new DeleteTask(null, mainActivity).execute((files));
         else Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
     }
+
+
+
+
+
 
     public void extractFile(File file) {
         int mode = checkFolder(file.getParentFile(), mainActivity);
