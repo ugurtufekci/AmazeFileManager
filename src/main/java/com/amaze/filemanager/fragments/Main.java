@@ -1595,7 +1595,7 @@ public class Main extends android.support.v4.app.Fragment {
             if (mFile[i].isDirectory()) {
                 folder_count++;
                 Layoutelements layoutelements = new Layoutelements(folder, name, mFile[i].getPath(),
-                        "", "", "", 0, false, mFile[i].lastModified() + "", true);
+                        "", "", "", 0, false, mFile[i].lastModified() + "", true , OpenMode.FILE);
                 layoutelements.setMode(OpenMode.SMB);
                 searchHelper.add(layoutelements.generateBaseFile());
                 a.add(layoutelements);
@@ -1606,7 +1606,7 @@ public class Main extends android.support.v4.app.Fragment {
                             Icons.loadMimeIcon(mFile[i].getPath(), !IS_LIST, res), name,
                             mFile[i].getPath(), "", "", Formatter.formatFileSize(getContext(),
                             mFile[i].length()), mFile[i].length(), false,
-                            mFile[i].lastModified() + "", false);
+                            mFile[i].lastModified() + "", false , OpenMode.FILE);
                     layoutelements.setMode(OpenMode.SMB);
                     searchHelper.add(layoutelements.generateBaseFile());
                     a.add(layoutelements);
@@ -1701,7 +1701,9 @@ public class Main extends android.support.v4.app.Fragment {
     // adds search results based on result boolean. If false, the adapter is initialised with initial
     // values, if true, new values are added to the adapter.
     public void addSearchResult(BaseFile a) {
+
         LIST_ELEMENTS.clear();                 //
+
         if (listView != null) {
 
             // initially clearing the array for new result set

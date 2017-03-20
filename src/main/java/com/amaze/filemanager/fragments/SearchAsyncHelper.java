@@ -23,10 +23,11 @@ import java.util.regex.Pattern;
 public class SearchAsyncHelper extends Fragment {
 
     private HelperCallbacks mCallbacks;
-    private String mPath, mInput , lastSearch="";
+    private String mPath, mInput ;
     public SearchTask mSearchTask;
     private OpenMode mOpenMode;
     private boolean mRootMode, isRegexEnabled, isMatchesEnabled;
+    public boolean isDone=false;
 
     public static final String KEY_PATH = "path";
     public static final String KEY_INPUT = "input";
@@ -34,6 +35,8 @@ public class SearchAsyncHelper extends Fragment {
     public static final String KEY_ROOT_MODE = "root_mode";
     public static final String KEY_REGEX = "regex";
     public static final String KEY_REGEX_MATCHES = "matches";
+    public static String lastSearch="";
+
     private MainActivity mainActivity;
 
 
@@ -145,11 +148,11 @@ public class SearchAsyncHelper extends Fragment {
          */
         private void search(HFile file, String query) {
 
-         /*
             if(!query.equalsIgnoreCase(lastSearch)) {
                 lastSearch = query;
+                isDone = true;
             }
-            else{
+            else if(isDone == false){
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -159,7 +162,9 @@ public class SearchAsyncHelper extends Fragment {
                         toast.show();
 
                         }});
-            }*/
+
+                isDone = true;
+            }
 
 
 

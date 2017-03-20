@@ -35,6 +35,7 @@ public class Layoutelements implements Parcelable {
     private static final String CURRENT_YEAR = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
 
     public Layoutelements(Parcel im) {
+
         title = im.readString();
         desc = im.readString();
         permissions = im.readString();
@@ -42,13 +43,20 @@ public class Layoutelements implements Parcelable {
         int j = im.readInt();
         date = im.readLong();
         int i = im.readInt();
+
         if (i == 0) {
             header = false;
-        } else {
+        }
+
+        else {
             header = true;
-        } if (j == 0) {
+        }
+
+        if (j == 0) {
             isDirectory = false;
-        } else {
+        }
+
+        else {
             isDirectory= true;
         }
         // don't save bitmaps in parcel, it might exceed the allowed transaction threshold
@@ -92,6 +100,7 @@ public class Layoutelements implements Parcelable {
     private boolean header;
     //same as hfile.modes but different than openmode in Main.java
     private OpenMode mode=OpenMode.FILE;
+
     public Layoutelements(BitmapDrawable imageId, String title, String desc, String permissions,
                           String symlink, String size,long longSize,  boolean header, String date,boolean isDirectory) {
         this.imageId = imageId;
@@ -109,6 +118,7 @@ public class Layoutelements implements Parcelable {
             this.date = Long.parseLong(date);
             this.date1 = Futils.getdate(this.date, CURRENT_YEAR);
         }
+        this.mode = m;
     }
 
 
