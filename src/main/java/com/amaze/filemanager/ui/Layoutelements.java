@@ -85,13 +85,15 @@ public class Layoutelements implements Parcelable {
     private String permissions;
     private String symlink;
     private String size;
+   // private boolean islock;
     private boolean isDirectory;
     private long date = 0,longSize=0;
     private String date1 = "";
     private boolean header;
     //same as hfile.modes but different than openmode in Main.java
     private OpenMode mode=OpenMode.FILE;
-    public Layoutelements(BitmapDrawable imageId, String title, String desc, String permissions, String symlink, String size,long longSize,  boolean header, String date,boolean isDirectory) {
+    public Layoutelements(BitmapDrawable imageId, String title, String desc, String permissions,
+                          String symlink, String size,long longSize,  boolean header, String date,boolean isDirectory) {
         this.imageId = imageId;
         this.title = title;
         this.desc = desc;
@@ -101,6 +103,8 @@ public class Layoutelements implements Parcelable {
         this.header = header;
         this.longSize=longSize;
         this.isDirectory = isDirectory;
+       // this.islock=islock;
+
         if (!date.trim().equals("")) {
             this.date = Long.parseLong(date);
             this.date1 = Futils.getdate(this.date, CURRENT_YEAR);
@@ -142,8 +146,10 @@ public class Layoutelements implements Parcelable {
         this.mode = mode;
     }
 
-    public boolean isDirectory() {
-        return isDirectory;}
+ //  public boolean isLock() {return isLock();}
+
+    public boolean isDirectory() {return isDirectory;}
+
     public BaseFile generateBaseFile()
     {
         BaseFile baseFile=new BaseFile(getDesc(),getPermissions(),getDate1(),longSize,isDirectory());

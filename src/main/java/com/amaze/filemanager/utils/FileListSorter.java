@@ -42,7 +42,8 @@ boolean rootMode;
 
 
      boolean isDirectory(Layoutelements path){
-    return path.isDirectory();}
+    return path.isDirectory();
+     }
 
 
     @Override

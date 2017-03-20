@@ -14,12 +14,21 @@ public class BaseFile extends HFile implements Parcelable {
     boolean isDirectory;
     String permisson;
     String name;
-
+    String password;
+    boolean hasLocked;
     String link="";
 
     public BaseFile(String path) {
         super(OpenMode.FILE, path);
         this.path = path;
+    }
+
+    public BaseFile(OpenMode mode, String path,boolean hasLocked,String password) {
+        super(OpenMode.FILE, path);
+        this.path = path;
+        this.mode = mode;
+        this.hasLocked =hasLocked;
+        this.password= password;
     }
 
     public BaseFile(String path, String permisson, long date, long size, boolean isDirectory) {
@@ -74,6 +83,8 @@ public class BaseFile extends HFile implements Parcelable {
     public boolean isDirectory() {
         return isDirectory;
     }
+
+    public boolean hasLocked() { return hasLocked; }
 
     public void setDirectory(boolean directory) {
         isDirectory = directory;
