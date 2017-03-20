@@ -102,7 +102,8 @@ public class Layoutelements implements Parcelable {
     private OpenMode mode=OpenMode.FILE;
 
     public Layoutelements(BitmapDrawable imageId, String title, String desc, String permissions,
-                          String symlink, String size,long longSize,  boolean header, String date,boolean isDirectory) {
+                          String symlink, String size,long longSize,  boolean header, String date,boolean isDirectory,OpenMode m) {
+
         this.imageId = imageId;
         this.title = title;
         this.desc = desc;

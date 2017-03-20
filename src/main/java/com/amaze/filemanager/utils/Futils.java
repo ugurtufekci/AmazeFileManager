@@ -1058,6 +1058,7 @@ public class Futils {
     public ArrayList<HFile> toHFileArray(ArrayList<String> a) {
         ArrayList<HFile> b = new ArrayList<>();
         for (int i = 0; i < a.size(); i++) {
+
             HFile hFile=new HFile(OpenMode.UNKNOWN,a.get(i));
             hFile.generateMode(null);
             b.add(hFile);
