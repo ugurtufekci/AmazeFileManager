@@ -112,6 +112,9 @@
     <string name="sortby">Sort By</string>
     <string name="post">Post</string>
     <string name="pre">Pre</string>
+
+    <string name="withpost">With Post</string>
+    <string name="withpre">With Pre</string>
     <string name="theme">Theme</string>
     <string name="skin">Skin</string>
     <string name="random">Random Skin</string>

@@ -17,4 +17,8 @@ Label seceneğindeki pos ve pre ye Rename deki özelliklerin aynısı eklendi. S
 
 19.03.2017
 
-"Label seceneğindeki pos ve pre renameden bağımsız farklı algoritmalarla çalışıyor.SelectAll seçeneğinde de düzeltilicel.Renamedeki boşluk girildiğinde de kabul olması düzeltildi.#14"
+"19.03.2017 Label seceneğindeki pos ve pre renameden bağımsız farklı algoritmalarla çalışıyor.SelectAll seçeneğinde de düzeltilicek.Renamedeki boşluk girildiğinde de kabul olması düzeltildi.#14"
+
+20.03.2017
+
+"20.03.2017 Post ve pre artık seçilmiş birden fazla klasör / dosyayı aynı isimle etiketlebiliyor.Olusabilicek hatalar kontrol edilmedi.  #14"

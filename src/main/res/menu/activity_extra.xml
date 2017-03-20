@@ -27,27 +27,29 @@
         android:visible="false" />
     <item
         android:id="@+id/search"
-        android:title="@string/search"
         android:icon="@drawable/ic_action_search"
+        android:title="@string/search"
         app:showAsAction="always">
 
         <menu>
 
             <item
-                android:visible="true"
-                android:id="@+id/post"
-                android:title="@string/post"
+                android:id="@+id/withpost"
+                android:icon="@drawable/circle"
+                android:title="@string/withpost"
 
-                />
+                android:visible="true" />
 
             <item
-                android:visible="true"
-                android:id="@+id/pre"
-                android:title="@string/pre" />
+                android:id="@+id/withpre"
+                android:icon="@drawable/circle"
+                android:title="@string/withpre"
+                android:visible="true" />
             <item
-                android:visible="true"
                 android:id="@+id/other"
-                android:title="@string/other" />
+                android:icon="@android:drawable/ic_search_category_default"
+                android:title="@string/other"
+                android:visible="true" />
 
         </menu>
 
