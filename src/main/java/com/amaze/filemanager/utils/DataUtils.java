@@ -1,27 +1,35 @@
 package com.amaze.filemanager.utils;
 
-import com.amaze.filemanager.ui.Layoutelements;
+import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.ui.drawer.Item;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 /**
  * Created by arpitkh996 on 20-01-2016.
  */
 
 //Central data being used across activity,fragments and classes
 public class DataUtils {
-    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
-    , trash = new ArrayList<>();
+    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>();
+   /* ,trash3 = new ArrayList<>();*/
+
+   public static ArrayList<BaseFile> trash = new ArrayList<>();
+    //public static ArrayList<BaseFile> hiddenfiles = new ArrayList<>();
+
+
+
+   // public static ArrayList<DataPackage> trash = new ArrayList<>();
+
+
 
     public static List<String> storages=new ArrayList<>();
 
-    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9,TEST=10;
+    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9,LOCK=10;
 
     public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3";
+    ,TRASH = "Table3"  ;
 
     public static ArrayList<Item> list=new ArrayList<>();
     public static ArrayList<String[]> servers=new ArrayList<>(),books=new ArrayList<>(),accounts=new ArrayList<>();
@@ -59,6 +67,9 @@ public class DataUtils {
         accounts=new ArrayList<>();
 
          trash = new ArrayList<>();
+       // trash3 = new ArrayList<>();
+
+
 
     }
     public static void registerOnDataChangedListener(DataChangeListener dataChangeListener){
@@ -108,9 +119,11 @@ public class DataUtils {
     public static void addServer(String[] i){
             servers.add(i);
     }
+
     public static void addHiddenFile(String i)
     {
         hiddenfiles.add(i);
+
         if(dataChangeListener!=null)
             dataChangeListener.onHiddenFileAdded(i);
     }
@@ -120,6 +133,9 @@ public class DataUtils {
         if(dataChangeListener!=null)
             dataChangeListener.onHiddenFileRemoved(i);
     }
+
+
+
     public static void addHistoryFile(String i)
     {
         history.add(i);
@@ -130,9 +146,10 @@ public class DataUtils {
 
     //*************************************
 
-    public static void addTrashFile(String i)
+    public static void addTrashFile(/*String i*/ BaseFile i)
     {
         trash.add(i);
+
         if(dataChangeListener!=null)
             dataChangeListener.onTrashAdded(i);
     }
@@ -172,9 +189,9 @@ public class DataUtils {
 
     public static ArrayList<String> getHiddenfiles() {
         return hiddenfiles;
-    }
+    }// string
 
-    public static void setHiddenfiles(ArrayList<String> hiddenfiles) {
+    public static void setHiddenfiles(ArrayList<String> hiddenfiles) {//Arraylist<String>
         if(hiddenfiles!=null)
         DataUtils.hiddenfiles = hiddenfiles;
     }
@@ -205,6 +222,23 @@ public class DataUtils {
         trash=new ArrayList<>();
         if(dataChangeListener!=null)
             dataChangeListener.onTrashCleared();
+
+    }
+
+
+
+    //********************************
+
+
+
+
+    //******************************
+
+    public static void clearHidden() {
+        hiddenfiles=new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onHiddenCleared();
+
     }
 
 
@@ -223,6 +257,9 @@ public class DataUtils {
         return list;
     }
 
+
+
+
     public static void setList(ArrayList<Item> list) {
         DataUtils.list = list;
     }
@@ -232,11 +269,13 @@ public class DataUtils {
         void onHiddenFileRemoved(String path);
         void onHistoryAdded(String path);
 
-         void onTrashAdded(String path);
+         void onTrashAdded(BaseFile path);
 
         void onBookAdded(String path[],boolean refreshdrawer);
         void onHistoryCleared();
 
         void onTrashCleared();
+
+        void onHiddenCleared();
     }
 }

@@ -28,12 +28,18 @@ public class FileListSorter implements Comparator<Layoutelements> {
 
 
     private int dirsOnTop = 0;
+    static String ext_a,ext_b;
 
     private int asc = 1;
     int sort = 0;
-boolean rootMode;
-    public FileListSorter(int dir, int sort, int asc,boolean rootMode)
-    {
+
+    boolean rootMode;
+
+    boolean hasExtension=true;
+
+
+
+    public FileListSorter(int dir, int sort, int asc,boolean rootMode ) {
         this.dirsOnTop = dir;
         this.asc = asc;
         this.sort = sort;
@@ -41,12 +47,23 @@ boolean rootMode;
     }
 
 
+
      boolean isDirectory(Layoutelements path){
-    return path.isDirectory();}
+    return path.isDirectory();
+     }
 
 
     @Override
     public int compare(Layoutelements file1, Layoutelements file2) {  // return 1 file1 > file2
+
+
+        if(file1.getTitle().contains(".") && file2.getTitle().contains(".")){
+
+            hasExtension = false;
+
+            // IF THEY DO NOT CONTAINS  "." THEN THESE ARE MAY BE APPLICATIONS OR FOLDERS.
+            // BECAUSE APP MANAGER HAS APPLICATIONS, DONT HAVE EXTENSIONS.
+        }
                                                                       // return -1 file1 < file2
         File f1;
 
@@ -74,6 +91,11 @@ boolean rootMode;
 
         }
 
+
+
+
+
+
         if (dirsOnTop == 0) {               // File lar üstte ise
 
             if (isDirectory(file1) && !isDirectory(file2)) {
@@ -85,7 +107,7 @@ boolean rootMode;
 
                 return 1;
 
-            } //else {return 1;}
+            }
         }
 
         else if (dirsOnTop == 1) {          // Directoryler üstte ise
@@ -102,18 +124,25 @@ boolean rootMode;
             else{return 1;}
         }
 
-        else {
-        }
+
 
         if (sort == 0) {        // NAME
             return asc * file1.getTitle().compareToIgnoreCase(file2.getTitle());
         }
-        else if (sort == 1) {   // LAST MODIFIED
+        else if (sort == 1) // LAST MODIFIED
+        {
             return asc * Long.valueOf(file1.getDate1()).compareTo(Long.valueOf(file2.getDate1()));
         }
+
+
+
+
         else if (sort == 2) {   // SIZE
 
-            if (f1.isFile() && f2.isFile()) {
+
+            if (!hasExtension) // IF DOES NOT HAVE EXTENSION THEN IT IS A FOLDER OR APP
+
+            {
 
                 return asc * Long.valueOf(file1.getlongSize()).compareTo(Long.valueOf(file2.getlongSize()));
             }
@@ -128,12 +157,13 @@ boolean rootMode;
 
 
 
-            if(f1.isFile() && f2.isFile()){
+            if(!hasExtension){  // IF DOES NOT HAVE EXTENSION THEN IT IS A FOLDER OR APP
 
 
-                final String ext_a = getExtension(file1.getTitle());
 
-                final String ext_b = getExtension(file2.getTitle());
+                ext_a = getExtension(file1.getTitle());
+
+                ext_b = getExtension(file2.getTitle());
 
 
                 final int res = asc * ext_a.compareTo(ext_b);

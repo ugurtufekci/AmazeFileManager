@@ -58,6 +58,7 @@
     <string name="itemsselected">Items Selected</string>
     <string name="newhomedirectory">New Home Directory</string>
     <string name="rename">Rename</string>
+
     <string name="save">Save</string>
     <string name="preLabel">PreLabel</string>
     <string name="postLabel">PostLabel</string>
@@ -230,6 +231,7 @@
     <string name="changelog">Changelog</string>
     <string name="fullChangelog">Full Changelog</string>
     <string name="ok">OK</string>
+    <string name="unlock">Unlock</string>
     <string name="password">Password</string>
     <string name="chooseUI">Choose Item UI</string>
     <string name="ui">Interface</string>
@@ -361,6 +363,7 @@
     <string name="smb_server">Server IP Address</string>
     <string name="username">Username</string>
     <string name="lock">Lock</string>
+
     <string name="anonymous">Anonymous</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="extstorage">External Storage</string>
@@ -566,6 +569,8 @@
     <string name="current_speed">Current Speed</string>
     <string name="smb_launch_error">You will need to copy this file to storage to open it</string>
     <string name="error_file_not_found">Error: File Not Found</string>
+    <string name="error_file_has_no_lock">Error: File Can Not Be UnLock</string>
+    <string name="error_file_already_lock">Error: File Can Not Be Lock</string>
     <string name="error_io">I/O Error</string>
     <string name="error_root_not_permitted">Error: Root permission not granted</string>
     <string name="medium_text">Medium Text</string>

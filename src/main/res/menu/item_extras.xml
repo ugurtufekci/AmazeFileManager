@@ -31,7 +31,11 @@
         tools:checkable="false" />
     <item
         android:id="@+id/lock"
+        android:checkable="false"
         android:title="@string/lock" />
+    <item
+        android:id="@+id/unlock"
+        android:title="@string/unlock" />
     <item
         android:id="@+id/about"
         android:title="@string/properties"/>

@@ -28,9 +28,14 @@ import jcifs.smb.SmbFile;
  */
 //Hybrid file for handeling all types of files
 public class HFile {
+    enum Type {fileOrFolder,application};
     String path;
+
+
+
     //public static final int ROOT_MODE=3,LOCAL_MODE=0,SMB_MODE=1,UNKNOWN=-1;
     OpenMode mode = OpenMode.FILE;
+
     boolean hasLocked=false;
 /*
 All openmode types initialy has no lock.
@@ -39,19 +44,35 @@ All openmode types initialy has no lock.
         this.path = path;
         this.mode = mode;
         this.hasLocked =false;
-    }
-/*
-creating new constructor for lock
-*/
-    public HFile(OpenMode mode, String path,boolean hasLocked) {
 
+    }
+
+
+    //***********************************************************
+    public HFile(OpenMode mode, BaseFile path,boolean hasLocked) {
+        this.path = path.getPath();
+        this.mode = mode;
+        this.hasLocked =hasLocked;
+    }
+
+    //**************************************************************
+
+
+
+    //***********************************************************
+    public HFile(OpenMode mode, String path,boolean hasLocked) {
         this.path = path;
         this.mode = mode;
         this.hasLocked =hasLocked;
     }
 
+    //**************************************************************
+
+
+
     public HFile(OpenMode mode, String path, String name, boolean isDirectory) {
         this.mode = mode;
+        this.hasLocked =false;
         if (path.startsWith("smb://") || isSmb()) {
             if (!isDirectory) this.path = path + name;
             else if (!name.endsWith("/")) this.path = path + name + "/";

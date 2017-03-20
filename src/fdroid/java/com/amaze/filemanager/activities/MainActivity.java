@@ -29,7 +29,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -61,7 +60,6 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -94,7 +92,6 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.adapters.DrawerAdapter;
 import com.amaze.filemanager.database.Tab;
 import com.amaze.filemanager.database.TabHandler;
-import com.amaze.filemanager.exceptions.RootNotPermittedException;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HFile;
@@ -106,7 +103,6 @@ import com.amaze.filemanager.fragments.ProcessViewer;
 import com.amaze.filemanager.fragments.SearchAsyncHelper;
 import com.amaze.filemanager.fragments.TabFragment;
 import com.amaze.filemanager.fragments.ZipViewer;
-import com.amaze.filemanager.fragments.preference_fragments.Preffrag;
 import com.amaze.filemanager.services.CopyService;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.services.asynctasks.CopyFileCheck;
@@ -130,7 +126,6 @@ import com.amaze.filemanager.utils.HistoryManager;
 import com.amaze.filemanager.utils.MainActivityHelper;
 import com.amaze.filemanager.utils.OpenMode;
 import com.amaze.filemanager.utils.PreferenceUtils;
-import com.amaze.filemanager.utils.RootUtils;
 import com.amaze.filemanager.utils.ServiceWatcherUtil;
 import com.amaze.filemanager.utils.color.ColorUsage;
 import com.amaze.filemanager.utils.theme.AppTheme;
@@ -161,6 +156,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public ListView mDrawerList;
     public ScrimInsetsRelativeLayout mDrawerLinear;
     public String path = "", launchPath;
+
+    public BaseFile path2;
+
     public ArrayList<BaseFile> COPY_PATH = null, MOVE_PATH = null;
     public FrameLayout frameLayout;
     public boolean mReturnIntent = false;
@@ -190,6 +188,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     int hidemode;
     public int operation = -1;
     public ArrayList<BaseFile> oparrayList;
+
 
     // oppathe - the path at which certain operation needs to be performed
     // oppathe1 - the new path which user wants to create/modify
@@ -293,6 +292,13 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         DataUtils.setHiddenfiles(history.readTable(DataUtils.HIDDEN));
         DataUtils.setGridfiles(grid.readTable(DataUtils.GRID));
         DataUtils.setListfiles(grid.readTable(DataUtils.LIST));
+
+        //**********************
+
+      //  DataUtils.setTrash(trash.readTable(DataUtils.TRASH));
+
+
+        //*****************
         util = new IconUtils(Sp, this);
         icons = new IconUtils(Sp, this);
 
@@ -1041,8 +1047,13 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             //****************************
 
             case R.id.trash:
-                if(ma != null)
+                if(ma != null) {
+
+                    // uygulama her açıldığında içindekiler kalmalı ???
+
                     utils.showTrashDialog(ma, getAppTheme());
+
+                }
             break;
 
             //*******************
@@ -2667,17 +2678,21 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 
-    @Override
+   //****************************************************************
     public void onHiddenFileAdded(String path) {
         history.addPath(null, path, DataUtils.HIDDEN, 0);
     }
 
 
 
-    @Override
+
     public void onHiddenFileRemoved(String path) {
         history.removePath(path, DataUtils.HIDDEN);
     }
+
+    //************************************************************
+
+
 
     @Override
     public void onHistoryAdded(String path) {
@@ -2685,13 +2700,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
 
+
+
 //*************************************
 
 
+    public void onTrashAdded(/*String path*/ BaseFile path) {
 
-    @Override
-    public void onTrashAdded(String path) {
-        trash.addPath(null, path, DataUtils.TRASH, 0);
+
+        trash.addPath(null, path.getPath(), DataUtils.TRASH, 0);
     }
 //**************************************
 
@@ -2716,8 +2733,23 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onTrashCleared() {
         trash.clear(DataUtils.TRASH);
+
     }
 //**************************************************
+
+
+//*************************************************
+
+
+    @Override
+    public void onHiddenCleared() {
+        history.clear(DataUtils.HIDDEN);
+
+    }
+//**************************************************
+
+
+
 
 
 

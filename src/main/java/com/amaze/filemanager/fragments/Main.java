@@ -19,7 +19,7 @@
 
 package com.amaze.filemanager.fragments;
 
-
+import android.support.design.widget.Snackbar;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -643,6 +643,7 @@ public class Main extends android.support.v4.app.Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             computeScroll();
             ArrayList<Integer> plist = adapter.getCheckedItemPositions();
+            ArrayList<File> lockedarr = new ArrayList<File>();   //arraylist for locked files.
             switch (item.getItemId()) {
                 case R.id.openmulti:
                     if (Build.VERSION.SDK_INT >= 16) {
@@ -776,17 +777,34 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
 
 
-/*
+
               case R.id.lock:
 
                     final ActionMode n = mode;
                     final BaseFile j;
+                  for (int i : plist)
+                  {
+                      lockedarr.add(new File(LIST_ELEMENTS.get(i).getDesc()));
+                  }
                     j= (LIST_ELEMENTS.get(
                             (plist.get(0)))).generateBaseFile();
                     lock(j);
                     mode.finish();
                     return true;
-*/
+                case R.id.unlock:
+
+                    final ActionMode n2 = mode;
+                    final BaseFile j2;
+                    for (int i : plist)
+                    {
+                        lockedarr.remove(new File(LIST_ELEMENTS.get(i).getDesc()));
+                    }
+                    j2= (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    unlock(j2);
+                    mode.finish();
+                    return true;
+
 
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
@@ -1336,44 +1354,92 @@ public class Main extends android.support.v4.app.Fragment {
         a.positiveColor(color).negativeColor(color).widgetColor(color);
         a.build().show();
     }
-    /*
-    lock builder
-    */
-    public void lock(final BaseFile f) {
-        MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-        String name = f.getName();
-        a.input("", name, false, new MaterialDialog.InputCallback() {
-            @Override
-            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
-            }
-        });
-        a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-        a.title(getResources().getString(R.string.lock));
-        a.callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog materialDialog) {
-                String name = materialDialog.getInputEditText().getText().toString();
-                if (f.isSmb())
-                    if (f.isDirectory() && !name.endsWith("/"))
-                        name = name + "/";
+    public void lock (final BaseFile f)
+    {
+        if(f.hasLocked()==false)
+        {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            String name = f.getName();
 
-                MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-            }
 
-            @Override
-            public void onNegative(MaterialDialog materialDialog) {
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.lock));
+            a.callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog materialDialog) {
+                    String name = materialDialog.getInputEditText().getText().toString();
+                    if (name.trim().length() != 0) {
+                        MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                    }
+                }
 
-                materialDialog.cancel();
-            }
-        });
-        a.positiveText(R.string.ok);
+                @Override
+                public void onNegative(MaterialDialog materialDialog) {
 
-        int color = Color.parseColor(fabSkin);
-        a.positiveColor(color).negativeColor(color).widgetColor(color);
-        a.build().show();
+                    materialDialog.cancel();
+                }
+            });
+        }
+        else
+        {
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
+                    Toast.LENGTH_LONG).show();
+        }
     }
+
+    public void unlock( final BaseFile f)
+    {
+        if (f.hasLocked() == true)
+        {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            final String inputpassword = "";
+            a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+                @Override
+                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+                }
+            });
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.unlock));
+            a.callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog materialDialog) {
+                    String inputpassword = materialDialog.getInputEditText().getText().toString();
+                    if (inputpassword.trim().length() != 0) {
+
+
+                        MAIN_ACTIVITY.mainActivityHelper.unlock(openMode, f.getPath(),
+                                CURRENT_PATH + "/" + inputpassword, getActivity(), BaseActivity.rootMode);
+                    }
+
+                }
+
+                @Override
+                public void onNegative(MaterialDialog materialDialog) {
+
+                    materialDialog.cancel();
+                }
+            });
+            a.positiveText(R.string.unlock);
+            a.negativeText(R.string.cancel);
+            int color = Color.parseColor(fabSkin);
+            a.positiveColor(color).negativeColor(color).widgetColor(color);
+            a.build().show();
+        }
+        else
+        {
+
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_has_no_lock),
+                    Toast.LENGTH_SHORT).show();
+
+
+
+
+        }
+    }
+
 
     public void computeScroll() {
         View vi = listView.getChildAt(0);
@@ -1561,7 +1627,7 @@ public class Main extends android.support.v4.app.Fragment {
             if (mFile[i].isDirectory()) {
                 folder_count++;
                 Layoutelements layoutelements = new Layoutelements(folder, name, mFile[i].getPath(),
-                        "", "", "", 0, false, mFile[i].lastModified() + "", true);
+                        "", "", "", 0, false, mFile[i].lastModified() + "", true , OpenMode.FILE);
                 layoutelements.setMode(OpenMode.SMB);
                 searchHelper.add(layoutelements.generateBaseFile());
                 a.add(layoutelements);
@@ -1572,7 +1638,7 @@ public class Main extends android.support.v4.app.Fragment {
                             Icons.loadMimeIcon(mFile[i].getPath(), !IS_LIST, res), name,
                             mFile[i].getPath(), "", "", Formatter.formatFileSize(getContext(),
                             mFile[i].length()), mFile[i].length(), false,
-                            mFile[i].lastModified() + "", false);
+                            mFile[i].lastModified() + "", false , OpenMode.FILE);
                     layoutelements.setMode(OpenMode.SMB);
                     searchHelper.add(layoutelements.generateBaseFile());
                     a.add(layoutelements);
@@ -1667,7 +1733,9 @@ public class Main extends android.support.v4.app.Fragment {
     // adds search results based on result boolean. If false, the adapter is initialised with initial
     // values, if true, new values are added to the adapter.
     public void addSearchResult(BaseFile a) {
+
         LIST_ELEMENTS.clear();                 //
+
         if (listView != null) {
 
             // initially clearing the array for new result set

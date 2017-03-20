@@ -28,6 +28,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -48,6 +49,7 @@ import com.amaze.filemanager.adapters.AppsAdapter;
 import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.ui.icons.IconHolder;
 import com.amaze.filemanager.utils.FileListSorter;
+import com.amaze.filemanager.utils.OpenMode;
 import com.amaze.filemanager.utils.provider.UtilitiesProviderInterface;
 import com.amaze.filemanager.utils.theme.AppTheme;
 
@@ -216,10 +218,16 @@ public class AppsList extends ListFragment {
                             BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_doc_apk_grid)),
                             object.applicationInfo.loadLabel(p).toString(), object.applicationInfo.publicSourceDir,
                             object.packageName, object.versionName, Formatter.formatFileSize(getContext(), f.length()),f.length(), false,
-                            f.lastModified()+"", false));
+                            f.lastModified()+"", false, OpenMode.FILE));
                     c.add(object);
                 }
-                Collections.sort(a, new FileListSorter(0, sortby, asc, false));
+
+              Collections.sort(a, new FileListSorter(0, sortby, asc, false));
+
+
+
+
+
             } catch (Exception e) {
                 //Toast.makeText(getActivity(), "" + e, Toast.LENGTH_LONG).show();
             }//ArrayAdapter<String> b=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,a);
