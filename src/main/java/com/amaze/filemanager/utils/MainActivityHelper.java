@@ -49,31 +49,33 @@ public class MainActivityHelper {
      */
     public static String SEARCH_TEXT;
 
-    public MainActivityHelper(MainActivity mainActivity){
+    public MainActivityHelper(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         this.utils = mainActivity.getFutils();
     }
-    public void showFailedOperationDialog(ArrayList<BaseFile> failedOps, boolean move, Context contextc){
-        MaterialDialog.Builder mat=new MaterialDialog.Builder(contextc);
+
+    public void showFailedOperationDialog(ArrayList<BaseFile> failedOps, boolean move, Context contextc) {
+        MaterialDialog.Builder mat = new MaterialDialog.Builder(contextc);
         mat.title("Operation Unsuccessful");
         mat.theme(mainActivity.getAppTheme().getMaterialDialogTheme());
         mat.positiveColor(Color.parseColor(BaseActivity.accentSkin));
         mat.positiveText(R.string.cancel);
-        String content="Following files were not "+(move?"moved":"copied")+" successfully";
-        int k=1;
-        for(BaseFile s:failedOps){
-            content=content+ "\n" + (k) + ". " + s.getName();
+        String content = "Following files were not " + (move ? "moved" : "copied") + " successfully";
+        int k = 1;
+        for (BaseFile s : failedOps) {
+            content = content + "\n" + (k) + ". " + s.getName();
             k++;
         }
         mat.content(content);
         mat.build().show();
     }
+
     public final BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
                 if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
-                    Toast.makeText( mainActivity, "Media Mounted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainActivity, "Media Mounted", Toast.LENGTH_SHORT).show();
                     String a = intent.getData().getPath();
                     if (a != null && a.trim().length() != 0 && new File(a).exists() && new File(a).canExecute()) {
                         DataUtils.storages.add(a);
@@ -91,22 +93,24 @@ public class MainActivityHelper {
 
     /**
      * Prompt a dialog to user to input directory name
+     *
      * @param openMode
-     * @param path current path at which directory to create
-     * @param ma {@link Main} current fragment
+     * @param path     current path at which directory to create
+     * @param ma       {@link Main} current fragment
      */
-    void mkdir(final OpenMode openMode,final String path,final Main ma){
-        final MaterialDialog materialDialog=utils.showNameDialog(mainActivity,new String[]{mainActivity.getResources().getString(R.string.entername), "",mainActivity.getResources().getString(R.string.newfolder),mainActivity.getResources().getString(R.string.create),mainActivity.getResources().getString(R.string.cancel),null});
+    void mkdir(final OpenMode openMode, final String path, final Main ma) {
+        final MaterialDialog materialDialog = utils.showNameDialog(mainActivity, new String[]{mainActivity.getResources().getString(R.string.entername), "", mainActivity.getResources().getString(R.string.newfolder), mainActivity.getResources().getString(R.string.create), mainActivity.getResources().getString(R.string.cancel), null});
         materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String a = materialDialog.getInputEditText().getText().toString();
-                mkDir(new HFile(openMode,path + "/" + a),ma);
+                mkDir(new HFile(openMode, path + "/" + a), ma);
                 materialDialog.dismiss();
             }
         });
         materialDialog.show();
     }
+
 
     /**
      * Prompt a dialog to user to input file name
@@ -210,7 +214,7 @@ public class MainActivityHelper {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         mainActivity.startActivityForResult(intent, 3);
     }
-    public void rename(OpenMode mode, String oldPath, String newPath, final Activity context, boolean rootmode) {
+    public void rename(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
         final Toast toast=Toast.makeText(context, context.getString(R.string.renaming),
                 Toast.LENGTH_SHORT);
         toast.show();
@@ -221,7 +225,7 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
                         if (toast != null) toast.cancel();
-                        Toast.makeText(mainActivity, context.getString(R.string.fileexist),
+                       Toast.makeText(mainActivity, context.getString(R.string.fileexist),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -276,9 +280,286 @@ public class MainActivityHelper {
             }
         });
     }
-    //empty metod for compile Main.java
-    public void lock(OpenMode mode, String oldPath, String newPath, final Activity context, boolean rootmode) {
+    public void post(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+        final Toast z=Toast.makeText(context, context.getString(R.string.postLabel), Toast.LENGTH_SHORT);
+        z.show();
+        Operations.post(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+            @Override
+            public void exists(HFile file) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (z != null) z.cancel();
 
+                        Toast.makeText(mainActivity, context.getString(R.string.fileexist),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void launchSAF(HFile file) {
+
+            }
+
+            @Override
+            public void launchSAF(final HFile file, final HFile file1) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (z != null) z.cancel();
+                        mainActivity.oppathe = file.getPath();
+                        mainActivity.oppathe1 = file1.getPath();
+                        mainActivity.operation = DataUtils.POST;
+                        guideDialogForLEXA(mainActivity.oppathe1);
+                    }
+                });
+            }
+
+            @Override
+            public void done(HFile hFile, final boolean b) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (b) {
+                            Intent intent = new Intent("loadlist");
+                            mainActivity.sendBroadcast(intent);
+                        } else
+                            Toast.makeText(context, context.getString(R.string.operationunsuccesful),
+                                    Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+
+            @Override
+            public void invalidName(final HFile file) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (z != null) z.cancel();
+                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
+                                + file.getName(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
+    public void pre(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+        final Toast toast=Toast.makeText(context, context.getString(R.string.preLabel),Toast.LENGTH_SHORT);
+        toast.show();
+        Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+            @Override
+            public void exists(HFile file) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        if (toast != null) toast.cancel();
+                        Toast.makeText(mainActivity, context.getString(R.string.fileexist),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void launchSAF(HFile file) {
+
+            }
+
+            @Override
+            public void launchSAF(final HFile file, final HFile file1) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (toast != null) toast.cancel();
+                        mainActivity.oppathe = file.getPath();
+                        mainActivity.oppathe1 = file1.getPath();
+                        mainActivity.operation = DataUtils.POST;
+                        guideDialogForLEXA(mainActivity.oppathe1);
+                    }
+                });
+            }
+
+            @Override
+            public void done(HFile hFile, final boolean b) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (b) {
+                            Intent intent = new Intent("loadlist");
+                            mainActivity.sendBroadcast(intent);
+                        } else
+                            Toast.makeText(context, context.getString(R.string.operationunsuccesful),
+                                    Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+
+            @Override
+            public void invalidName(final HFile file) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (toast != null) toast.cancel();
+                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
+                                + file.getName(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
+
+
+    //copy from rename "examine later"
+    public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+        final Toast toast=Toast.makeText(context, context.getString(R.string.lock),Toast.LENGTH_SHORT);
+        toast.show();
+        Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+            @Override
+            public void exists(HFile file)
+            {
+                context.runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        if (toast != null) toast.cancel();
+                        Toast.makeText(mainActivity, context.getString(R.string.error_file_already_lock),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void launchSAF(HFile file) {
+
+            }
+
+            @Override
+            public void launchSAF(final HFile file, final HFile file1) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (toast != null) toast.cancel();
+                        mainActivity.oppathe = file.getPath();
+                        mainActivity.oppathe1 = file1.getPath();
+                        mainActivity.operation = DataUtils.POST;
+                        guideDialogForLEXA(mainActivity.oppathe1);
+                    }
+                });
+            }
+
+            @Override
+            public void done(HFile hFile, final boolean b) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (b) {
+                            Intent intent = new Intent("loadlist");
+                            mainActivity.sendBroadcast(intent);
+                        } else
+                            Toast.makeText(context, context.getString(R.string.operationunsuccesful),
+                                    Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+
+            @Override
+            public void invalidName(final HFile file) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (toast != null) toast.cancel();
+                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
+                                + file.getName(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
+
+
+    //copy from rename "examine later"
+    public void unlock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode)
+    {
+        final Toast toast=Toast.makeText(context, context.getString(R.string.unlock),Toast.LENGTH_SHORT);
+        toast.show();
+        Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack()
+        {
+            @Override
+            public void exists(HFile file)
+            {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        if (toast != null) toast.cancel();
+                        Toast.makeText(mainActivity, context.getString(R.string.error_file_has_no_lock),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void launchSAF(HFile file)
+            {
+
+            }
+
+            @Override
+            public void launchSAF(final HFile file, final HFile file1)
+            {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (toast != null) toast.cancel();
+                        mainActivity.oppathe = file.getPath();
+                        mainActivity.oppathe1 = file1.getPath();
+                        mainActivity.operation = DataUtils.POST;
+                        guideDialogForLEXA(mainActivity.oppathe1);
+                    }
+                });
+            }
+
+            @Override
+            public void done(HFile hFile, final boolean b)
+            {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (b) {
+                            Intent intent = new Intent("loadlist");
+                            mainActivity.sendBroadcast(intent);
+                        } else
+                            Toast.makeText(context, context.getString(R.string.operationunsuccesful),
+                                    Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+
+            @Override
+            public void invalidName(final HFile file)
+            {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (toast != null) toast.cancel();
+                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
+                                + file.getName(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
     public int checkFolder(final File folder, Context context) {

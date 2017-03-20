@@ -199,8 +199,102 @@ public class Operations {
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+//********
+public static void post(final HFile oldFile, final HFile newFile, final boolean rootMode,
+                          final Context context, final ErrorCallBack errorCallBack){
+    new AsyncTask<Void, Void, Void>() {
+        @Override
+        protected Void doInBackground(Void... params) {
 
+            // check whether file names for new file are valid or recursion occurs
+            if (MainActivityHelper.isNewDirectoryRecursive(newFile) ||
+                    !Operations.isFileNameValid(newFile.getName())) {
+                errorCallBack.invalidName(newFile);
+                return null;
+            }
 
+            if(newFile.exists()){
+                errorCallBack.exists(newFile);
+                return null;
+            }
+
+            if (oldFile.isSmb()) {
+                try {
+                    SmbFile smbFile = new SmbFile(oldFile.getPath());
+                    SmbFile smbFile1=new SmbFile(newFile.getPath());
+                    if(smbFile1.exists()){
+                        errorCallBack.exists(newFile);
+                        return null;
+                    }
+                    smbFile.renameTo(smbFile1);
+                    if(!smbFile.exists() && smbFile1.exists())
+                        errorCallBack.done(newFile,true);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (SmbException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            } else if (oldFile.isOtgFile()) {
+                DocumentFile oldDocumentFile = RootHelper.getDocumentFile(oldFile.getPath(), context, false);
+                DocumentFile newDocumentFile = RootHelper.getDocumentFile(newFile.getPath(), context, false);
+                if (newDocumentFile!=null) {
+                    errorCallBack.exists(newFile);
+                    return null;
+                }
+                errorCallBack.done(newFile, oldDocumentFile.renameTo(newFile.getName()));
+                return null;
+            } else {
+
+                File file = new File(oldFile.getPath());
+                File file1 = new File(newFile.getPath());
+                switch (oldFile.getMode()){
+                    case FILE:
+                        int mode = checkFolder(file.getParentFile(), context);
+                        if (mode == 2) {
+                            errorCallBack.launchSAF(oldFile,newFile);
+                        } else if (mode == 1 || mode==0) {
+                            try {
+                                FileUtil.renameFolder(file, file1, context);
+                            } catch (RootNotPermittedException e) {
+                                e.printStackTrace();
+                            }
+                            boolean a = !file.exists() && file1.exists();
+                            if (!a && rootMode){
+                                try {
+                                    RootUtils.rename(file.getPath(), file1.getPath());
+                                } catch (Exception e) {
+                                    Logger.log(e,oldFile.getPath()+"\n"+newFile.getPath(),context);
+                                }
+                                oldFile.setMode(OpenMode.ROOT);
+                                newFile.setMode(OpenMode.ROOT);
+                                a = !file.exists() && file1.exists();
+                            }
+                            errorCallBack.done(newFile,a);
+                            return null;
+                        }
+                        break;
+                    case ROOT:
+                        try {
+
+                            RootUtils.rename(file.getPath(), file1.getPath());
+                        } catch (Exception e) {
+                            Logger.log(e,oldFile.getPath()+"\n"+newFile.getPath(),context);
+                        }
+
+                        newFile.setMode(OpenMode.ROOT);
+                        errorCallBack.done(newFile, true);
+                        break;
+
+                }
+            }
+            return null;
+        }
+    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+}
+
+//**************************************************************
     public static void rename(final HFile oldFile, final HFile newFile, final boolean rootMode,
                               final Context context, final ErrorCallBack errorCallBack){
         new AsyncTask<Void, Void, Void>() {
@@ -294,6 +388,7 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
+
     /*
     MainActicityHelper need operation.lock
     Operation.lock

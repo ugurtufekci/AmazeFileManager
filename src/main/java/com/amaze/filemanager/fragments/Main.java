@@ -19,7 +19,7 @@
 
 package com.amaze.filemanager.fragments;
 
-
+import android.support.design.widget.Snackbar;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -188,7 +188,7 @@ public class Main extends android.support.v4.app.Fragment {
 
     }
 
-    @Override
+  @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -642,6 +642,7 @@ public class Main extends android.support.v4.app.Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             computeScroll();
             ArrayList<Integer> plist = adapter.getCheckedItemPositions();
+            ArrayList<File> lockedarr = new ArrayList<File>();   //arraylist for locked files.
             switch (item.getItemId()) {
                 case R.id.openmulti:
                     if (Build.VERSION.SDK_INT >= 16) {
@@ -738,43 +739,61 @@ public class Main extends android.support.v4.app.Fragment {
 
                 case R.id.rename:
 
-                    final ActionMode m = mode;
-                    final BaseFile f;
+                     ActionMode m = mode;
+                   BaseFile f;
                     f = (LIST_ELEMENTS.get(
                             (plist.get(0)))).generateBaseFile();
                     rename(f);
                     mode.finish();
                     return true;
 
-                case R.id.label:
-
-                    final ActionMode u = mode;
-                    final BaseFile o;
-                    o = (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    rename(o);
-                    mode.finish();
-                    return true;
-
-
                 case R.id.post:
-                    final ActionMode a = mode;
-                    final BaseFile g;
+                    ActionMode a = mode;
+                     BaseFile g;
                     g = (LIST_ELEMENTS.get(
                         (plist.get(0)))).generateBaseFile();
-                    rename(g);
+                    post(g);
                     mode.finish();
                     return true;
+
 
                 case R.id.pre:
-                    final ActionMode t = mode;
-                    final BaseFile h;
-                    g = (LIST_ELEMENTS.get(
+                   ActionMode t = mode;
+                    BaseFile h;
+                    h = (LIST_ELEMENTS.get(
                             (plist.get(0)))).generateBaseFile();
-                    rename(g);
+                    pre(h);
                     mode.finish();
                     return true;
 
+
+
+              case R.id.lock:
+
+                    final ActionMode n = mode;
+                    final BaseFile j;
+                  for (int i : plist)
+                  {
+                      lockedarr.add(new File(LIST_ELEMENTS.get(i).getDesc()));
+                  }
+                    j= (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    lock(j);
+                    mode.finish();
+                    return true;
+                case R.id.unlock:
+
+                    final ActionMode n2 = mode;
+                    final BaseFile j2;
+                    for (int i : plist)
+                    {
+                        lockedarr.remove(new File(LIST_ELEMENTS.get(i).getDesc()));
+                    }
+                    j2= (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    unlock(j2);
+                    mode.finish();
+                    return true;
 
 
                 case R.id.hide:
@@ -1146,14 +1165,120 @@ public class Main extends android.support.v4.app.Fragment {
 
     }
 
-    /**
-     * Show dialog to rename a file
-     * @param f the file to rename
-     */
-    public void rename(final BaseFile f) {
+
+
+
+    public void post(final BaseFile p) {
+
+        MaterialDialog.Builder b = new MaterialDialog.Builder(getActivity());
+        final String nameOrjinal = p.getName();
+
+        b.input("","", false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog material, CharSequence charSequence) {
+
+            }
+        });
+        b.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+        b.title(getResources().getString(R.string.postLabel));
+        b.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+
+                String name = materialDialog.getInputEditText().getText().toString();
+                if(name.trim().length() != 0) {
+                    name = nameOrjinal + "+" + name;
+                    if (p.isSmb())
+                        if (p.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
+                else
+                {
+                    name =nameOrjinal;
+                    if (p.isSmb())
+                        if (p.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+
+                }
+            }
+
+            @Override
+            public void onNegative(MaterialDialog material) {
+
+                material.cancel();
+            }
+        });
+        b.build().show();
+        b.positiveText(R.string.save);
+        b.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        b.positiveColor(color).negativeColor(color).widgetColor(color);
+
+    }
+    public void pre(final BaseFile w) {
+
+        MaterialDialog.Builder c = new MaterialDialog.Builder(getActivity());
+        final String orjinalName = w.getName();
+
+        c.input("", "", false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+        c.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+        c.title(getResources().getString(R.string.preLabel));
+        c.callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog materialDialog) {
+
+                String name = materialDialog.getInputEditText().getText().toString();
+                if (name.trim().length() != 0) {
+                    //"+";
+
+                    name = name +"+"+ orjinalName;
+                    if (w.isSmb())
+                        if (w.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
+                else
+                {
+                    name = orjinalName;
+                    if (w.isSmb())
+                        if (w.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+
+                }
+            }
+            @Override
+            public void onNegative(MaterialDialog materialDialog) {
+
+                materialDialog.cancel();
+            }
+        });
+        c.positiveText(R.string.save);
+        c.negativeText(R.string.cancel);
+        int color = Color.parseColor(fabSkin);
+        c.positiveColor(color).negativeColor(color).widgetColor(color);
+        c.build().show();
+    }
+
+    public void rename( final BaseFile f) {
         MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-        String name = f.getName();
-        a.input("", name, false, new MaterialDialog.InputCallback() {
+        final String orjinalName = f.getName();
+        a.input("", orjinalName, false, new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
@@ -1165,12 +1290,24 @@ public class Main extends android.support.v4.app.Fragment {
             @Override
             public void onPositive(MaterialDialog materialDialog) {
                 String name = materialDialog.getInputEditText().getText().toString();
-                if (f.isSmb())
-                    if (f.isDirectory() && !name.endsWith("/"))
-                        name = name + "/";
+                if(name.trim().length()!=0) {
+                    if (f.isSmb())
+                        if (f.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
 
-                MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                    MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
+                else
+                {
+                    name =orjinalName;
+                    if (f.isSmb())
+                        if (f.isDirectory() && !name.endsWith("/"))
+                            name = name + "/";
+
+                    MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                }
             }
 
             @Override
@@ -1185,44 +1322,92 @@ public class Main extends android.support.v4.app.Fragment {
         a.positiveColor(color).negativeColor(color).widgetColor(color);
         a.build().show();
     }
-    /*
-    lock builder
-    */
-    public void lock(final BaseFile f) {
-        MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-        String name = f.getName();
-        a.input("", name, false, new MaterialDialog.InputCallback() {
-            @Override
-            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
-            }
-        });
-        a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-        a.title(getResources().getString(R.string.lock));
-        a.callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog materialDialog) {
-                String name = materialDialog.getInputEditText().getText().toString();
-                if (f.isSmb())
-                    if (f.isDirectory() && !name.endsWith("/"))
-                        name = name + "/";
+    public void lock (final BaseFile f)
+    {
+        if(f.hasLocked()==false)
+        {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            String name = f.getName();
 
-                MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-            }
 
-            @Override
-            public void onNegative(MaterialDialog materialDialog) {
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.lock));
+            a.callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog materialDialog) {
+                    String name = materialDialog.getInputEditText().getText().toString();
+                    if (name.trim().length() != 0) {
+                        MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                    }
+                }
 
-                materialDialog.cancel();
-            }
-        });
-        a.positiveText(R.string.ok);
+                @Override
+                public void onNegative(MaterialDialog materialDialog) {
 
-        int color = Color.parseColor(fabSkin);
-        a.positiveColor(color).negativeColor(color).widgetColor(color);
-        a.build().show();
+                    materialDialog.cancel();
+                }
+            });
+        }
+        else
+        {
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
+                    Toast.LENGTH_LONG).show();
+        }
     }
+
+    public void unlock( final BaseFile f)
+    {
+        if (f.hasLocked() == true)
+        {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            final String inputpassword = "";
+            a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+                @Override
+                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+                }
+            });
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.unlock));
+            a.callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog materialDialog) {
+                    String inputpassword = materialDialog.getInputEditText().getText().toString();
+                    if (inputpassword.trim().length() != 0) {
+
+
+                        MAIN_ACTIVITY.mainActivityHelper.unlock(openMode, f.getPath(),
+                                CURRENT_PATH + "/" + inputpassword, getActivity(), BaseActivity.rootMode);
+                    }
+
+                }
+
+                @Override
+                public void onNegative(MaterialDialog materialDialog) {
+
+                    materialDialog.cancel();
+                }
+            });
+            a.positiveText(R.string.unlock);
+            a.negativeText(R.string.cancel);
+            int color = Color.parseColor(fabSkin);
+            a.positiveColor(color).negativeColor(color).widgetColor(color);
+            a.build().show();
+        }
+        else
+        {
+
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_has_no_lock),
+                    Toast.LENGTH_SHORT).show();
+
+
+
+
+        }
+    }
+
 
     public void computeScroll() {
         View vi = listView.getChildAt(0);
@@ -1410,7 +1595,7 @@ public class Main extends android.support.v4.app.Fragment {
             if (mFile[i].isDirectory()) {
                 folder_count++;
                 Layoutelements layoutelements = new Layoutelements(folder, name, mFile[i].getPath(),
-                        "", "", "", 0, false, mFile[i].lastModified() + "", true);
+                        "", "", "", 0, false, mFile[i].lastModified() + "", true , OpenMode.FILE);
                 layoutelements.setMode(OpenMode.SMB);
                 searchHelper.add(layoutelements.generateBaseFile());
                 a.add(layoutelements);
@@ -1421,7 +1606,7 @@ public class Main extends android.support.v4.app.Fragment {
                             Icons.loadMimeIcon(mFile[i].getPath(), !IS_LIST, res), name,
                             mFile[i].getPath(), "", "", Formatter.formatFileSize(getContext(),
                             mFile[i].length()), mFile[i].length(), false,
-                            mFile[i].lastModified() + "", false);
+                            mFile[i].lastModified() + "", false , OpenMode.FILE);
                     layoutelements.setMode(OpenMode.SMB);
                     searchHelper.add(layoutelements.generateBaseFile());
                     a.add(layoutelements);
@@ -1516,7 +1701,9 @@ public class Main extends android.support.v4.app.Fragment {
     // adds search results based on result boolean. If false, the adapter is initialised with initial
     // values, if true, new values are added to the adapter.
     public void addSearchResult(BaseFile a) {
+
         LIST_ELEMENTS.clear();                 //
+
         if (listView != null) {
 
             // initially clearing the array for new result set

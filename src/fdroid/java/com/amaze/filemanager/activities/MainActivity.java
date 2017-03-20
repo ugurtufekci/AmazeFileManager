@@ -1643,6 +1643,16 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     mainActivityHelper.rename(ma2.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
                     ma2.updateList();
                     break;
+                case DataUtils.POST:
+                    Main ma7 = ((Main) getFragment().getTab());
+                    mainActivityHelper.post(ma7.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    ma7.updateList();
+                    break;
+                case DataUtils.PRE:
+                    Main ma8 = ((Main) getFragment().getTab());
+                    mainActivityHelper.pre(ma8.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    ma8.updateList();
+                    break;
                 case DataUtils.NEW_FILE:
                     Main ma3 = ((Main) getFragment().getTab());
                     mainActivityHelper.mkFile(new HFile(OpenMode.FILE, oppathe), ma3);

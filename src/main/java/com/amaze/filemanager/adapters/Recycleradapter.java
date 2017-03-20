@@ -704,8 +704,20 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                                 arrayList.add(new File(rowItem.getDesc()));
                                 utilsProvider.getFutils().shareFiles(arrayList, main.MAIN_ACTIVITY, utilsProvider.getAppTheme(), Color.parseColor(main.fabSkin));
                                 return true;
+                            case R.id.lock:                 //generateBaseFile from Layoutelements
+                                main.lock(rowItem.generateBaseFile());
+                                return true;
+                            case R.id.unlock:
+                                main.unlock(rowItem.generateBaseFile());
+                                return true;
                             case R.id.rename:
-                                main.rename(rowItem.generateBaseFile());
+                                 main.rename(rowItem.generateBaseFile());
+                                return true;
+                            case R.id.post:
+                                main.post(rowItem.generateBaseFile());
+                                return true;
+                            case R.id.pre:
+                                main.pre(rowItem.generateBaseFile());
                                 return true;
                             case R.id.cpy:
                                 MainActivity MAIN_ACTIVITY = main.MAIN_ACTIVITY;

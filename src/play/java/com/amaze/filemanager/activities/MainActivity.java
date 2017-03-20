@@ -1744,6 +1744,16 @@ public class MainActivity extends BaseActivity implements
                     mainActivityHelper.rename(ma2.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
                     ma2.updateList();
                     break;
+                case DataUtils.POST:
+                    Main ma4 = ((Main) getFragment().getTab());
+                    mainActivityHelper.rename(ma4.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    ma4.updateList();
+                    break;
+                case DataUtils.PRE:
+                    Main ma5 = ((Main) getFragment().getTab());
+                    mainActivityHelper.rename(ma5.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    ma5.updateList();
+                    break;
                 case DataUtils.NEW_FILE:
                     Main ma3 = ((Main) getFragment().getTab());
                     mainActivityHelper.mkFile(new HFile(OpenMode.FILE, oppathe), ma3);
