@@ -29,6 +29,7 @@
         android:title="@string/favorites"
         android:icon="@drawable/ic_action_favorites"
         app:showAsAction="always" />
+    <!--  DOSYA SECILDIGINDE SAG YUKARIDA CIKMASI ICIN EKLENDI (COP KUTUSU GIBI)-->
     <item
         android:id="@+id/cpy"
         android:title="@string/copy"
