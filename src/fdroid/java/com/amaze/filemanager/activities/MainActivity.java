@@ -635,6 +635,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void invalidatePasteButton(MenuItem paste) {
         if (MOVE_PATH != null || COPY_PATH != null) {
             paste.setVisible(true);
+
         } else {
             paste.setVisible(false);
         }
@@ -885,6 +886,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         MenuItem s = menu.findItem(R.id.view);
         MenuItem search = menu.findItem(R.id.search);
         MenuItem paste = menu.findItem(R.id.paste);
+        MenuItem favorite = menu.findItem(R.id.Favorites);
+
+
         String f = null;
         Fragment fragment;
         try {
@@ -912,6 +916,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             initiatebbar();
             if (Build.VERSION.SDK_INT >= 21) toolbar.setElevation(0);
             invalidatePasteButton(paste);
+
+
+
             search.setVisible(true);
             if (indicator_layout != null) indicator_layout.setVisibility(View.VISIBLE);
             menu.findItem(R.id.search).setVisible(true);
@@ -929,11 +936,14 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.view).setVisible(true);
             menu.findItem(R.id.extract).setVisible(false);
             invalidatePasteButton(menu.findItem(R.id.paste));
+
+
             findViewById(R.id.buttonbarframe).setVisibility(View.VISIBLE);
         } else if (f.contains("AppsList") || f.contains("ProcessViewer") ||
                 f.contains(FTPServerFragment.class.getName())) {
             appBarLayout.setExpanded(true);
             menu.findItem(R.id.sethome).setVisible(false);
+
             if (indicator_layout != null) indicator_layout.setVisibility(View.GONE);
             findViewById(R.id.buttonbarframe).setVisibility(View.GONE);
             menu.findItem(R.id.search).setVisible(false);
@@ -1152,6 +1162,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 MOVE_PATH = null;
 
                 invalidatePasteButton(item);
+                invalidatePasteButton(item);
+
+
+
                 break;
             case R.id.extract:
                 Fragment fragment1 = getSupportFragmentManager().findFragmentById(R.id.content_frame);
@@ -1164,6 +1178,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
                 break;
+            case R.id.Favorites:
+
+                // MERİÇ BALGAMIŞ
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

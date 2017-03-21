@@ -25,6 +25,11 @@
         android:visible="false"
         app:showAsAction="ifRoom|withText" />
     <item
+        android:id="@+id/Favorites"
+        android:title="@string/favorites"
+        android:icon="@drawable/ic_action_favorites"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/cpy"
         android:title="@string/copy"
         android:icon="@drawable/ic_content_copy_white_24dp"

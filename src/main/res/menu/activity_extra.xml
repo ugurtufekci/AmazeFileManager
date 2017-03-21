@@ -25,11 +25,21 @@
         android:icon="@drawable/ic_content_paste_white_36dp"
         app:showAsAction="always"
         android:visible="false" />
+
+
+    <item android:id="@+id/Favorites"
+        android:title="@string/favorites"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_favorites"
+        android:visible="false"
+        />
+
     <item
         android:id="@+id/search"
         android:title="@string/search"
         android:icon="@drawable/ic_action_search"
         app:showAsAction="always">
+
 
         <menu>
 

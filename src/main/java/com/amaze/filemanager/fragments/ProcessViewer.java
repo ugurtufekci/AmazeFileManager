@@ -368,9 +368,12 @@ public class ProcessViewer extends Fragment {
 
                     mProgressImage.setImageDrawable(getResources()
                             .getDrawable(R.drawable.ic_content_copy_white_36dp));
+
+
                 } else {
                     mProgressImage.setImageDrawable(getResources()
                             .getDrawable(R.drawable.ic_content_copy_grey600_36dp));
+
                 }
                 mProgressTypeText.setText(isMove ? getResources().getString(R.string.moving)
                         : getResources().getString(R.string.copying));
