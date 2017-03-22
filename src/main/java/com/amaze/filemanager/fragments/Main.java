@@ -766,18 +766,6 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
 
 
-/*
-              case R.id.lock:
-
-                    final ActionMode n = mode;
-                    final BaseFile j;
-                    j= (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    lock(j);
-                    mode.finish();
-                    return true;
-*/
-
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
                         hide(LIST_ELEMENTS.get(plist.get(i1)).getDesc());
@@ -825,10 +813,19 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 
+                case R.id.Favorites:
 
+                    for (int j = 0; j < plist.size(); j++) {
 
+                        if(!DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(j)).getDesc())) {
+                            DataUtils.addFavoritesFile(LIST_ELEMENTS.get(plist.get(j)).getDesc());
+                            Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(getActivity(), "Already added to Favorites", Toast.LENGTH_SHORT).show();
 
-
+                        }
+                    }
 
                 default:
                     return false;
@@ -1308,6 +1305,7 @@ public class Main extends android.support.v4.app.Fragment {
     lock builder
     */
     public void lock(final BaseFile f) {
+
         MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
         String name = f.getName();
         a.input("", name, false, new MaterialDialog.InputCallback() {

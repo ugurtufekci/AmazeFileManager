@@ -1199,7 +1199,37 @@ public class Futils {
 
     }
 
-    //********************************************
+
+
+
+
+
+
+    public void showFavoritesDialog(final Main m, AppTheme appTheme) {
+        final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
+        a.positiveText(R.string.cancel);
+        a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+        a.negativeText(R.string.clear);
+        a.negativeColor(Color.parseColor(BaseActivity.accentSkin));
+        a.title("Favorites");
+        a.onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                DataUtils.clearFavorites();
+            }
+        });
+        a.theme(appTheme.getMaterialDialogTheme());
+
+        a.autoDismiss(true);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.favorites),null,true);
+        a.adapter(adapter, null);
+
+        MaterialDialog x= a.build();
+        adapter.updateDialog(x);
+        x.show();
+
+    }
+
 
 
     public void showTrashDialog(final Main m, AppTheme appTheme) {

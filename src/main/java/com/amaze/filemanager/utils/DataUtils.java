@@ -14,14 +14,14 @@ import java.util.List;
 //Central data being used across activity,fragments and classes
 public class DataUtils {
     public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
-    , trash = new ArrayList<>();
+    , trash = new ArrayList<>() , favorites = new ArrayList<>();
 
     public static List<String> storages=new ArrayList<>();
 
     public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9,TEST=10;
 
-    public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3";
+    public static final String FAVORITES = "favorites",DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
+    ,TRASH = "Table3" , LOCKED = "locked";
 
     public static ArrayList<Item> list=new ArrayList<>();
     public static ArrayList<String[]> servers=new ArrayList<>(),books=new ArrayList<>(),accounts=new ArrayList<>();
@@ -57,8 +57,8 @@ public class DataUtils {
         servers=new ArrayList<>();
         books=new ArrayList<>();
         accounts=new ArrayList<>();
-
-         trash = new ArrayList<>();
+        favorites = new ArrayList<>();
+        trash = new ArrayList<>();
 
     }
     public static void registerOnDataChangedListener(DataChangeListener dataChangeListener){
@@ -120,6 +120,8 @@ public class DataUtils {
         if(dataChangeListener!=null)
             dataChangeListener.onHiddenFileRemoved(i);
     }
+
+
     public static void addHistoryFile(String i)
     {
         history.add(i);
@@ -127,7 +129,12 @@ public class DataUtils {
             dataChangeListener.onHistoryAdded(i);
     }
 
-
+    public static void addFavoritesFile(String i)
+    {
+        favorites.add(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onFavoritesAdded(i);
+    }
     //*************************************
 
     public static void addTrashFile(String i)
@@ -211,6 +218,13 @@ public class DataUtils {
 
     //********************************
 
+
+    public static void clearFavorites() {
+        favorites=new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onFavoritesCleared();
+    }
+
     public static List<String> getStorages() {
         return storages;
     }
@@ -231,12 +245,14 @@ public class DataUtils {
         void onHiddenFileAdded(String path);
         void onHiddenFileRemoved(String path);
         void onHistoryAdded(String path);
-
-         void onTrashAdded(String path);
+        void onFavoritesAdded(String path);
+        void onTrashAdded(String path);
 
         void onBookAdded(String path[],boolean refreshdrawer);
         void onHistoryCleared();
-
+        void onFavoritesCleared();
         void onTrashCleared();
+
+
     }
 }
