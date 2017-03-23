@@ -31,12 +31,7 @@ public class HFile {
     enum Type {fileOrFolder,application};
     String path;
 
-<<<<<<< HEAD
-    //public static final int ROOT_MODE=3,LOCAL_MODE=0,SMB_MODE=1,UNKNOWN=-1;
-    OpenMode mode = OpenMode.FILE;
 
-
-=======
 
 
     //public static final int ROOT_MODE=3,LOCAL_MODE=0,SMB_MODE=1,UNKNOWN=-1;
@@ -46,7 +41,7 @@ public class HFile {
 /*
 All openmode types initialy has no lock.
 */
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
+
     public HFile(OpenMode mode, String path) {
         this.path = path;
         this.mode = mode;

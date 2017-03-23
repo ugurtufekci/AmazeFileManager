@@ -25,18 +25,18 @@
         android:visible="false"
         app:showAsAction="ifRoom|withText" />
     <item
-<<<<<<< HEAD
+
         android:id="@+id/lock2"
         android:title="@string/lock2"
         android:icon="@drawable/ic_action_lock21"
         app:showAsAction="always" />
-=======
+    <item
         android:id="@+id/Favorites"
         android:title="@string/favorites"
         android:icon="@drawable/ic_action_favorites"
         app:showAsAction="always" />
     <!--  DOSYA SECILDIGINDE SAG YUKARIDA CIKMASI ICIN EKLENDI (COP KUTUSU GIBI)-->
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
+
     <item
         android:id="@+id/cpy"
         android:title="@string/copy"

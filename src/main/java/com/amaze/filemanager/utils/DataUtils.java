@@ -12,14 +12,14 @@ import java.util.List;
 
 //Central data being used across activity,fragments and classes
 public class DataUtils {
-<<<<<<< HEAD
+
     public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
-    , trash = new ArrayList<>(),lock_array =new ArrayList<>();
-=======
+    ,lock_array =new ArrayList<>();
+
 
     public static ArrayList<String>  favorites = new ArrayList<>();
 
-    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>();
+
    /* ,trash3 = new ArrayList<>();*/
 
    public static ArrayList<BaseFile> trash = new ArrayList<>();
@@ -30,21 +30,18 @@ public class DataUtils {
    // public static ArrayList<DataPackage> trash = new ArrayList<>();
 
 
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
+
 
     public static List<String> storages=new ArrayList<>();
 
     public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9,TEST=10;
 
-<<<<<<< HEAD
-    public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3",LOCK ="Table4";
-=======
+
 
     public static final String FAVORITES = "favorites",DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3" , LOCKED = "locked";
+    ,TRASH = "Table3" , LOCK = "Table4";
 
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
+
 
     public static ArrayList<Item> list=new ArrayList<>();
     public static ArrayList<String[]> servers=new ArrayList<>(),books=new ArrayList<>(),accounts=new ArrayList<>();
@@ -85,11 +82,10 @@ public class DataUtils {
         // trash3 = new ArrayList<>();
 
 
-<<<<<<< HEAD
+
          trash = new ArrayList<>();
         lock_array = new ArrayList<>();
-=======
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
+
 
     }
     public static void registerOnDataChangedListener(DataChangeListener dataChangeListener){
@@ -140,7 +136,7 @@ public class DataUtils {
             servers.add(i);
     }
 
-<<<<<<< HEAD
+
     public static void addLockFile(String i)
     {
         lock_array.add(i);
@@ -156,8 +152,6 @@ public class DataUtils {
             dataChangeListener.onLockedRemoved(i);
     }
 
-=======
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
     public static void addHiddenFile(String i)
     {
         hiddenfiles.add(i);

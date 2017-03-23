@@ -174,11 +174,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public LinearLayout pathbar;
     public FrameLayout buttonBarFrame;
     public boolean isDrawerLocked = false;
-<<<<<<< HEAD
-    HistoryManager history, grid,lockHistory,trash;
-=======
-    HistoryManager favorites , history, grid, trash , locked;
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
+
+    HistoryManager favorites , history, grid, trash , lockHistory;
+
     Futils utils;
 
     MainActivity mainActivity = this;
@@ -270,22 +268,16 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         mainActivityHelper = new MainActivityHelper(this);
         initialiseFab();
 
-<<<<<<< HEAD
         lockHistory = new HistoryManager(this, "Table4");
         lockHistory.initializeTable(DataUtils.LOCK, 0);
         lockHistory.initializeTable(DataUtils.HIDDEN, 0);
 
 
-=======
         favorites = new HistoryManager(this,"favorites");
         favorites.initializeTable(DataUtils.FAVORITES, 0);
         favorites.initializeTable(DataUtils.HIDDEN, 0);
 
 
-        locked = new HistoryManager(this,"locked");
-        locked.initializeTable(DataUtils.LOCKED, 0);
-        locked.initializeTable(DataUtils.HIDDEN, 0);
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
 
         history = new HistoryManager(this, "Table2");
         history.initializeTable(DataUtils.HISTORY, 0);
@@ -2742,7 +2734,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 
-<<<<<<< HEAD
+
     @Override
     public void onLockedAdded(String path) {
         lockHistory.addPath(null, path, DataUtils.LOCK, 0); //addPath mode 0 equals(path)
@@ -2754,9 +2746,6 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     @Override
-=======
-   //****************************************************************
->>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
     public void onHiddenFileAdded(String path) {
         history.addPath(null, path, DataUtils.HIDDEN, 0);
     }
