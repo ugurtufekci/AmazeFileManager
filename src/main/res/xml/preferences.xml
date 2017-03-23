@@ -26,9 +26,6 @@
             android:key="colors"
             android:summary="@string/color_summary"
             android:title="@string/color_title"/>
-        <Preference
-            android:key="password"
-            android:title="@string/password"/>
 
         <com.amaze.filemanager.ui.views.CheckBx
             android:defaultValue="true"
@@ -48,6 +45,9 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/general">
+        <Preference
+            android:key="password"
+            android:title="@string/password"/>
         <com.amaze.filemanager.ui.views.CheckBx
             android:defaultValue="true"
             android:key="savepaths"

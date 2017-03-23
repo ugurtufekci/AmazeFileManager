@@ -104,6 +104,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 
@@ -113,6 +114,7 @@ public class Main extends android.support.v4.app.Fragment {
     private Futils utils;
 
     public ArrayList<Layoutelements> LIST_ELEMENTS;
+    public static ArrayList<BaseFile> LOCKED_FILES= new ArrayList<>();
     public Recycleradapter adapter;
     public ActionMode mActionMode;
     public SharedPreferences Sp;
@@ -428,6 +430,7 @@ public class Main extends android.support.v4.app.Fragment {
             if (openMode == OpenMode.SMB)
                 smbPath = savedInstanceState.getString("SmbPath");
             LIST_ELEMENTS = savedInstanceState.getParcelableArrayList("list");
+           LOCKED_FILES = savedInstanceState.getParcelableArrayList("lockedlist");
             CURRENT_PATH = cur;
             folder_count = savedInstanceState.getInt("folder_count", 0);
             file_count = savedInstanceState.getInt("file_count", 0);
@@ -643,7 +646,7 @@ public class Main extends android.support.v4.app.Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             computeScroll();
             ArrayList<Integer> plist = adapter.getCheckedItemPositions();
-            ArrayList<File> lockedarr = new ArrayList<File>();   //arraylist for locked files.
+
             switch (item.getItemId()) {
                 case R.id.openmulti:
                     if (Build.VERSION.SDK_INT >= 16) {
@@ -745,61 +748,69 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 
-                    case R.id.post:
+                case R.id.post:
                     ActionMode a = mode;
-                   // withpost();
+                    // withpost();
 
 
-                    ArrayList<BaseFile> selectAllpost  = new ArrayList<>();
+                    ArrayList<BaseFile> selectAllpost = new ArrayList<>();
                     BaseFile g;
 
-                    for (int i = 0 ; i<plist.size(); i++)
-                        selectAllpost.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile() );
+                    for (int i = 0; i < plist.size(); i++)
+                        selectAllpost.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile());
                     g = selectAllpost.get(0);
-                    post(g,selectAllpost);
+                    post(g, selectAllpost);
                     mode.finish();
                     return true;
 
                 case R.id.pre:
                     ActionMode t = mode;
-                    ArrayList<BaseFile> selectAllpre  = new ArrayList<>();
+                    ArrayList<BaseFile> selectAllpre = new ArrayList<>();
                     final BaseFile j;
                     //     BaseFile tempt;
-                    for (int i = 0 ; i<plist.size(); i++)
-                        selectAllpre.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile() );
-                    j= selectAllpre.get(0);
-                    pre(j,selectAllpre);
+                    for (int i = 0; i < plist.size(); i++)
+                        selectAllpre.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile());
+                    j = selectAllpre.get(0);
+                    pre(j, selectAllpre);
                     mode.finish();
                     return true;
 
-
-
-                case R.id.lock:
-
-                    final ActionMode n = mode;
-                    final BaseFile p;
-                    for (int i : plist)
-                    {
-                        lockedarr.add(new File(LIST_ELEMENTS.get(i).getDesc()));
+                case R.id.lock2:
+                    if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc())) {
+                        DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+                        Toast.makeText(getActivity(), getResources().getString(R.string.locking),
+                                Toast.LENGTH_LONG).show();
                     }
-                    p= (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    lock(p);
-                    mode.finish();
-                    return true;
-                case R.id.unlock:
-
-                    final ActionMode n2 = mode;
-                    final BaseFile j2;
-                    for (int i : plist)
+                    else
                     {
-                        lockedarr.remove(new File(LIST_ELEMENTS.get(i).getDesc()));
+                        MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
+                        final String inputpassword = "";
+                        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+                            }
+                        });
+                        l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+                        l.title(getResources().getString(R.string.unlock));
+
+                        l.positiveText(R.string.unlock);
+                        l.negativeText(R.string.cancel);
+                        int color = Color.parseColor(fabSkin);
+                        l.positiveColor(color).negativeColor(color).widgetColor(color);
+                        l.build().show();
+
+                        ////////////////////////////////////////////////
+                        Toast.makeText(getActivity(), "UNLOCKING",
+                                Toast.LENGTH_LONG).show();
+                        DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+
+
                     }
-                    j2= (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    unlock(j2);
-                    mode.finish();
                     return true;
+
+
+
 
 
                 case R.id.hide:
@@ -849,10 +860,18 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 
+                case R.id.Favorites:
 
+                    for (int k = 0; k < plist.size(); k++) {
 
+                        if (!DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())) {
+                            DataUtils.addFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
+                            Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "Already added to Favorites", Toast.LENGTH_SHORT).show();
 
-
+                        }
+                    }
 
                 default:
                     return false;
@@ -1345,44 +1364,38 @@ public class Main extends android.support.v4.app.Fragment {
         a.build().show();
     }
 
+
+
+
+
+   /*
+
     public void lock (final BaseFile f)
+
     {
-        if(f.hasLocked()==false)
+
+
+        if(!LOCKED_FILES.contains(f))
         {
             MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-            String name = f.getName();
-
-
             a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
             a.title(getResources().getString(R.string.lock));
-            a.callback(new MaterialDialog.ButtonCallback() {
-                @Override
-                public void onPositive(MaterialDialog materialDialog) {
-                    String name = materialDialog.getInputEditText().getText().toString();
-                    if (name.trim().length() != 0) {
-                        MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-                    }
-                }
 
-                @Override
-                public void onNegative(MaterialDialog materialDialog) {
-
-                    materialDialog.cancel();
-                }
-            });
+            LOCKED_FILES.add(f);
         }
-        else
+
+        else if(LOCKED_FILES.contains(f))
         {
             Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
                     Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
-    public void unlock( final BaseFile f)
+   /*public void unlock( final BaseFile f)
     {
-        if (f.hasLocked() == true)
-        {
+
+       // if (LOCKED_FILES.contains(f))
+       // {
             MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
             final String inputpassword = "";
             a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
@@ -1397,12 +1410,6 @@ public class Main extends android.support.v4.app.Fragment {
                 @Override
                 public void onPositive(MaterialDialog materialDialog) {
                     String inputpassword = materialDialog.getInputEditText().getText().toString();
-                    if (inputpassword.trim().length() != 0) {
-
-
-                        MAIN_ACTIVITY.mainActivityHelper.unlock(openMode, f.getPath(),
-                                CURRENT_PATH + "/" + inputpassword, getActivity(), BaseActivity.rootMode);
-                    }
 
                 }
 
@@ -1417,8 +1424,10 @@ public class Main extends android.support.v4.app.Fragment {
             int color = Color.parseColor(fabSkin);
             a.positiveColor(color).negativeColor(color).widgetColor(color);
             a.build().show();
-        }
-        else
+
+            LOCKED_FILES.remove(f);
+       // }
+      /* else if (!LOCKED_FILES.contains(f))
         {
 
             Toast.makeText(getActivity(), getResources().getString(R.string.error_file_has_no_lock),
@@ -1428,7 +1437,7 @@ public class Main extends android.support.v4.app.Fragment {
 
 
         }
-    }
+    }*/
 
 
     public void computeScroll() {

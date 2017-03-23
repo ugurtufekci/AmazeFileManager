@@ -25,6 +25,19 @@
         android:visible="false"
         app:showAsAction="ifRoom|withText" />
     <item
+
+        android:id="@+id/lock2"
+        android:title="@string/lock2"
+        android:icon="@drawable/ic_action_lock21"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/Favorites"
+        android:title="@string/favorites"
+        android:icon="@drawable/ic_action_favorites"
+        app:showAsAction="always" />
+    <!--  DOSYA SECILDIGINDE SAG YUKARIDA CIKMASI ICIN EKLENDI (COP KUTUSU GIBI)-->
+
+    <item
         android:id="@+id/cpy"
         android:title="@string/copy"
         android:icon="@drawable/ic_content_copy_white_24dp"
@@ -48,13 +61,12 @@
         android:id="@+id/all"
         android:title="@string/selectall"
         android:icon="@drawable/ic_select_all_white_36dp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction = "ifRoom" />
     <item
-        android:visible="true"
         android:id="@+id/label"
-        android:icon="@drawable/ic_action_new"
-        android:title="@string/label">
-
+        android:icon="@drawable/circle"
+        android:title="@string/label"
+        android:visible="true">
 
 
         <menu>
@@ -62,16 +74,16 @@
             <item
                 android:id="@+id/post"
                 android:checkable="false"
-                android:icon="@drawable/circle"
+                android:icon="@android:drawable/ic_input_get"
                 android:title="@string/post"
                 android:visible="true" />/ tools:checkable="false"
 
-                />
+            />
 
             <item
                 android:id="@+id/pre"
                 android:checkable="false"
-                android:icon="@drawable/circle"
+                android:icon="@android:drawable/ic_input_get"
                 android:title="@string/pre"
                 android:visible="true" />/ tools:checkable="false"/>
         </menu>

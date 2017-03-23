@@ -1149,6 +1149,22 @@ public class MainActivity extends BaseActivity implements
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
                 break;
+            case R.id.password:
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
+                        Toast.LENGTH_LONG).show();
+               /* BaseFile j;
+                final ActionMode n = mode;
+
+
+                j=(LIST_ELEMENTS.get(
+                        (plist.get(0)))).generateBaseFile();
+
+
+                lock(j);
+
+
+                mode.finish();*/
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

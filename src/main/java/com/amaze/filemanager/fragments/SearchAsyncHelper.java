@@ -1,3 +1,4 @@
+
 package com.amaze.filemanager.fragments;
 
 import android.content.Context;
@@ -147,8 +148,9 @@ public class SearchAsyncHelper extends Fragment {
          * @param query the searched text
          */
         private void search(HFile file, String query) {
+            query=query.trim();
 
-            if(!query.equalsIgnoreCase(lastSearch)) {
+            if(!query.equals(lastSearch)) {
                 lastSearch = query;
                 isDone = true;
             }
@@ -161,13 +163,10 @@ public class SearchAsyncHelper extends Fragment {
                         //if(toast!=null)toast.cancel();
                         toast.show();
 
-                        }});
+                    }});
 
                 isDone = true;
             }
-
-
-
 
             if (file.isDirectory()) {
                 ArrayList<BaseFile> f = file.listFiles(mRootMode);
@@ -178,19 +177,57 @@ public class SearchAsyncHelper extends Fragment {
                         if (!isCancelled()) {
                             if (x.isDirectory()) {
 
-                                if (x.getName().toLowerCase()
-                                        .contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
-                                    publishProgress(x);
+
+
+                                if (query.contains("+")) {
+                                    //pre
+                                    if (query.charAt(query.length() - 1) == '+') {
+                                        if (x.getName().startsWith(query))
+                                            publishProgress(x);
+                                        if (!isCancelled()) search(x, query);
+                                    }
+                                    if (query.charAt(0) == '+') {
+                                        if (x.getName().endsWith(query))
+                                            publishProgress(x);
+                                        if (!isCancelled()) search(x, query);
+                                    }
                                 }
-                                if (!isCancelled()) search(x, query);
+
+                                else {
+                                    if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
+                                        publishProgress(x);
+                                    }
+                                    if (!isCancelled()) search(x, query);
+                                }
+
+
+
 
                             }
                             else {
 
-                                if (x.getName().toLowerCase()
-                                        .contains(query.toLowerCase())) {   // EGER FILE ISE SADECE ISMINI BAS
-                                    publishProgress(x);
+
+                                if (query.contains("+")) {
+                                    //pre
+                                    if (query.charAt(query.length() - 1) == '+') {
+                                        if (x.getName().startsWith(query))
+                                            publishProgress(x);
+                                        if (!isCancelled()) search(x, query);
+                                    }
+                                    if (query.charAt(0) == '+') {
+                                        if (x.getName().endsWith(query))
+                                            publishProgress(x);
+                                        if (!isCancelled()) search(x, query);
+                                    }
                                 }
+
+                                else {
+                                    if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
+                                        publishProgress(x);
+                                    }
+                                    if (!isCancelled()) search(x, query);
+                                }
+
                             }
                         } else return;
                     }

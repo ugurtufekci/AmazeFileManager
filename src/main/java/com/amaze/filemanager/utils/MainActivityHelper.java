@@ -302,6 +302,7 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // arraye burda ekle
                         if (z != null) z.cancel();
 
                         Toast.makeText(mainActivity, context.getString(R.string.fileexist),
@@ -823,7 +824,7 @@ public class MainActivityHelper {
      * Creates a fragment which will handle the search AsyncTask {@link SearchAsyncHelper}
      * @param query the text query entered the by user
      */
-    public void search(String query ) {
+    public void search(String query) {
         TabFragment tabFragment=mainActivity.getFragment();
         if(tabFragment==null)return;
         final Main ma = (Main) tabFragment.getTab();
@@ -834,7 +835,7 @@ public class MainActivityHelper {
         //ma.searchTask = task;
 
 
-            SEARCH_TEXT = query;
+        SEARCH_TEXT = query;
 
 
         mainActivity.mainFragment = (Main) mainActivity.getFragment().getTab();
