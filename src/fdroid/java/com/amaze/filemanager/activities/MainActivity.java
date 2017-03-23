@@ -175,7 +175,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public LinearLayout pathbar;
     public FrameLayout buttonBarFrame;
     public boolean isDrawerLocked = false;
-    HistoryManager history, grid,trash;
+    HistoryManager history, grid,lockHistory,trash;
     Futils utils;
 
     MainActivity mainActivity = this;
@@ -266,6 +266,12 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         mainActivityHelper = new MainActivityHelper(this);
         initialiseFab();
 
+        lockHistory = new HistoryManager(this, "Table4");
+        lockHistory.initializeTable(DataUtils.LOCK, 0);
+        lockHistory.initializeTable(DataUtils.HIDDEN, 0);
+
+
+
         history = new HistoryManager(this, "Table2");
         history.initializeTable(DataUtils.HISTORY, 0);
         history.initializeTable(DataUtils.HIDDEN, 0);
@@ -290,6 +296,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             grid.make(DataUtils.BOOKS);
             Sp.edit().putBoolean("booksadded", true).commit();
         }
+        //DataUtils.setLockedfiles(lockHistory.readTable(DataUtils.LOCK));
         DataUtils.setHiddenfiles(history.readTable(DataUtils.HIDDEN));
         DataUtils.setGridfiles(grid.readTable(DataUtils.GRID));
         DataUtils.setListfiles(grid.readTable(DataUtils.LIST));
@@ -921,6 +928,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             //*************************
             menu.findItem(R.id.trash).setVisible(true);
 
+            menu.findItem(R.id.locklist).setVisible(true);
+
+           // menu.findItem(R.id.unlock).setVisible(true);
 
             menu.findItem(R.id.sethome).setVisible(true);
 
@@ -942,7 +952,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
             //***************************
             menu.findItem(R.id.trash).setVisible(false);
-
+            menu.findItem(R.id.locklist).setVisible(false);
 
             menu.findItem(R.id.extract).setVisible(false);
             if (f.contains("ProcessViewer")) menu.findItem(R.id.item10).setVisible(false);
@@ -974,6 +984,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             //*******************************
             menu.findItem(R.id.trash).setVisible(false);
 
+            menu.findItem(R.id.locklist).setVisible(false);
             menu.findItem(R.id.item10).setVisible(false);
             menu.findItem(R.id.hiddenitems).setVisible(false);
             menu.findItem(R.id.view).setVisible(false);
@@ -1037,6 +1048,14 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 if (ma != null)
                     utils.showHistoryDialog(ma, getAppTheme());
                 break;
+            case R.id.locklist:
+                if (ma != null)
+                    utils.showLockDialog(ma, getAppTheme());
+                break;
+           /* case R.id.unlock:
+                if (ma != null)
+                    utils.showUnlockDialog(ma, getAppTheme());
+                break;*/
 
             //****************************
 
@@ -2665,6 +2684,16 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             refreshDrawer();
         }
 
+    }
+
+    @Override
+    public void onLockedAdded(String path) {
+        lockHistory.addPath(null, path, DataUtils.LOCK, 0); //addPath mode 0 equals(path)
+                                                          // mode 1 equals (name+path)
+    }
+    @Override
+    public void onLockedRemoved(String path) {
+        lockHistory.removePath(path, DataUtils.LOCK);
     }
 
     @Override
