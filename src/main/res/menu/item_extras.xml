@@ -10,34 +10,6 @@
         android:title="@string/openwith"
         />
 
-    <item
-        android:visible="true"
-        android:id="@+id/label"
-        android:icon="@drawable/ic_action_new"
-        android:title="@string/label">
-
-
-
-        <menu>
-
-            <item
-                android:visible="true"
-                android:id="@+id/post"
-                android:title="@string/post"
-                android:checkable="false"
-                tools:checkable="false"
-
-                />
-
-            <item
-                android:visible="true"
-                android:id="@+id/pre"
-                android:title="@string/pre"
-                android:checkable="false"
-                tools:checkable="false"/>
-        </menu>
-
-    </item>
 
     <item
         android:id="@+id/cut"
@@ -59,7 +31,11 @@
         tools:checkable="false" />
     <item
         android:id="@+id/lock"
+        android:checkable="false"
         android:title="@string/lock" />
+    <item
+        android:id="@+id/unlock"
+        android:title="@string/unlock" />
     <item
         android:id="@+id/about"
         android:title="@string/properties"/>

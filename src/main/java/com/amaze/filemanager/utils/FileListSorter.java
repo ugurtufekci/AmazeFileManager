@@ -53,8 +53,6 @@ public class FileListSorter implements Comparator<Layoutelements> {
      }
 
 
-
-
     @Override
     public int compare(Layoutelements file1, Layoutelements file2) {  // return 1 file1 > file2
 

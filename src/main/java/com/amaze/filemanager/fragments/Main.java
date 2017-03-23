@@ -19,7 +19,7 @@
 
 package com.amaze.filemanager.fragments;
 
-
+import android.support.design.widget.Snackbar;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -172,6 +172,7 @@ public class Main extends android.support.v4.app.Fragment {
     public int skin_color;
     public int skinTwoColor;
     public int icon_skin_color;
+   // ArrayList<BaseFile> selectAll  = new ArrayList<>();
 
     // defines the current visible tab, default either 0 or 1
     //private int mCurrentTab;
@@ -642,6 +643,7 @@ public class Main extends android.support.v4.app.Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             computeScroll();
             ArrayList<Integer> plist = adapter.getCheckedItemPositions();
+            ArrayList<File> lockedarr = new ArrayList<File>();   //arraylist for locked files.
             switch (item.getItemId()) {
                 case R.id.openmulti:
                     if (Build.VERSION.SDK_INT >= 16) {
@@ -748,22 +750,61 @@ public class Main extends android.support.v4.app.Fragment {
 
                 case R.id.post:
                     ActionMode a = mode;
+                    ArrayList<BaseFile> selectAllpost  = new ArrayList<>();
                      BaseFile g;
-                    g = (LIST_ELEMENTS.get(
-                        (plist.get(0)))).generateBaseFile();
-                    post(g);
+
+                    for (int i = 0 ; i<plist.size(); i++)
+                        selectAllpost.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile() );
+                    g = selectAllpost.get(0);
+                    post(g,selectAllpost);
                     mode.finish();
                     return true;
-
 
                 case R.id.pre:
                    ActionMode t = mode;
-                    BaseFile h;
-                    h = (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    pre(h);
+                    ArrayList<BaseFile> selectAllpre  = new ArrayList<>();
+                    final BaseFile j;
+               //     BaseFile tempt;
+                   for (int i = 0 ; i<plist.size(); i++)
+                        selectAllpre.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile() );
+
+
+               //     selectAllReturn (selectAll);
+
+                    j= selectAllpre.get(0);
+                    pre(j,selectAllpre);
                     mode.finish();
                     return true;
+
+
+
+              case R.id.lock:
+
+                    final ActionMode n = mode;
+                    final BaseFile b;
+                  for (int i : plist)
+                  {
+                      lockedarr.add(new File(LIST_ELEMENTS.get(i).getDesc()));
+                  }
+                    b= (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    lock(b);
+                    mode.finish();
+                    return true;
+                case R.id.unlock:
+
+                    final ActionMode n2 = mode;
+                    final BaseFile j2;
+                    for (int i : plist)
+                    {
+                        lockedarr.remove(new File(LIST_ELEMENTS.get(i).getDesc()));
+                    }
+                    j2= (LIST_ELEMENTS.get(
+                            (plist.get(0)))).generateBaseFile();
+                    unlock(j2);
+                    mode.finish();
+                    return true;
+
 
 
                 case R.id.hide:
@@ -815,10 +856,10 @@ public class Main extends android.support.v4.app.Fragment {
 
                 case R.id.Favorites:
 
-                    for (int j = 0; j < plist.size(); j++) {
+                    for (int k = 0; k < plist.size(); k++) {
 
-                        if(!DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(j)).getDesc())) {
-                            DataUtils.addFavoritesFile(LIST_ELEMENTS.get(plist.get(j)).getDesc());
+                        if(!DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())) {
+                            DataUtils.addFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
                             Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
                         }
                         else{
@@ -830,6 +871,11 @@ public class Main extends android.support.v4.app.Fragment {
                 default:
                     return false;
             }
+        }
+
+
+        public ArrayList<BaseFile> selectAllReturn (ArrayList<BaseFile> a){
+            return a;
         }
 
         // called when the user exits the action mode
@@ -1147,12 +1193,12 @@ public class Main extends android.support.v4.app.Fragment {
 
 
 
-    public void post(final BaseFile p) {
+    public void post(final BaseFile k ,final ArrayList <BaseFile> selected) {
 
         MaterialDialog.Builder b = new MaterialDialog.Builder(getActivity());
-        final String nameOrjinal = p.getName();
 
-        b.input("","", false, new MaterialDialog.InputCallback() {
+
+        b.input(""," ", false, new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog material, CharSequence charSequence) {
 
@@ -1165,24 +1211,36 @@ public class Main extends android.support.v4.app.Fragment {
             public void onPositive(MaterialDialog materialDialog) {
 
                 String name = materialDialog.getInputEditText().getText().toString();
-                if(name.trim().length() != 0) {
-                    name = nameOrjinal + "+" + name;
-                    if (p.isSmb())
-                        if (p.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
+                String temp = name;
 
-                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-                }
-                else
-                {
-                    name =nameOrjinal;
-                    if (p.isSmb())
-                        if (p.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
+                for (int i = 0; i < selected.size(); i++) {
+                    String nameOrjinal = selected.get(i).getName();
 
-                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                    if (name.trim().length()!=0) {
+
+                        name = nameOrjinal + "+" + name;
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
+
+                        MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+
+                    }
+                     else {
+                        name ="   ";
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
+                                  MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
+                                   CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+
+                    }
+
+
+
 
                 }
             }
@@ -1200,10 +1258,12 @@ public class Main extends android.support.v4.app.Fragment {
         b.positiveColor(color).negativeColor(color).widgetColor(color);
 
     }
-    public void pre(final BaseFile w) {
+
+
+
+    public void pre(final BaseFile k, final ArrayList<BaseFile> selected) {
 
         MaterialDialog.Builder c = new MaterialDialog.Builder(getActivity());
-        final String orjinalName = w.getName();
 
         c.input("", "", false, new MaterialDialog.InputCallback() {
             @Override
@@ -1214,33 +1274,45 @@ public class Main extends android.support.v4.app.Fragment {
         c.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
         c.title(getResources().getString(R.string.preLabel));
         c.callback(new MaterialDialog.ButtonCallback() {
+
+
             @Override
             public void onPositive(MaterialDialog materialDialog) {
 
                 String name = materialDialog.getInputEditText().getText().toString();
-                if (name.trim().length() != 0) {
+        String temp =name ;
+                for (int i = 0; i < selected.size(); i++) {
+                    String orjinalName = selected.get(i).getName();
+
                     //"+";
+                    if (name.trim().length() != 0) {
+                        name = name + "+" + orjinalName;
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
 
-                    name = name +"+"+ orjinalName;
-                    if (w.isSmb())
-                        if (w.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
+                        MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+                    }
 
-                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+
+
+                    else
+                    {
+                        name ="   ";
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
+                        MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+                    }
                 }
-                else
-                {
-                    name = orjinalName;
-                    if (w.isSmb())
-                        if (w.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
 
-                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
 
                 }
-            }
+
             @Override
             public void onNegative(MaterialDialog materialDialog) {
 
@@ -1269,24 +1341,15 @@ public class Main extends android.support.v4.app.Fragment {
             @Override
             public void onPositive(MaterialDialog materialDialog) {
                 String name = materialDialog.getInputEditText().getText().toString();
-                if(name.trim().length()!=0) {
+
                     if (f.isSmb())
                         if (f.isDirectory() && !name.endsWith("/"))
                             name = name + "/";
 
                     MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
                             CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-                }
-                else
-                {
-                    name =orjinalName;
-                    if (f.isSmb())
-                        if (f.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
 
-                    MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-                }
+
             }
 
             @Override
@@ -1301,45 +1364,94 @@ public class Main extends android.support.v4.app.Fragment {
         a.positiveColor(color).negativeColor(color).widgetColor(color);
         a.build().show();
     }
-    /*
-    lock builder
-    */
-    public void lock(final BaseFile f) {
 
-        MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-        String name = f.getName();
-        a.input("", name, false, new MaterialDialog.InputCallback() {
-            @Override
-            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
-            }
-        });
-        a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-        a.title(getResources().getString(R.string.lock));
-        a.callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog materialDialog) {
-                String name = materialDialog.getInputEditText().getText().toString();
-                if (f.isSmb())
-                    if (f.isDirectory() && !name.endsWith("/"))
-                        name = name + "/";
 
-                MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-            }
+    public void lock (final BaseFile f)
+    {
+        if(f.hasLocked()==false)
+        {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            String name = f.getName();
 
-            @Override
-            public void onNegative(MaterialDialog materialDialog) {
 
-                materialDialog.cancel();
-            }
-        });
-        a.positiveText(R.string.ok);
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.lock));
+            a.callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog materialDialog) {
+                    String name = materialDialog.getInputEditText().getText().toString();
+                    if (name.trim().length() != 0) {
+                        MAIN_ACTIVITY.mainActivityHelper.lock(openMode, f.getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                    }
+                }
 
-        int color = Color.parseColor(fabSkin);
-        a.positiveColor(color).negativeColor(color).widgetColor(color);
-        a.build().show();
+                @Override
+                public void onNegative(MaterialDialog materialDialog) {
+
+                    materialDialog.cancel();
+                }
+            });
+        }
+        else
+        {
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
+                    Toast.LENGTH_LONG).show();
+        }
     }
+
+    public void unlock( final BaseFile f)
+    {
+        if (f.hasLocked() == true)
+        {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            final String inputpassword = "";
+            a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+                @Override
+                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+                }
+            });
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.unlock));
+            a.callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog materialDialog) {
+                    String inputpassword = materialDialog.getInputEditText().getText().toString();
+                    if (inputpassword.trim().length() != 0) {
+
+
+                        MAIN_ACTIVITY.mainActivityHelper.unlock(openMode, f.getPath(),
+                                CURRENT_PATH + "/" + inputpassword, getActivity(), BaseActivity.rootMode);
+                    }
+
+                }
+
+                @Override
+                public void onNegative(MaterialDialog materialDialog) {
+
+                    materialDialog.cancel();
+                }
+            });
+            a.positiveText(R.string.unlock);
+            a.negativeText(R.string.cancel);
+            int color = Color.parseColor(fabSkin);
+            a.positiveColor(color).negativeColor(color).widgetColor(color);
+            a.build().show();
+        }
+        else
+        {
+
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_has_no_lock),
+                    Toast.LENGTH_SHORT).show();
+
+
+
+
+        }
+    }
+
 
     public void computeScroll() {
         View vi = listView.getChildAt(0);

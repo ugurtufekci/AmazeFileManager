@@ -19,135 +19,130 @@
 
 package com.amaze.filemanager.activities;
 
-        import android.animation.Animator;
-        import android.animation.AnimatorListenerAdapter;
-        import android.animation.ObjectAnimator;
-        import android.app.Activity;
-        import android.app.ActivityManager;
-        import android.content.BroadcastReceiver;
-        import android.content.ContentResolver;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.IntentFilter;
-        import android.content.IntentSender;
-        import android.content.pm.PackageManager;
-        import android.content.res.Configuration;
-        import android.graphics.Color;
-        import android.graphics.drawable.BitmapDrawable;
-        import android.graphics.drawable.ColorDrawable;
-        import android.graphics.drawable.Drawable;
-        import android.hardware.usb.UsbManager;
-        import android.media.RingtoneManager;
-        import android.net.Uri;
-        import android.os.AsyncTask;
-        import android.os.Build;
-        import android.os.Bundle;
-        import android.os.CountDownTimer;
-        import android.os.Environment;
-        import android.os.Handler;
-        import android.os.HandlerThread;
-        import android.support.annotation.NonNull;
-        import android.support.annotation.RequiresApi;
-        import android.support.design.widget.AppBarLayout;
-        import android.support.design.widget.CoordinatorLayout;
-        import android.support.design.widget.Snackbar;
-        import android.support.v4.app.ActionBarDrawerToggle;
-        import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
-        import android.support.v4.app.Fragment;
-        import android.support.v4.app.FragmentTransaction;
-        import android.support.v4.content.ContextCompat;
-        import android.support.v4.widget.DrawerLayout;
-        import android.support.v7.widget.AppCompatEditText;
-        import android.support.v7.widget.Toolbar;
-        import android.text.TextUtils;
-        import android.util.DisplayMetrics;
-        import android.util.Log;
-        import android.view.Gravity;
-        import android.view.KeyEvent;
-        import android.view.Menu;
-        import android.view.MenuInflater;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.view.ViewAnimationUtils;
-        import android.view.ViewGroup;
-        import android.view.Window;
-        import android.view.WindowManager;
-        import android.view.animation.AccelerateDecelerateInterpolator;
-        import android.view.animation.Animation;
-        import android.view.animation.AnimationUtils;
-        import android.view.animation.DecelerateInterpolator;
-        import android.view.inputmethod.InputMethodManager;
-        import android.widget.Button;
-        import android.widget.FrameLayout;
-        import android.widget.HorizontalScrollView;
-        import android.widget.ImageButton;
-        import android.widget.ImageView;
-        import android.widget.LinearLayout;
-        import android.widget.ListView;
-        import android.widget.RelativeLayout;
-        import android.widget.TextView;
-        import android.widget.Toast;
 
-        import com.afollestad.materialdialogs.DialogAction;
-        import com.afollestad.materialdialogs.MaterialDialog;
-        import com.amaze.filemanager.R;
-        import com.amaze.filemanager.adapters.DrawerAdapter;
-        import com.amaze.filemanager.database.Tab;
-        import com.amaze.filemanager.database.TabHandler;
-        import com.amaze.filemanager.exceptions.RootNotPermittedException;
-        import com.amaze.filemanager.filesystem.BaseFile;
-        import com.amaze.filemanager.filesystem.FileUtil;
-        import com.amaze.filemanager.filesystem.HFile;
-        import com.amaze.filemanager.filesystem.RootHelper;
-        import com.amaze.filemanager.fragments.AppsList;
-        import com.amaze.filemanager.fragments.FTPServerFragment;
-        import com.amaze.filemanager.fragments.Main;
-        import com.amaze.filemanager.fragments.ProcessViewer;
-        import com.amaze.filemanager.fragments.SearchAsyncHelper;
-        import com.amaze.filemanager.fragments.TabFragment;
-        import com.amaze.filemanager.fragments.ZipViewer;
-        import com.amaze.filemanager.fragments.preference_fragments.Preffrag;
-        import com.amaze.filemanager.services.CopyService;
-        import com.amaze.filemanager.services.DeleteTask;
-        import com.amaze.filemanager.services.asynctasks.CopyFileCheck;
-        import com.amaze.filemanager.services.asynctasks.MoveFiles;
-        import com.amaze.filemanager.ui.Layoutelements;
-        import com.amaze.filemanager.ui.dialogs.RenameBookmark;
-        import com.amaze.filemanager.ui.dialogs.RenameBookmark.BookmarkCallback;
-        import com.amaze.filemanager.ui.dialogs.SmbConnectDialog;
-        import com.amaze.filemanager.ui.dialogs.SmbConnectDialog.SmbConnectionListener;
-        import com.amaze.filemanager.ui.drawer.EntryItem;
-        import com.amaze.filemanager.ui.drawer.Item;
-        import com.amaze.filemanager.ui.drawer.SectionItem;
-        import com.amaze.filemanager.ui.icons.IconUtils;
-        import com.amaze.filemanager.ui.views.RoundedImageView;
-        import com.amaze.filemanager.ui.views.ScrimInsetsRelativeLayout;
-        import com.amaze.filemanager.utils.AppConfig;
-        import com.amaze.filemanager.utils.BookSorter;
-        import com.amaze.filemanager.utils.DataUtils;
-        import com.amaze.filemanager.utils.DataUtils.DataChangeListener;
-        import com.amaze.filemanager.utils.Futils;
-        import com.amaze.filemanager.utils.HistoryManager;
-        import com.amaze.filemanager.utils.MainActivityHelper;
-        import com.amaze.filemanager.utils.OpenMode;
-        import com.amaze.filemanager.utils.PreferenceUtils;
-        import com.amaze.filemanager.utils.RootUtils;
-        import com.amaze.filemanager.utils.ServiceWatcherUtil;
-        import com.amaze.filemanager.utils.color.ColorUsage;
-        import com.amaze.filemanager.utils.theme.AppTheme;
-        import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.ImageLoader;
-        import com.github.clans.fab.FloatingActionButton;
-        import com.github.clans.fab.FloatingActionMenu;
-        import com.readystatesoftware.systembartint.SystemBarTintManager;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.hardware.usb.UsbManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import java.io.File;
-        import java.util.ArrayList;
-        import java.util.Collections;
-        import java.util.List;
-        import java.util.regex.Pattern;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.amaze.filemanager.R;
+import com.amaze.filemanager.adapters.DrawerAdapter;
+import com.amaze.filemanager.database.Tab;
+import com.amaze.filemanager.database.TabHandler;
+import com.amaze.filemanager.filesystem.BaseFile;
+import com.amaze.filemanager.filesystem.FileUtil;
+import com.amaze.filemanager.filesystem.HFile;
+import com.amaze.filemanager.filesystem.RootHelper;
+import com.amaze.filemanager.fragments.AppsList;
+import com.amaze.filemanager.fragments.FTPServerFragment;
+import com.amaze.filemanager.fragments.Main;
+import com.amaze.filemanager.fragments.ProcessViewer;
+import com.amaze.filemanager.fragments.SearchAsyncHelper;
+import com.amaze.filemanager.fragments.TabFragment;
+import com.amaze.filemanager.fragments.ZipViewer;
+import com.amaze.filemanager.services.CopyService;
+import com.amaze.filemanager.services.DeleteTask;
+import com.amaze.filemanager.services.asynctasks.CopyFileCheck;
+import com.amaze.filemanager.services.asynctasks.MoveFiles;
+import com.amaze.filemanager.ui.dialogs.RenameBookmark;
+import com.amaze.filemanager.ui.dialogs.RenameBookmark.BookmarkCallback;
+import com.amaze.filemanager.ui.dialogs.SmbConnectDialog;
+import com.amaze.filemanager.ui.dialogs.SmbConnectDialog.SmbConnectionListener;
+import com.amaze.filemanager.ui.drawer.EntryItem;
+import com.amaze.filemanager.ui.drawer.Item;
+import com.amaze.filemanager.ui.drawer.SectionItem;
+import com.amaze.filemanager.ui.icons.IconUtils;
+import com.amaze.filemanager.ui.views.RoundedImageView;
+import com.amaze.filemanager.ui.views.ScrimInsetsRelativeLayout;
+import com.amaze.filemanager.utils.AppConfig;
+import com.amaze.filemanager.utils.BookSorter;
+import com.amaze.filemanager.utils.DataUtils;
+import com.amaze.filemanager.utils.DataUtils.DataChangeListener;
+import com.amaze.filemanager.utils.Futils;
+import com.amaze.filemanager.utils.HistoryManager;
+import com.amaze.filemanager.utils.MainActivityHelper;
+import com.amaze.filemanager.utils.OpenMode;
+import com.amaze.filemanager.utils.PreferenceUtils;
+import com.amaze.filemanager.utils.ServiceWatcherUtil;
+import com.amaze.filemanager.utils.color.ColorUsage;
+import com.amaze.filemanager.utils.theme.AppTheme;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-        import eu.chainfire.libsuperuser.Shell;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import eu.chainfire.libsuperuser.Shell;
 
 
 public class MainActivity extends BaseActivity implements OnRequestPermissionsResultCallback,
@@ -162,6 +157,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public ListView mDrawerList;
     public ScrimInsetsRelativeLayout mDrawerLinear;
     public String path = "", launchPath;
+
+    public BaseFile path2;
+
     public ArrayList<BaseFile> COPY_PATH = null, MOVE_PATH = null;
     public FrameLayout frameLayout;
     public boolean mReturnIntent = false;
@@ -191,6 +189,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     int hidemode;
     public int operation = -1;
     public ArrayList<BaseFile> oparrayList;
+
 
     // oppathe - the path at which certain operation needs to be performed
     // oppathe1 - the new path which user wants to create/modify
@@ -303,6 +302,13 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         DataUtils.setHiddenfiles(history.readTable(DataUtils.HIDDEN));
         DataUtils.setGridfiles(grid.readTable(DataUtils.GRID));
         DataUtils.setListfiles(grid.readTable(DataUtils.LIST));
+
+        //**********************
+
+      //  DataUtils.setTrash(trash.readTable(DataUtils.TRASH));
+
+
+        //*****************
         util = new IconUtils(Sp, this);
         icons = new IconUtils(Sp, this);
 
@@ -1073,10 +1079,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             //****************************
 
             case R.id.trash:
-                if(ma != null)
-                    utils.showTrashDialog(ma, getAppTheme());
-                break;
+                if(ma != null) {
 
+                    // uygulama her açıldığında içindekiler kalmalı ???
+
+                    utils.showTrashDialog(ma, getAppTheme());
+
+
+                }
+            break;
             //*******************
             case R.id.sethome:
                 if (ma == null) return super.onOptionsItemSelected(item);
@@ -2706,17 +2717,21 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 
-    @Override
+   //****************************************************************
     public void onHiddenFileAdded(String path) {
         history.addPath(null, path, DataUtils.HIDDEN, 0);
     }
 
 
 
-    @Override
+
     public void onHiddenFileRemoved(String path) {
         history.removePath(path, DataUtils.HIDDEN);
     }
+
+    //************************************************************
+
+
 
     @Override
     public void onHistoryAdded(String path) {
@@ -2724,13 +2739,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
 
+
+
 //*************************************
 
 
+    public void onTrashAdded(/*String path*/ BaseFile path) {
 
-    @Override
-    public void onTrashAdded(String path) {
-        trash.addPath(null, path, DataUtils.TRASH, 0);
+
+        trash.addPath(null, path.getPath(), DataUtils.TRASH, 0);
     }
 //**************************************
 
@@ -2755,8 +2772,23 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onTrashCleared() {
         trash.clear(DataUtils.TRASH);
+
     }
 //**************************************************
+
+
+//*************************************************
+
+
+    @Override
+    public void onHiddenCleared() {
+        history.clear(DataUtils.HIDDEN);
+
+    }
+//**************************************************
+
+
+
 
 
 
@@ -2810,6 +2842,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onFavoritesAdded(String path) {
         favorites.addPath(null, path, DataUtils.FAVORITES, 0);
+    }
+
+    @Override
+    public void onTrashAdded(String path) {
+
     }
 
 

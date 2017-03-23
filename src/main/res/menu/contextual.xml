@@ -56,6 +56,35 @@
         android:icon="@drawable/ic_select_all_white_36dp"
         app:showAsAction = "ifRoom" />
     <item
+        android:visible="true"
+        android:id="@+id/label"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/label">
+
+
+
+        <menu>
+
+            <item
+                android:visible="true"
+                android:id="@+id/post"
+                android:title="@string/post"
+                android:checkable="false"
+               />/ tools:checkable="false"
+
+                />
+
+            <item
+                android:visible="true"
+                android:id="@+id/pre"
+                android:title="@string/pre"
+                android:checkable="false"
+               />/ tools:checkable="false"/>
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/share"
         android:title="@string/share" />
     <item
@@ -71,6 +100,7 @@
     <item
         android:id="@+id/addshortcut"
         android:title="@string/addshortcut" />
+
 
     <item
         android:id="@+id/ex"
