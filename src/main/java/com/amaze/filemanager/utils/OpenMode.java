@@ -11,7 +11,8 @@ public enum OpenMode {
     UNKNOWN,
     FILE,
     SMB,
-
+    WITHPOST,
+    WITHPRE,
     /**
      * Custom file types like apk/images/downloads (which don't have a defined path)
      */

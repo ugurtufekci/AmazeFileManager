@@ -60,20 +60,20 @@
         <menu>
 
             <item
-                android:visible="true"
                 android:id="@+id/post"
-                android:title="@string/post"
                 android:checkable="false"
-               />/ tools:checkable="false"
+                android:icon="@drawable/circle"
+                android:title="@string/post"
+                android:visible="true" />/ tools:checkable="false"
 
                 />
 
             <item
-                android:visible="true"
                 android:id="@+id/pre"
-                android:title="@string/pre"
                 android:checkable="false"
-               />/ tools:checkable="false"/>
+                android:icon="@drawable/circle"
+                android:title="@string/pre"
+                android:visible="true" />/ tools:checkable="false"/>
         </menu>
 
     </item>

@@ -35,6 +35,7 @@ public class Operations {
     private static final String GREATER_THAN = ">";
     private static final String LESS_THAN = "<";
     private static final String FAT = "FAT";
+    private static final String PLUS="+";
 
     public interface ErrorCallBack{
         void exists(HFile file);
@@ -42,7 +43,28 @@ public class Operations {
         void launchSAF(HFile file,HFile file1);
         void done(HFile hFile,boolean b);
         void invalidName(HFile file);
+
     }
+
+
+
+    public static boolean alreadyLabel(final HFile a) {
+                if(a.getName().contains("+"))
+                    return true;
+             return false ;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static void mkdir(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack){
         if(file==null || errorCallBack==null)return;
@@ -213,11 +235,15 @@ public static void post(final HFile oldFile, final HFile newFile, final boolean 
         protected Void doInBackground(Void... params) {
 
             // check whether file names for new file are valid or recursion occurs
-            if (!Operations.isFileNameValid(newFile.getName())) {
+            if (!Operations.isFileNameValidpostpre(newFile.getName())) {
                 errorCallBack.invalidName(newFile);
                 return null;
             }
+            if(alreadyLabel(oldFile)) {
+                errorCallBack.invalidName(newFile);
+                return null;
 
+            }
             if(newFile.exists()){
                 errorCallBack.exists(newFile);
                 return null;
@@ -308,9 +334,14 @@ public static void post(final HFile oldFile, final HFile newFile, final boolean 
             protected Void doInBackground(Void... params) {
 
                 // check whether file names for new file are valid or recursion occurs
-                if (!Operations.isFileNameValid(newFile.getName())) {
+                if (!Operations.isFileNameValidpostpre(newFile.getName())) {
                     errorCallBack.invalidName(newFile);
                     return null;
+                }
+                if(alreadyLabel(oldFile)) {
+                    errorCallBack.invalidName(newFile);
+                    return null;
+
                 }
 
                 if(newFile.exists()){
@@ -593,7 +624,7 @@ public static void post(final HFile oldFile, final HFile newFile, final boolean 
      * @param fileName the filename, not the full path!
      * @return boolean if the file name is valid or invalid
      */
-    public static boolean isFileNameValid(String fileName) {
+    public static boolean isFileNameValidpostpre(String fileName) {
 
         //String fileName = builder.substring(builder.lastIndexOf("/")+1, builder.length());
 
@@ -603,6 +634,24 @@ public static void post(final HFile oldFile, final HFile newFile, final boolean 
                 fileName.contains(COLON) || fileName.contains(FOREWARD_SLASH) ||
                 fileName.contains(GREATER_THAN) || fileName.contains(LESS_THAN) ||
                 fileName.contains(QUESTION_MARK) || fileName.contains(QUOTE))) {
+            return false;
+
+        }
+        else if (fileName.trim().length()==0)return false;
+        else
+            return true ;
+    }
+
+    public static boolean isFileNameValid(String fileName) {
+
+        //String fileName = builder.substring(builder.lastIndexOf("/")+1, builder.length());
+
+
+        // TODO: check file name validation only for FAT filesystems
+        if ((fileName.contains(ASTERISK) || fileName.contains(BACKWARD_SLASH) ||
+                fileName.contains(COLON) || fileName.contains(FOREWARD_SLASH) ||
+                fileName.contains(GREATER_THAN) || fileName.contains(LESS_THAN) ||
+                fileName.contains(QUESTION_MARK) ||fileName.contains(PLUS) || fileName.contains(QUOTE)))  {
             return false;
 
         }

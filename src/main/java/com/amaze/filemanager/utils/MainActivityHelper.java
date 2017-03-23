@@ -91,6 +91,18 @@ public class MainActivityHelper {
         }
     };
 
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Prompt a dialog to user to input directory name
      *
@@ -147,9 +159,8 @@ public class MainActivityHelper {
                 SmbSearchDialog smbDialog=new SmbSearchDialog();
                 smbDialog.show(mainActivity.getFragmentManager(),"tab");
                 break;
-            /*case 3:
-                mainActivity.bindDrive();
-                break;*/
+
+
         }
     }
 
@@ -343,9 +354,12 @@ public class MainActivityHelper {
                         if (z != null) z.cancel();
                         if (file.getName().trim().length()==0)
                             Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ "whitespace", Toast.LENGTH_LONG).show();
-                        else
+                        else if (file.getName().contains("+")){
+                            Toast.makeText(context, context.getString(R.string.alreadyLabel), Toast.LENGTH_LONG).show();
+                        }
+                            else{
                         Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
-                                + file.getName(), Toast.LENGTH_LONG).show();
+                                + file.getName(), Toast.LENGTH_LONG).show();}
                     }
                 });
             }
@@ -413,6 +427,9 @@ public class MainActivityHelper {
                         if (toast != null) toast.cancel();
                         if (file.getName().trim().length()==0)
                             Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ "whitespace", Toast.LENGTH_LONG).show();
+                        else if (file.getName().contains("+")){
+                            Toast.makeText(context, context.getString(R.string.alreadyLabel) , Toast.LENGTH_LONG).show();
+                        }
                         else
                         Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
                                 + file.getName(), Toast.LENGTH_LONG).show();
@@ -423,7 +440,6 @@ public class MainActivityHelper {
     }
 
 
-    //copy from rename "examine later"
     public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
         final Toast toast=Toast.makeText(context, context.getString(R.string.lock),Toast.LENGTH_SHORT);
         toast.show();
@@ -807,7 +823,7 @@ public class MainActivityHelper {
      * Creates a fragment which will handle the search AsyncTask {@link SearchAsyncHelper}
      * @param query the text query entered the by user
      */
-    public void search(String query) {
+    public void search(String query ) {
         TabFragment tabFragment=mainActivity.getFragment();
         if(tabFragment==null)return;
         final Main ma = (Main) tabFragment.getTab();
