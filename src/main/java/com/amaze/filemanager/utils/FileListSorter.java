@@ -107,8 +107,13 @@ public class FileListSorter implements Comparator<Layoutelements> {
 
                 return 1;
 
+<<<<<<< HEAD
             }else
                 return 1;
+=======
+            }
+
+>>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
         }
 
         else if (dirsOnTop == 1) {          // Directoryler üstte ise
@@ -122,7 +127,9 @@ public class FileListSorter implements Comparator<Layoutelements> {
                 return -1;
             }
 
-            else{return 1;}
+            else{
+                return 1;
+            }
         }
 
 

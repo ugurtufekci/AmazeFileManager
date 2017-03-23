@@ -168,8 +168,10 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
             int color = getColor(getColorResAt(position));
 
             ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-            if (color == selectedColor)
+            if (color == selectedColor) {
                 imageView.setImageResource(R.drawable.ic_checkmark_selected);
+                imageView.setImageResource(R.drawable.ic_action_favorites);
+            }
             GradientDrawable gradientDrawable = (GradientDrawable) imageView.getBackground();
 
             gradientDrawable.setColor(color);

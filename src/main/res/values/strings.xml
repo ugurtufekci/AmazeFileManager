@@ -26,6 +26,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="books">Bookmarks</string>
+    <string name="favorites">Favorites</string>
     <string name="icon">icon</string>
     <string name="efn">Enter File Name</string>
     <string name="storage">Storage</string>
@@ -114,6 +115,9 @@
     <string name="sortby">Sort By</string>
     <string name="post">Post</string>
     <string name="pre">Pre</string>
+
+    <string name="withpost">With Post</string>
+    <string name="withpre">With Pre</string>
     <string name="theme">Theme</string>
     <string name="skin">Skin</string>
     <string name="random">Random Skin</string>

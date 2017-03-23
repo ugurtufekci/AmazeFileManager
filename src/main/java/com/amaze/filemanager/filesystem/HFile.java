@@ -31,10 +31,22 @@ public class HFile {
     enum Type {fileOrFolder,application};
     String path;
 
+<<<<<<< HEAD
     //public static final int ROOT_MODE=3,LOCAL_MODE=0,SMB_MODE=1,UNKNOWN=-1;
     OpenMode mode = OpenMode.FILE;
 
 
+=======
+
+
+    //public static final int ROOT_MODE=3,LOCAL_MODE=0,SMB_MODE=1,UNKNOWN=-1;
+    OpenMode mode = OpenMode.FILE;
+
+    boolean hasLocked=false;
+/*
+All openmode types initialy has no lock.
+*/
+>>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
     public HFile(OpenMode mode, String path) {
         this.path = path;
         this.mode = mode;
@@ -42,6 +54,28 @@ public class HFile {
 
 
     }
+
+
+    //***********************************************************
+    public HFile(OpenMode mode, BaseFile path,boolean hasLocked) {
+        this.path = path.getPath();
+        this.mode = mode;
+        this.hasLocked =hasLocked;
+    }
+
+    //**************************************************************
+
+
+
+    //***********************************************************
+    public HFile(OpenMode mode, String path,boolean hasLocked) {
+        this.path = path;
+        this.mode = mode;
+        this.hasLocked =hasLocked;
+    }
+
+    //**************************************************************
+
 
 
     public HFile(OpenMode mode, String path, String name, boolean isDirectory) {

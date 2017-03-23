@@ -714,10 +714,12 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                                  main.rename(rowItem.generateBaseFile());
                                 return true;
                             case R.id.post:
-                                main.post(rowItem.generateBaseFile());
+                                ArrayList<BaseFile> selected2 = new ArrayList<>();
+                                main.post(rowItem.generateBaseFile(),selected2);
                                 return true;
                             case R.id.pre:
-                                main.pre(rowItem.generateBaseFile());
+                                ArrayList<BaseFile> selected = new ArrayList<>();
+                                main.pre(rowItem.generateBaseFile(),selected);
                                 return true;
                             case R.id.cpy:
                                 MainActivity MAIN_ACTIVITY = main.MAIN_ACTIVITY;

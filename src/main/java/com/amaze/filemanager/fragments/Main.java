@@ -174,6 +174,7 @@ public class Main extends android.support.v4.app.Fragment {
     public int skin_color;
     public int skinTwoColor;
     public int icon_skin_color;
+   // ArrayList<BaseFile> selectAll  = new ArrayList<>();
 
     // defines the current visible tab, default either 0 or 1
     //private int mCurrentTab;
@@ -752,20 +753,29 @@ public class Main extends android.support.v4.app.Fragment {
 
                 case R.id.post:
                     ActionMode a = mode;
+                    ArrayList<BaseFile> selectAllpost  = new ArrayList<>();
                      BaseFile g;
-                    g = (LIST_ELEMENTS.get(
-                        (plist.get(0)))).generateBaseFile();
-                    post(g);
+
+                    for (int i = 0 ; i<plist.size(); i++)
+                        selectAllpost.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile() );
+                    g = selectAllpost.get(0);
+                    post(g,selectAllpost);
                     mode.finish();
                     return true;
 
-
                 case R.id.pre:
                    ActionMode t = mode;
-                    BaseFile h;
-                    h = (LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-                    pre(h);
+                    ArrayList<BaseFile> selectAllpre  = new ArrayList<>();
+                    final BaseFile j;
+               //     BaseFile tempt;
+                   for (int i = 0 ; i<plist.size(); i++)
+                        selectAllpre.add((LIST_ELEMENTS.get((plist.get(i)))).generateBaseFile() );
+
+
+               //     selectAllReturn (selectAll);
+
+                    j= selectAllpre.get(0);
+                    pre(j,selectAllpre);
                     mode.finish();
                     return true;
 
@@ -803,21 +813,8 @@ public class Main extends android.support.v4.app.Fragment {
                         }
                     return true;
 
-              /*case R.id.lock:
-                    BaseFile j;
-                    final ActionMode n = mode;
 
 
-                    j=(LIST_ELEMENTS.get(
-                            (plist.get(0)))).generateBaseFile();
-
-
-                    lock(j);
-
-
-                    mode.finish();
-                    return true;
-                */
 
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
@@ -866,14 +863,28 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 
+                case R.id.Favorites:
 
+                    for (int k = 0; k < plist.size(); k++) {
 
+                        if(!DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())) {
+                            DataUtils.addFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
+                            Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(getActivity(), "Already added to Favorites", Toast.LENGTH_SHORT).show();
 
-
+                        }
+                    }
 
                 default:
                     return false;
             }
+        }
+
+
+        public ArrayList<BaseFile> selectAllReturn (ArrayList<BaseFile> a){
+            return a;
         }
 
         // called when the user exits the action mode
@@ -1191,12 +1202,12 @@ public class Main extends android.support.v4.app.Fragment {
 
 
 
-    public void post(final BaseFile p) {
+    public void post(final BaseFile k ,final ArrayList <BaseFile> selected) {
 
         MaterialDialog.Builder b = new MaterialDialog.Builder(getActivity());
-        final String nameOrjinal = p.getName();
 
-        b.input("","", false, new MaterialDialog.InputCallback() {
+
+        b.input(""," ", false, new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog material, CharSequence charSequence) {
 
@@ -1209,24 +1220,36 @@ public class Main extends android.support.v4.app.Fragment {
             public void onPositive(MaterialDialog materialDialog) {
 
                 String name = materialDialog.getInputEditText().getText().toString();
-                if(name.trim().length() != 0) {
-                    name = nameOrjinal + "+" + name;
-                    if (p.isSmb())
-                        if (p.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
+                String temp = name;
 
-                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-                }
-                else
-                {
-                    name =nameOrjinal;
-                    if (p.isSmb())
-                        if (p.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
+                for (int i = 0; i < selected.size(); i++) {
+                    String nameOrjinal = selected.get(i).getName();
 
-                    MAIN_ACTIVITY.mainActivityHelper.post(openMode, p.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                    if (name.trim().length()!=0) {
+
+                        name = nameOrjinal + "+" + name;
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
+
+                        MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+
+                    }
+                     else {
+                        name ="   ";
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
+                                  MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
+                                   CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+
+                    }
+
+
+
 
                 }
             }
@@ -1244,10 +1267,12 @@ public class Main extends android.support.v4.app.Fragment {
         b.positiveColor(color).negativeColor(color).widgetColor(color);
 
     }
-    public void pre(final BaseFile w) {
+
+
+
+    public void pre(final BaseFile k, final ArrayList<BaseFile> selected) {
 
         MaterialDialog.Builder c = new MaterialDialog.Builder(getActivity());
-        final String orjinalName = w.getName();
 
         c.input("", "", false, new MaterialDialog.InputCallback() {
             @Override
@@ -1258,33 +1283,45 @@ public class Main extends android.support.v4.app.Fragment {
         c.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
         c.title(getResources().getString(R.string.preLabel));
         c.callback(new MaterialDialog.ButtonCallback() {
+
+
             @Override
             public void onPositive(MaterialDialog materialDialog) {
 
                 String name = materialDialog.getInputEditText().getText().toString();
-                if (name.trim().length() != 0) {
+        String temp =name ;
+                for (int i = 0; i < selected.size(); i++) {
+                    String orjinalName = selected.get(i).getName();
+
                     //"+";
+                    if (name.trim().length() != 0) {
+                        name = name + "+" + orjinalName;
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
 
-                    name = name +"+"+ orjinalName;
-                    if (w.isSmb())
-                        if (w.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
+                        MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+                    }
 
-                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+
+
+                    else
+                    {
+                        name ="   ";
+                        if (selected.get(i).isSmb())
+                            if (selected.get(i).isDirectory() && !name.endsWith("/"))
+                                name = name + "/";
+                        MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                        name = temp;
+                    }
                 }
-                else
-                {
-                    name = orjinalName;
-                    if (w.isSmb())
-                        if (w.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
 
-                    MAIN_ACTIVITY.mainActivityHelper.pre(openMode, w.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
 
                 }
-            }
+
             @Override
             public void onNegative(MaterialDialog materialDialog) {
 
@@ -1313,24 +1350,15 @@ public class Main extends android.support.v4.app.Fragment {
             @Override
             public void onPositive(MaterialDialog materialDialog) {
                 String name = materialDialog.getInputEditText().getText().toString();
-                if(name.trim().length()!=0) {
+
                     if (f.isSmb())
                         if (f.isDirectory() && !name.endsWith("/"))
                             name = name + "/";
 
                     MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
                             CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-                }
-                else
-                {
-                    name =orjinalName;
-                    if (f.isSmb())
-                        if (f.isDirectory() && !name.endsWith("/"))
-                            name = name + "/";
 
-                    MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
-                            CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
-                }
+
             }
 
             @Override
@@ -1349,7 +1377,11 @@ public class Main extends android.support.v4.app.Fragment {
 
 
 
-   /* public void lock (final BaseFile f)
+
+   /*
+
+    public void lock (final BaseFile f)
+
     {
 
 

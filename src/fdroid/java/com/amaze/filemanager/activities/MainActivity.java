@@ -19,6 +19,7 @@
 
 package com.amaze.filemanager.activities;
 
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -29,7 +30,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -61,7 +61,6 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -94,7 +93,6 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.adapters.DrawerAdapter;
 import com.amaze.filemanager.database.Tab;
 import com.amaze.filemanager.database.TabHandler;
-import com.amaze.filemanager.exceptions.RootNotPermittedException;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HFile;
@@ -106,7 +104,6 @@ import com.amaze.filemanager.fragments.ProcessViewer;
 import com.amaze.filemanager.fragments.SearchAsyncHelper;
 import com.amaze.filemanager.fragments.TabFragment;
 import com.amaze.filemanager.fragments.ZipViewer;
-import com.amaze.filemanager.fragments.preference_fragments.Preffrag;
 import com.amaze.filemanager.services.CopyService;
 import com.amaze.filemanager.services.DeleteTask;
 import com.amaze.filemanager.services.asynctasks.CopyFileCheck;
@@ -130,7 +127,6 @@ import com.amaze.filemanager.utils.HistoryManager;
 import com.amaze.filemanager.utils.MainActivityHelper;
 import com.amaze.filemanager.utils.OpenMode;
 import com.amaze.filemanager.utils.PreferenceUtils;
-import com.amaze.filemanager.utils.RootUtils;
 import com.amaze.filemanager.utils.ServiceWatcherUtil;
 import com.amaze.filemanager.utils.color.ColorUsage;
 import com.amaze.filemanager.utils.theme.AppTheme;
@@ -161,6 +157,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public ListView mDrawerList;
     public ScrimInsetsRelativeLayout mDrawerLinear;
     public String path = "", launchPath;
+
+    public BaseFile path2;
+
     public ArrayList<BaseFile> COPY_PATH = null, MOVE_PATH = null;
     public FrameLayout frameLayout;
     public boolean mReturnIntent = false;
@@ -175,7 +174,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public LinearLayout pathbar;
     public FrameLayout buttonBarFrame;
     public boolean isDrawerLocked = false;
+<<<<<<< HEAD
     HistoryManager history, grid,lockHistory,trash;
+=======
+    HistoryManager favorites , history, grid, trash , locked;
+>>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
     Futils utils;
 
     MainActivity mainActivity = this;
@@ -190,6 +193,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     int hidemode;
     public int operation = -1;
     public ArrayList<BaseFile> oparrayList;
+
 
     // oppathe - the path at which certain operation needs to be performed
     // oppathe1 - the new path which user wants to create/modify
@@ -266,11 +270,22 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         mainActivityHelper = new MainActivityHelper(this);
         initialiseFab();
 
+<<<<<<< HEAD
         lockHistory = new HistoryManager(this, "Table4");
         lockHistory.initializeTable(DataUtils.LOCK, 0);
         lockHistory.initializeTable(DataUtils.HIDDEN, 0);
 
 
+=======
+        favorites = new HistoryManager(this,"favorites");
+        favorites.initializeTable(DataUtils.FAVORITES, 0);
+        favorites.initializeTable(DataUtils.HIDDEN, 0);
+
+
+        locked = new HistoryManager(this,"locked");
+        locked.initializeTable(DataUtils.LOCKED, 0);
+        locked.initializeTable(DataUtils.HIDDEN, 0);
+>>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
 
         history = new HistoryManager(this, "Table2");
         history.initializeTable(DataUtils.HISTORY, 0);
@@ -300,6 +315,13 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         DataUtils.setHiddenfiles(history.readTable(DataUtils.HIDDEN));
         DataUtils.setGridfiles(grid.readTable(DataUtils.GRID));
         DataUtils.setListfiles(grid.readTable(DataUtils.LIST));
+
+        //**********************
+
+      //  DataUtils.setTrash(trash.readTable(DataUtils.TRASH));
+
+
+        //*****************
         util = new IconUtils(Sp, this);
         icons = new IconUtils(Sp, this);
 
@@ -642,6 +664,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void invalidatePasteButton(MenuItem paste) {
         if (MOVE_PATH != null || COPY_PATH != null) {
             paste.setVisible(true);
+
         } else {
             paste.setVisible(false);
         }
@@ -892,6 +915,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         MenuItem s = menu.findItem(R.id.view);
         MenuItem search = menu.findItem(R.id.search);
         MenuItem paste = menu.findItem(R.id.paste);
+
+
         String f = null;
         Fragment fragment;
         try {
@@ -919,10 +944,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             initiatebbar();
             if (Build.VERSION.SDK_INT >= 21) toolbar.setElevation(0);
             invalidatePasteButton(paste);
+
+
+
             search.setVisible(true);
             if (indicator_layout != null) indicator_layout.setVisibility(View.VISIBLE);
             menu.findItem(R.id.search).setVisible(true);
             menu.findItem(R.id.home).setVisible(true);
+            menu.findItem(R.id.favorite_button).setVisible(true);
+
             menu.findItem(R.id.history).setVisible(true);
 
             //*************************
@@ -939,15 +969,20 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.view).setVisible(true);
             menu.findItem(R.id.extract).setVisible(false);
             invalidatePasteButton(menu.findItem(R.id.paste));
+
+
             findViewById(R.id.buttonbarframe).setVisibility(View.VISIBLE);
         } else if (f.contains("AppsList") || f.contains("ProcessViewer") ||
                 f.contains(FTPServerFragment.class.getName())) {
             appBarLayout.setExpanded(true);
             menu.findItem(R.id.sethome).setVisible(false);
+
             if (indicator_layout != null) indicator_layout.setVisibility(View.GONE);
             findViewById(R.id.buttonbarframe).setVisibility(View.GONE);
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
+            menu.findItem(R.id.favorite_button).setVisible(false);
+
             menu.findItem(R.id.history).setVisible(false);
 
             //***************************
@@ -980,6 +1015,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
+            menu.findItem(R.id.favorite_button).setVisible(false);
 
             //*******************************
             menu.findItem(R.id.trash).setVisible(false);
@@ -1040,10 +1076,12 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         } catch (Exception e) {
         }
         switch (item.getItemId()) {
+
             case R.id.home:
                 if (ma != null)
                     ma.home();
                 break;
+
             case R.id.history:
                 if (ma != null)
                     utils.showHistoryDialog(ma, getAppTheme());
@@ -1057,13 +1095,24 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     utils.showUnlockDialog(ma, getAppTheme());
                 break;*/
 
+            case R.id.favorite_button:
+                if (ma != null)
+                    utils.showFavoritesDialog(ma, getAppTheme());
+                break;
+
+
             //****************************
 
             case R.id.trash:
-                if(ma != null)
-                    utils.showTrashDialog(ma, getAppTheme());
-            break;
+                if(ma != null) {
 
+                    // uygulama her açıldığında içindekiler kalmalı ???
+
+                    utils.showTrashDialog(ma, getAppTheme());
+
+
+                }
+            break;
             //*******************
             case R.id.sethome:
                 if (ma == null) return super.onOptionsItemSelected(item);
@@ -1171,6 +1220,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 MOVE_PATH = null;
 
                 invalidatePasteButton(item);
+                invalidatePasteButton(item);
+
+
+
                 break;
             case R.id.extract:
                 Fragment fragment1 = getSupportFragmentManager().findFragmentById(R.id.content_frame);
@@ -1183,6 +1236,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
                 break;
+
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -2686,6 +2742,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 
+<<<<<<< HEAD
     @Override
     public void onLockedAdded(String path) {
         lockHistory.addPath(null, path, DataUtils.LOCK, 0); //addPath mode 0 equals(path)
@@ -2697,16 +2754,23 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     @Override
+=======
+   //****************************************************************
+>>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
     public void onHiddenFileAdded(String path) {
         history.addPath(null, path, DataUtils.HIDDEN, 0);
     }
 
 
 
-    @Override
+
     public void onHiddenFileRemoved(String path) {
         history.removePath(path, DataUtils.HIDDEN);
     }
+
+    //************************************************************
+
+
 
     @Override
     public void onHistoryAdded(String path) {
@@ -2714,13 +2778,15 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
 
+
+
 //*************************************
 
 
+    public void onTrashAdded(/*String path*/ BaseFile path) {
 
-    @Override
-    public void onTrashAdded(String path) {
-        trash.addPath(null, path, DataUtils.TRASH, 0);
+
+        trash.addPath(null, path.getPath(), DataUtils.TRASH, 0);
     }
 //**************************************
 
@@ -2745,8 +2811,25 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onTrashCleared() {
         trash.clear(DataUtils.TRASH);
+
     }
 //**************************************************
+
+
+//*************************************************
+
+
+    @Override
+    public void onHiddenCleared() {
+        history.clear(DataUtils.HIDDEN);
+
+    }
+//**************************************************
+
+
+
+
+
 
 
 
@@ -2788,4 +2871,22 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 mainFragment.openMode, false, !mainFragment.IS_LIST);
         mainFragment.mSwipeRefreshLayout.setRefreshing(false);
     }
+
+
+    @Override
+    public void onFavoritesCleared() {
+        favorites.clear(DataUtils.FAVORITES);
+    }
+
+    @Override
+    public void onFavoritesAdded(String path) {
+        favorites.addPath(null, path, DataUtils.FAVORITES, 0);
+    }
+
+    @Override
+    public void onTrashAdded(String path) {
+
+    }
+
+
 }

@@ -25,10 +25,18 @@
         android:visible="false"
         app:showAsAction="ifRoom|withText" />
     <item
+<<<<<<< HEAD
         android:id="@+id/lock2"
         android:title="@string/lock2"
         android:icon="@drawable/ic_action_lock21"
         app:showAsAction="always" />
+=======
+        android:id="@+id/Favorites"
+        android:title="@string/favorites"
+        android:icon="@drawable/ic_action_favorites"
+        app:showAsAction="always" />
+    <!--  DOSYA SECILDIGINDE SAG YUKARIDA CIKMASI ICIN EKLENDI (COP KUTUSU GIBI)-->
+>>>>>>> 88334edbbc6212b45ef93c4f7f59f3ec4f676423
     <item
         android:id="@+id/cpy"
         android:title="@string/copy"
@@ -53,7 +61,36 @@
         android:id="@+id/all"
         android:title="@string/selectall"
         android:icon="@drawable/ic_select_all_white_36dp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction = "ifRoom" />
+    <item
+        android:visible="true"
+        android:id="@+id/label"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/label">
+
+
+
+        <menu>
+
+            <item
+                android:visible="true"
+                android:id="@+id/post"
+                android:title="@string/post"
+                android:checkable="false"
+               />/ tools:checkable="false"
+
+                />
+
+            <item
+                android:visible="true"
+                android:id="@+id/pre"
+                android:title="@string/pre"
+                android:checkable="false"
+               />/ tools:checkable="false"/>
+        </menu>
+
+    </item>
+
     <item
         android:id="@+id/share"
         android:title="@string/share" />
@@ -70,6 +107,7 @@
     <item
         android:id="@+id/addshortcut"
         android:title="@string/addshortcut" />
+
 
     <item
         android:id="@+id/ex"

@@ -41,6 +41,10 @@ public class IconUtils {
         return c.getResources().getDrawable(R.drawable.ic_content_copy_white_36dp);
     }
 
+    public Drawable getFavoriteDrawable() {
+        return c.getResources().getDrawable(R.drawable.ic_action_favorites  );
+    }
+
     public Drawable getCutDrawable() {
             return c.getResources().getDrawable(R.drawable.ic_content_cut_white_36dp);
     }
