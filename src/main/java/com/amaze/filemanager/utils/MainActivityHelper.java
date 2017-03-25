@@ -482,7 +482,10 @@ public class MainActivityHelper {
     }
 
 
-    public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+
+    //copy from rename "examine later"
+   /* public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+
         final Toast toast=Toast.makeText(context, context.getString(R.string.lock),Toast.LENGTH_SHORT);
         toast.show();
         Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
@@ -550,83 +553,7 @@ public class MainActivityHelper {
             }
         });
     }
-
-
-    //copy from rename "examine later"
-    public void unlock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode)
-    {
-        final Toast toast=Toast.makeText(context, context.getString(R.string.unlock),Toast.LENGTH_SHORT);
-        toast.show();
-        Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack()
-        {
-            @Override
-            public void exists(HFile file)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                        if (toast != null) toast.cancel();
-                        Toast.makeText(mainActivity, context.getString(R.string.error_file_has_no_lock),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void launchSAF(HFile file)
-            {
-
-            }
-
-            @Override
-            public void launchSAF(final HFile file, final HFile file1)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (toast != null) toast.cancel();
-                        mainActivity.oppathe = file.getPath();
-                        mainActivity.oppathe1 = file1.getPath();
-                        mainActivity.operation = DataUtils.POST;
-                        guideDialogForLEXA(mainActivity.oppathe1);
-                    }
-                });
-            }
-
-            @Override
-            public void done(HFile hFile, final boolean b)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (b) {
-                            Intent intent = new Intent("loadlist");
-                            mainActivity.sendBroadcast(intent);
-                        } else
-                            Toast.makeText(context, context.getString(R.string.operationunsuccesful),
-                                    Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            }
-
-            @Override
-            public void invalidName(final HFile file)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (toast != null) toast.cancel();
-                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
-                                + file.getName(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-    }
+*/
 
     public int checkFolder(final File folder, Context context) {
         boolean lol= Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
