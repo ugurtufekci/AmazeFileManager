@@ -63,30 +63,29 @@
         android:icon="@drawable/ic_select_all_white_36dp"
         app:showAsAction = "ifRoom" />
     <item
-        android:visible="true"
         android:id="@+id/label"
-        android:icon="@drawable/ic_action_new"
-        android:title="@string/label">
-
+        android:icon="@drawable/circle"
+        android:title="@string/label"
+        android:visible="true">
 
 
         <menu>
 
             <item
-                android:visible="true"
                 android:id="@+id/post"
-                android:title="@string/post"
                 android:checkable="false"
-               />/ tools:checkable="false"
+                android:icon="@android:drawable/ic_input_get"
+                android:title="@string/post"
+                android:visible="true" />/ tools:checkable="false"
 
-                />
+            />
 
             <item
-                android:visible="true"
                 android:id="@+id/pre"
-                android:title="@string/pre"
                 android:checkable="false"
-               />/ tools:checkable="false"/>
+                android:icon="@android:drawable/ic_input_get"
+                android:title="@string/pre"
+                android:visible="true" />/ tools:checkable="false"/>
         </menu>
 
     </item>

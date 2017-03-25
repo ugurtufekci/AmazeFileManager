@@ -59,6 +59,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -233,7 +234,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     private int TOOLBAR_START_INSET;
     private RelativeLayout searchViewLayout;
-    private AppCompatEditText searchViewEditText;
+    private AppCompatEditText searchViewEditText,searchViewEditTextpre,searchViewEditTextpost;
     private int[] searchCoords = new int[2];
     private CoordinatorLayout mScreenLayout;
     private View fabBgView;
@@ -908,6 +909,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         MenuItem search = menu.findItem(R.id.search);
         MenuItem paste = menu.findItem(R.id.paste);
 
+        MenuItem post= menu.findItem(R.id.Post);
+        MenuItem pre= menu.findItem(R.id.Pre);
 
         String f = null;
         Fragment fragment;
@@ -946,7 +949,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.favorite_button).setVisible(true);
 
             menu.findItem(R.id.history).setVisible(true);
-
+            menu.findItem(R.id.Post).setVisible(true);
+            menu.findItem(R.id.Pre).setVisible(true);
             //*************************
             menu.findItem(R.id.trash).setVisible(true);
 
@@ -976,7 +980,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.favorite_button).setVisible(false);
 
             menu.findItem(R.id.history).setVisible(false);
-
+            menu.findItem(R.id.Post).setVisible(false);
+            menu.findItem(R.id.Pre).setVisible(false);
             //***************************
             menu.findItem(R.id.trash).setVisible(false);
             menu.findItem(R.id.locklist).setVisible(false);
@@ -1007,7 +1012,12 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
+
+            menu.findItem(R.id.Post).setVisible(false);
+            menu.findItem(R.id.Pre).setVisible(false);
+
             menu.findItem(R.id.favorite_button).setVisible(false);
+
 
             //*******************************
             menu.findItem(R.id.trash).setVisible(false);
@@ -1069,6 +1079,18 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         }
         switch (item.getItemId()) {
 
+            case R.id.labelHistory:
+
+                if(ma != null) {
+
+                    utils.showLabelHistoryDialog(ma, getAppTheme());
+
+                }
+
+            break;
+
+
+
             case R.id.home:
                 if (ma != null)
                     ma.home();
@@ -1102,6 +1124,27 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
                 }
             break;
+
+            case R.id.Post :
+
+                if(ma != null) {
+                    View searchItem = toolbar.findViewById(R.id.search);
+                    searchViewEditText.setText("");
+                    searchItem.getLocationOnScreen(searchCoords);
+                    revealSearchView();
+
+                }
+                break;
+            case R.id.Pre :
+
+                if(ma != null) {
+                    View searchItem = toolbar.findViewById(R.id.search);
+                    searchViewEditText.setText("");
+                    searchItem.getLocationOnScreen(searchCoords);
+                    revealSearchView();
+                }
+                break;
+
             //*******************
             case R.id.sethome:
                 if (ma == null) return super.onOptionsItemSelected(item);
@@ -1230,7 +1273,57 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
         }
         return super.onOptionsItemSelected(item);
+    }    void revealSearchViewpost() {
+
+        final int START_RADIUS = 16;
+        int endRadius = Math.max(toolbar.getWidth(), toolbar.getHeight());
+
+        Animator animator;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            animator = ViewAnimationUtils.createCircularReveal(searchViewLayout,
+                    searchCoords[0] + 32, searchCoords[1] - 16, START_RADIUS, endRadius);
+        } else {
+            // TODO:ViewAnimationUtils.createCircularReveal
+            animator = new ObjectAnimator().ofFloat(searchViewLayout, "alpha", 0f, 1f);
+        }
+
+        utils.revealShow(fabBgView, true);
+
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(600);
+        searchViewLayout.setVisibility(View.VISIBLE);
+        animator.start();
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                searchViewEditText.requestFocus();
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                searchViewEditTextpost.setText("+"+searchViewEditTextpost.getText());
+                imm.showSoftInput(searchViewEditTextpost, InputMethodManager.SHOW_IMPLICIT);
+                isSearchViewEnabled = true;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
     }
+
+
 
     /**
      * show search view with a circular reveal animation
@@ -1265,6 +1358,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             public void onAnimationEnd(Animator animation) {
 
                 searchViewEditText.requestFocus();
+              //  searchViewEditText.setText();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(searchViewEditText, InputMethodManager.SHOW_IMPLICIT);
                 isSearchViewEnabled = true;
@@ -2811,13 +2905,6 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 //**************************************************
-
-
-
-
-
-
-
 
     @Override
     public void delete(String title, String path) {

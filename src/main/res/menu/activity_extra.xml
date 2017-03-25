@@ -47,28 +47,6 @@
         app:showAsAction="always">
 
 
-        <menu>
-
-            <item
-                android:id="@+id/withpost"
-                android:icon="@drawable/circle"
-                android:title="@string/withpost"
-
-                android:visible="true" />
-
-            <item
-                android:id="@+id/withpre"
-                android:icon="@drawable/circle"
-                android:title="@string/withpre"
-                android:visible="true" />
-            <item
-                android:id="@+id/other"
-                android:icon="@android:drawable/ic_search_category_default"
-                android:title="@string/other"
-                android:visible="true" />
-
-        </menu>
-
     </item>
     <item android:id="@+id/home"
         android:title="@string/home"
@@ -89,6 +67,56 @@
         </menu>
 
     </item>
+
+
+    <item
+        android:id="@+id/searchWith"
+        android:icon="?android:attr/actionModeWebSearchDrawable"
+        android:title="@string/searchWith"
+        android:visible="true">
+
+
+        <menu>
+
+            <item
+                android:id="@+id/Post"
+                android:checkable="false"
+                android:icon="@android:drawable/ic_input_get"
+                android:title="@string/Post"
+                android:visible="true" />/ tools:checkable="false"
+
+            />
+
+            <item
+                android:id="@+id/Pre"
+                android:checkable="false"
+                android:icon="@android:drawable/ic_input_get"
+                android:title="@string/Pre"
+                android:visible="true" />/ tools:checkable="false"/>
+        </menu>
+
+    </item>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <item android:id="@+id/history"
         android:icon="@drawable/ic_history_white_48dp"
         app:showAsAction="ifRoom"
@@ -132,6 +160,16 @@
         android:id="@+id/trash"
         android:title="Trash"
         />
+
+    <item
+        android:id="@+id/labelHistory"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/labelHistory"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+
+
     <item
         android:visible="true"
         app:showAsAction="ifRoom"

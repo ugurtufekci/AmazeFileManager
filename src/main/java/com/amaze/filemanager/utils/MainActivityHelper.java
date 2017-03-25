@@ -91,6 +91,18 @@ public class MainActivityHelper {
         }
     };
 
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Prompt a dialog to user to input directory name
      *
@@ -147,9 +159,8 @@ public class MainActivityHelper {
                 SmbSearchDialog smbDialog=new SmbSearchDialog();
                 smbDialog.show(mainActivity.getFragmentManager(),"tab");
                 break;
-            /*case 3:
-                mainActivity.bindDrive();
-                break;*/
+
+
         }
     }
 
@@ -291,6 +302,7 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // arraye burda ekle
                         if (z != null) z.cancel();
 
                         Toast.makeText(mainActivity, context.getString(R.string.fileexist),
@@ -343,9 +355,12 @@ public class MainActivityHelper {
                         if (z != null) z.cancel();
                         if (file.getName().trim().length()==0)
                             Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ "whitespace", Toast.LENGTH_LONG).show();
-                        else
+                        else if (file.getName().contains("+")){
+                            Toast.makeText(context, context.getString(R.string.alreadyLabel), Toast.LENGTH_LONG).show();
+                        }
+                            else{
                         Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
-                                + file.getName(), Toast.LENGTH_LONG).show();
+                                + file.getName(), Toast.LENGTH_LONG).show();}
                     }
                 });
             }
@@ -413,6 +428,9 @@ public class MainActivityHelper {
                         if (toast != null) toast.cancel();
                         if (file.getName().trim().length()==0)
                             Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ "whitespace", Toast.LENGTH_LONG).show();
+                        else if (file.getName().contains("+")){
+                            Toast.makeText(context, context.getString(R.string.alreadyLabel) , Toast.LENGTH_LONG).show();
+                        }
                         else
                         Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
                                 + file.getName(), Toast.LENGTH_LONG).show();
@@ -423,8 +441,10 @@ public class MainActivityHelper {
     }
 
 
+
     //copy from rename "examine later"
    /* public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+
         final Toast toast=Toast.makeText(context, context.getString(R.string.lock),Toast.LENGTH_SHORT);
         toast.show();
         Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
@@ -742,7 +762,7 @@ public class MainActivityHelper {
         //ma.searchTask = task;
 
 
-            SEARCH_TEXT = query;
+        SEARCH_TEXT = query;
 
 
         mainActivity.mainFragment = (Main) mainActivity.getFragment().getTab();

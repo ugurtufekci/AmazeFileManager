@@ -1382,6 +1382,30 @@ public class Futils {
         x.show();
 
     }
+    public void showLabelHistoryDialog(final Main m, AppTheme appTheme) {
+        final MaterialDialog.Builder b = new MaterialDialog.Builder(m.getActivity());
+        b.positiveText(R.string.cancel);
+        b.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+        b.negativeText(R.string.clear);
+        b.negativeColor(Color.parseColor(BaseActivity.accentSkin));
+        b.title(R.string.labelHistory);
+        b.onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                DataUtils.clearHistory();
+            }
+        });
+        b.theme(appTheme.getMaterialDialogTheme());
+
+        b.autoDismiss(true);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.history),null,true);
+        b.adapter(adapter, null);
+
+        MaterialDialog x= b.build();
+        adapter.updateDialog(x);
+        x.show();
+
+    }
 
 
 

@@ -23,6 +23,8 @@ public class DataUtils {
    /* ,trash3 = new ArrayList<>();*/
 
    public static ArrayList<BaseFile> trash = new ArrayList<>();
+
+    public static ArrayList<String> labelHistory = new ArrayList<>();
     //public static ArrayList<BaseFile> hiddenfiles = new ArrayList<>();
 
 
@@ -34,12 +36,14 @@ public class DataUtils {
 
     public static List<String> storages=new ArrayList<>();
 
-    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9,TEST=10;
+
+    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,POST=8,PRE=9,LOCK1=10,WITHPOST=11;
 
 
 
     public static final String FAVORITES = "favorites",DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3" , LOCK = "Table4";
+    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="table5";
+
 
 
 
@@ -79,6 +83,8 @@ public class DataUtils {
         accounts=new ArrayList<>();
         favorites = new ArrayList<>();
         trash = new ArrayList<>();
+        labelHistory=new ArrayList<>();
+
         // trash3 = new ArrayList<>();
 
 
@@ -173,6 +179,14 @@ public class DataUtils {
         if(dataChangeListener!=null)
             dataChangeListener.onHistoryAdded(i);
     }
+
+    public static void addlabelHistory(String i)
+    {
+        labelHistory.add(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onHistoryAdded(i);
+    }
+
 
     public static void addFavoritesFile(String i)
     {

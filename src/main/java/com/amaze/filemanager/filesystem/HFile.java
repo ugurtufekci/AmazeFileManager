@@ -508,16 +508,31 @@ All openmode types initialy has no lock.
         return inputStream;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     public boolean exists() {
         boolean exists = false;
         if (isSmb()) {
             try {
                 SmbFile smbFile = getSmbFile(2000);
+
                 exists = smbFile != null ? smbFile.exists() : false;
             } catch (SmbException e) {
                 exists = false;
             }
-        } else if (isLocal()) exists = new File(path).exists();
+        } else if (isLocal())
+            exists = new File(path).exists();
         else if (isRoot()) {
             try {
                 return RootHelper.fileExists(path);
