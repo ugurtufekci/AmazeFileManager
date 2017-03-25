@@ -1424,7 +1424,7 @@ public class Futils {
         b.theme(appTheme.getMaterialDialogTheme());
 
         b.autoDismiss(true);
-        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.history),null,true);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.labelHistory),null,true);
         b.adapter(adapter, null);
 
         MaterialDialog x= b.build();

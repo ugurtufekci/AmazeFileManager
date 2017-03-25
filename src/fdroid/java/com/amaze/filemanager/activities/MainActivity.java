@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public FrameLayout buttonBarFrame;
     public boolean isDrawerLocked = false;
 
-    HistoryManager favorites , history, grid, trash , lockHistory;
+    HistoryManager favorites , history, grid, trash , lockHistory,labelHistory;
 
     Futils utils;
 
@@ -276,6 +276,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
         favorites = new HistoryManager(this,"favorites");
         favorites.initializeTable(DataUtils.FAVORITES, 0);
+        favorites.initializeTable(DataUtils.HIDDEN, 0);
+
+        labelHistory = new HistoryManager(this,"Table5");
+        favorites.initializeTable(DataUtils.LABELHISTORY, 0);
         favorites.initializeTable(DataUtils.HIDDEN, 0);
 
 
@@ -909,8 +913,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         MenuItem search = menu.findItem(R.id.search);
         MenuItem paste = menu.findItem(R.id.paste);
 
-        MenuItem post= menu.findItem(R.id.Post);
-        MenuItem pre= menu.findItem(R.id.Pre);
+        MenuItem postpre= menu.findItem(R.id.postprelabel);
+        MenuItem historyLabel= menu.findItem(R.id.labelHistory);
 
         String f = null;
         Fragment fragment;
@@ -949,8 +953,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.favorite_button).setVisible(true);
 
             menu.findItem(R.id.history).setVisible(true);
-            menu.findItem(R.id.Post).setVisible(true);
-            menu.findItem(R.id.Pre).setVisible(true);
+            menu.findItem(R.id.postprelabel).setVisible(true);
+            menu.findItem(R.id.labelHistory).setVisible(true);
+
             //*************************
             menu.findItem(R.id.trash).setVisible(true);
 
@@ -980,8 +985,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.favorite_button).setVisible(false);
 
             menu.findItem(R.id.history).setVisible(false);
-            menu.findItem(R.id.Post).setVisible(false);
-            menu.findItem(R.id.Pre).setVisible(false);
+            menu.findItem(R.id.postprelabel).setVisible(false);
+            menu.findItem(R.id.labelHistory).setVisible(false);
             //***************************
             menu.findItem(R.id.trash).setVisible(false);
             menu.findItem(R.id.locklist).setVisible(false);
@@ -1013,8 +1018,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
 
-            menu.findItem(R.id.Post).setVisible(false);
-            menu.findItem(R.id.Pre).setVisible(false);
+            menu.findItem(R.id.postprelabel).setVisible(false);
+            menu.findItem(R.id.labelHistory).setVisible(false);
 
             menu.findItem(R.id.favorite_button).setVisible(false);
 
@@ -1128,7 +1133,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 }
             break;
 
-            case R.id.Post :
+            case R.id.postprelabel :
 
                 if(ma != null) {
                     View searchItem = toolbar.findViewById(R.id.search);
@@ -1138,15 +1143,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
                 }
                 break;
-            case R.id.Pre :
 
-                if(ma != null) {
-                    View searchItem = toolbar.findViewById(R.id.search);
-                    searchViewEditText.setText("");
-                    searchItem.getLocationOnScreen(searchCoords);
-                    revealSearchView();
-                }
-                break;
 
             //*******************
             case R.id.sethome:
@@ -1795,12 +1792,14 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     break;
                 case DataUtils.POST:
                     Main ma7 = ((Main) getFragment().getTab());
-                    mainActivityHelper.post(ma7.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    String a ="";
+                    mainActivityHelper.post(ma7.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode,a);
                     ma7.updateList();
                     break;
                 case DataUtils.PRE:
                     Main ma8 = ((Main) getFragment().getTab());
-                    mainActivityHelper.pre(ma8.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    String b="";
+                    mainActivityHelper.pre(ma8.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode,b);
                     ma8.updateList();
                     break;
                 case DataUtils.NEW_FILE:
@@ -2872,7 +2871,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         trash.addPath(null, path.getPath(), DataUtils.TRASH, 0);
     }
 //**************************************
+public void onLabelAdded(/*String path*/ BaseFile path) {
 
+
+    labelHistory.addPath(null, path.getPath(), DataUtils.LABELHISTORY, 0);
+}
 
 
     @Override
@@ -2900,7 +2903,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
 
 //*************************************************
+public void onHistoryLabelCleared() {
+    labelHistory.clear(DataUtils.LABELHISTORY);
 
+}
 
     @Override
     public void onHiddenCleared() {
@@ -2955,10 +2961,17 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     @Override
+    public void onLabelHistoryCleared() {
+        labelHistory.clear(DataUtils.LABELHISTORY);
+    }
+    @Override
     public void onFavoritesAdded(String path) {
         favorites.addPath(null, path, DataUtils.FAVORITES, 0);
     }
-
+    @Override
+    public void onLabelHistoryAdded(String path) {
+        labelHistory.addPath(null, path, DataUtils.LABELHISTORY, 0);
+    }
     @Override
     public void onTrashAdded(String path) {
 

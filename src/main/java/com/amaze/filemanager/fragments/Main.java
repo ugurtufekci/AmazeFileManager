@@ -1219,19 +1219,19 @@ public class Main extends android.support.v4.app.Fragment {
 
                 String name = materialDialog.getInputEditText().getText().toString();
                 String temp = name;
-
+                String check = materialDialog.getInputEditText().getText().toString();
                 for (int i = 0; i < selected.size(); i++) {
                     String nameOrjinal = selected.get(i).getName();
 
                     if (name.trim().length()!=0) {
-
+                        name=name.trim();
                         name = nameOrjinal + "+" + name;
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
 
                         MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
 
                     }
@@ -1241,7 +1241,7 @@ public class Main extends android.support.v4.app.Fragment {
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
                         MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
 
                     }
@@ -1284,23 +1284,21 @@ public class Main extends android.support.v4.app.Fragment {
 
                 String name = materialDialog.getInputEditText().getText().toString();
                 String temp =name ;
+                String check = materialDialog.getInputEditText().getText().toString();
                 for (int i = 0; i < selected.size(); i++) {
                     String orjinalName = selected.get(i).getName();
 
                     //"+";
                     if (name.trim().length() != 0) {
                         name = name + "+" + orjinalName;
+                        name=name.trim();
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
 
                         MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
-                    }
-                    else if (name.contains("+"))
-                    {
-
                     }
                     else
                     {
@@ -1309,7 +1307,7 @@ public class Main extends android.support.v4.app.Fragment {
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
                         MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
                     }
                 }
