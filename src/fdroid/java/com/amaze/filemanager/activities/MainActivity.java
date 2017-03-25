@@ -952,7 +952,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
             menu.findItem(R.id.locklist).setVisible(true);
 
-           // menu.findItem(R.id.unlock).setVisible(true);
+
 
             menu.findItem(R.id.sethome).setVisible(true);
 
@@ -1082,10 +1082,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 if (ma != null)
                     utils.showLockDialog(ma, getAppTheme());
                 break;
-           /* case R.id.unlock:
-                if (ma != null)
-                    utils.showUnlockDialog(ma, getAppTheme());
-                break;*/
+
 
             case R.id.favorite_button:
                 if (ma != null)
