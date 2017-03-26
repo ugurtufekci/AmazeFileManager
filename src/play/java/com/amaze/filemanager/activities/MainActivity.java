@@ -1149,21 +1149,23 @@ public class MainActivity extends BaseActivity implements
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
                 break;
-            case R.id.password:
-                Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
-                        Toast.LENGTH_LONG).show();
-               /* BaseFile j;
-                final ActionMode n = mode;
+            case R.id.
+                MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
+                final String inputpassword = "";
+                l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
+                    }
+                });
+                l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+                l.title(getResources().getString(R.string.unlock));
 
-                j=(LIST_ELEMENTS.get(
-                        (plist.get(0)))).generateBaseFile();
-
-
-                lock(j);
-
-
-                mode.finish();*/
+                l.positiveText(R.string.ok);
+                l.negativeText(R.string.cancel);
+                int color = Color.parseColor(fabSkin);
+                l.positiveColor(color).negativeColor(color).widgetColor(color);
+                l.build().show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -228,14 +228,14 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 //********
-public static void post(final HFile oldFile, final HFile newFile, final boolean rootMode,
+public static void post(final String orjinalname,final HFile oldFile, final HFile newFile, final boolean rootMode,
                           final Context context, final ErrorCallBack errorCallBack){
     new AsyncTask<Void, Void, Void>() {
         @Override
         protected Void doInBackground(Void... params) {
 
             // check whether file names for new file are valid or recursion occurs
-            if (!Operations.isFileNameValidpostpre(newFile.getName())) {
+            if (!Operations.isFileNameValidpostpre(newFile.getName()) ||  !Operations.isFileNameValid(orjinalname)) {
                 errorCallBack.invalidName(newFile);
                 return null;
             }
@@ -327,14 +327,14 @@ public static void post(final HFile oldFile, final HFile newFile, final boolean 
 
 //**************************************************************
 
-    public static void pre(final HFile oldFile, final HFile newFile, final boolean rootMode,
+    public static void pre(final String orjinalname,final HFile oldFile, final HFile newFile, final boolean rootMode,
                             final Context context, final ErrorCallBack errorCallBack){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
 
                 // check whether file names for new file are valid or recursion occurs
-                if (!Operations.isFileNameValidpostpre(newFile.getName())) {
+                if (!Operations.isFileNameValidpostpre(newFile.getName()) || !Operations.isFileNameValid(orjinalname)) {
                     errorCallBack.invalidName(newFile);
                     return null;
                 }

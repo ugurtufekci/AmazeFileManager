@@ -40,6 +40,7 @@ import java.util.ArrayList;
  * Created by root on 11/22/15.
  */
 public class MainActivityHelper {
+    DataUtils h = new DataUtils();
     private MainActivity mainActivity;
     private Futils utils;
 
@@ -226,7 +227,7 @@ public class MainActivityHelper {
         mainActivity.startActivityForResult(intent, 3);
     }
     public void rename(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
-        final Toast toast=Toast.makeText(context, context.getString(R.string.renaming),
+        final Toast toast = Toast.makeText(context, context.getString(R.string.renaming),
                 Toast.LENGTH_SHORT);
         toast.show();
         Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
@@ -236,7 +237,7 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
                         if (toast != null) toast.cancel();
-                       Toast.makeText(mainActivity, context.getString(R.string.fileexist),
+                        Toast.makeText(mainActivity, context.getString(R.string.fileexist),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -283,20 +284,33 @@ public class MainActivityHelper {
                     @Override
                     public void run() {
 
-                        if (  toast != null  ) toast.cancel();
-                        if (file.getName().trim().length()==0)
-                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ "whitespace", Toast.LENGTH_LONG).show();
+                        if (toast != null) toast.cancel();
+                        if (file.getName().trim().length() == 0)
+                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + "whitespace", Toast.LENGTH_LONG).show();
                         else
-                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ file.getName(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + file.getName(), Toast.LENGTH_LONG).show();
                     }
                 });
             }
         });
+
+        if (oldPath.contains("+")) {
+
+            for (int i = 0; i < h.addlabelHistory().size(); i++) {
+
+                if (h.labelget(i).equals(oldPath)) {
+                    h.addlabelHistory().set(i, null);
+                }
+            }
+
+        }
     }
-    public void post(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+
+    public void post(OpenMode mode, final String oldPath, final String newPath, final Activity context, boolean rootmode,final String orjinalname) {
         final Toast z=Toast.makeText(context, context.getString(R.string.postLabel), Toast.LENGTH_SHORT);
+
         z.show();
-        Operations.post(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+        Operations.post(orjinalname,new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
             public void exists(HFile file) {
                 context.runOnUiThread(new Runnable() {
@@ -307,6 +321,7 @@ public class MainActivityHelper {
 
                         Toast.makeText(mainActivity, context.getString(R.string.fileexist),
                                 Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }
@@ -335,7 +350,7 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (b) {
+                        if (b) {h.addLabelHistory(newPath);
                             Intent intent = new Intent("loadlist");
                             mainActivity.sendBroadcast(intent);
                         } else
@@ -353,23 +368,34 @@ public class MainActivityHelper {
                     public void run() {
 
                         if (z != null) z.cancel();
-                        if (file.getName().trim().length()==0)
-                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ "whitespace", Toast.LENGTH_LONG).show();
-                        else if (file.getName().contains("+")){
+                        if (file.getName().trim().length()==0) {
+
+                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + "whitespace", Toast.LENGTH_LONG).show();
+                            //check=false;
+
+                        }
+                        else if (oldPath.contains("+")){
+
                             Toast.makeText(context, context.getString(R.string.alreadyLabel), Toast.LENGTH_LONG).show();
+
                         }
                             else{
+
                         Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
-                                + file.getName(), Toast.LENGTH_LONG).show();}
+                                + file.getName(), Toast.LENGTH_LONG).show();
+                            }
+
                     }
                 });
             }
         });
+
+
     }
-    public void pre(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+    public void pre(OpenMode mode, final String oldPath, final String newPath, final Activity context, boolean rootmode, final String orjinalname) {
         final Toast toast=Toast.makeText(context, context.getString(R.string.preLabel),Toast.LENGTH_SHORT);
         toast.show();
-        Operations.pre(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
+        Operations.pre(orjinalname,new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
             public void exists(HFile file) {
                 context.runOnUiThread(new Runnable() {
@@ -378,10 +404,13 @@ public class MainActivityHelper {
 
 
                         if (toast != null) toast.cancel();
+
                         Toast.makeText(mainActivity, context.getString(R.string.fileexist),
                                 Toast.LENGTH_SHORT).show();
+
                     }
                 });
+
             }
 
             @Override
@@ -411,6 +440,7 @@ public class MainActivityHelper {
                         if (b) {
                             Intent intent = new Intent("loadlist");
                             mainActivity.sendBroadcast(intent);
+                            h.addLabelHistory(newPath);
                         } else
                             Toast.makeText(context, context.getString(R.string.operationunsuccesful),
                                     Toast.LENGTH_SHORT).show();
@@ -426,22 +456,36 @@ public class MainActivityHelper {
                     public void run() {
 
                         if (toast != null) toast.cancel();
-                        if (file.getName().trim().length()==0)
-                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": "+ "whitespace", Toast.LENGTH_LONG).show();
-                        else if (file.getName().contains("+")){
-                            Toast.makeText(context, context.getString(R.string.alreadyLabel) , Toast.LENGTH_LONG).show();
+                        if (file.getName().trim().length()==0) {
+
+                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + "whitespace", Toast.LENGTH_LONG).show();
+
                         }
-                        else
-                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
-                                + file.getName(), Toast.LENGTH_LONG).show();
+                        else if (oldPath.contains("+")){
+
+                            Toast.makeText(context, context.getString(R.string.alreadyLabel) , Toast.LENGTH_LONG).show();
+
+                        }
+                        else {
+                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
+                                    + file.getName(), Toast.LENGTH_LONG).show();
+
+
+                        }
+
                     }
                 });
             }
         });
+
+
     }
 
 
-    public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+
+    //copy from rename "examine later"
+   /* public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
+
         final Toast toast=Toast.makeText(context, context.getString(R.string.lock),Toast.LENGTH_SHORT);
         toast.show();
         Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
@@ -509,83 +553,7 @@ public class MainActivityHelper {
             }
         });
     }
-
-
-    //copy from rename "examine later"
-    public void unlock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode)
-    {
-        final Toast toast=Toast.makeText(context, context.getString(R.string.unlock),Toast.LENGTH_SHORT);
-        toast.show();
-        Operations.rename(new HFile(mode, oldPath), new HFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack()
-        {
-            @Override
-            public void exists(HFile file)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                        if (toast != null) toast.cancel();
-                        Toast.makeText(mainActivity, context.getString(R.string.error_file_has_no_lock),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void launchSAF(HFile file)
-            {
-
-            }
-
-            @Override
-            public void launchSAF(final HFile file, final HFile file1)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (toast != null) toast.cancel();
-                        mainActivity.oppathe = file.getPath();
-                        mainActivity.oppathe1 = file1.getPath();
-                        mainActivity.operation = DataUtils.POST;
-                        guideDialogForLEXA(mainActivity.oppathe1);
-                    }
-                });
-            }
-
-            @Override
-            public void done(HFile hFile, final boolean b)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (b) {
-                            Intent intent = new Intent("loadlist");
-                            mainActivity.sendBroadcast(intent);
-                        } else
-                            Toast.makeText(context, context.getString(R.string.operationunsuccesful),
-                                    Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-            }
-
-            @Override
-            public void invalidName(final HFile file)
-            {
-                context.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (toast != null) toast.cancel();
-                        Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
-                                + file.getName(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-    }
+*/
 
     public int checkFolder(final File folder, Context context) {
         boolean lol= Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;

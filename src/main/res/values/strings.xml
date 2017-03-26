@@ -118,7 +118,7 @@
     <string name="post">Post</string>
     <string name="pre">Pre</string>
     <string name="searchWith">Search With </string>
-    <string name="Post">Post</string>
+    <string name="postprelabel">Pre/Post Label</string>
     <string name="Pre">Pre</string>
     <string name="theme">Theme</string>
     <string name="skin">Skin</string>
@@ -366,7 +366,7 @@
     <string name="smb_con">SMB Connection</string>
     <string name="smb_server">Server IP Address</string>
     <string name="username">Username</string>
-    <string name="lock">lock</string>
+
     <string name="lock2">lock2</string>
 
     <string name="anonymous">Anonymous</string>
