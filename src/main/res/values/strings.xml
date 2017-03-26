@@ -365,6 +365,7 @@
     <string name="needsaccesssummary1">\tto grant write access to operate </string>
     <string name="smb_con">SMB Connection</string>
     <string name="smb_server">Server IP Address</string>
+
     <string name="username">Username</string>
 
     <string name="lock2">lock2</string>

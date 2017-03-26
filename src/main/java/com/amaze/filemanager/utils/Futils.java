@@ -1338,15 +1338,14 @@ public class Futils {
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         a.positiveText(R.string.cancel);
         a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
-        a.title(R.string.lock2);
+        a.title("Locked files/folders");
         a.onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 DataUtils.clearHistory();
             }
         });
-        a.theme(appTheme.getMaterialDialogTheme());
-
+         a.theme(appTheme.getMaterialDialogTheme());
         a.autoDismiss(true);
         HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.lock_array),null,true);
         a.adapter(adapter, null);
@@ -1356,6 +1355,46 @@ public class Futils {
         x.show();
 
    }
+    public void showPasswordDialog(final Main m, AppTheme appTheme)
+    {
+        MaterialDialog.Builder l = new MaterialDialog.Builder(m.getActivity());
+        final String inputpassword = "";
+        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+        l.theme(Theme.DARK);
+        l.title(" Enter your password ");
+
+        l.positiveText(R.string.ok);
+        l.negativeText(R.string.cancel);
+        l.build().show();
+
+
+       /* final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
+        a.positiveText(R.string.ok);
+        a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+        a.title("Create/Change your password");
+        final String inputpassword = "";
+        a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+        @Override
+        public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+        }
+    });
+        a.theme(appTheme.getMaterialDialogTheme());
+
+        a.autoDismiss(true);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.lock_array),null,true);
+        a.adapter(adapter, null);
+
+        MaterialDialog x= a.build();
+        adapter.updateDialog(x);
+        x.show();*/
+
+    }
 
 
     public void showHistoryDialog(final Main m, AppTheme appTheme) {

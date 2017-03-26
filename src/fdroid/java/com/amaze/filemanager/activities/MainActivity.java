@@ -19,7 +19,7 @@
 
 package com.amaze.filemanager.activities;
 
-
+import com.afollestad.materialdialogs.MaterialDialog;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -317,6 +317,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         //*****************
         util = new IconUtils(Sp, this);
         icons = new IconUtils(Sp, this);
+
 
         timer = new CountDownTimer(5000, 1000) {
             @Override
@@ -1103,6 +1104,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             case R.id.locklist:
                 if (ma != null)
                     utils.showLockDialog(ma, getAppTheme());
+                break;
+            case R.id.password:
+                if (ma != null)
+                    utils.showPasswordDialog(ma, getAppTheme());
                 break;
 
 

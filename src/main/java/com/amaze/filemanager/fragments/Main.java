@@ -800,7 +800,7 @@ public class Main extends android.support.v4.app.Fragment {
                         l.positiveColor(color).negativeColor(color).widgetColor(color);
                         l.build().show();
 
-                        ////////////////////////////////////////////////
+
                         Toast.makeText(getActivity(), "UNLOCKING",
                                 Toast.LENGTH_LONG).show();
                         DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
@@ -808,34 +808,7 @@ public class Main extends android.support.v4.app.Fragment {
 
                     }
                     return true;
-               /* case R.id.passwordET:
-                    if(){
-                    }
-                    else
-                    {
-                        MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
-                        final String inputpassword = "";
-                        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
-                            }
-                        });
-                        l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-                        l.title(getResources().getString(R.string.unlock));
-
-                        l.positiveText(R.string.ok);
-                        l.negativeText(R.string.cancel);
-                        int color = Color.parseColor(fabSkin);
-                        l.positiveColor(color).negativeColor(color).widgetColor(color);
-                        l.build().show();
-
-
-
-
-
-                    }
-                    return true;*/
 
 
 
@@ -1392,80 +1365,6 @@ public class Main extends android.support.v4.app.Fragment {
         a.build().show();
     }
 
-
-
-
-
-   /*
-
-    public void lock (final BaseFile f)
-
-    {
-
-
-        if(!LOCKED_FILES.contains(f))
-        {
-            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-            a.title(getResources().getString(R.string.lock));
-
-            LOCKED_FILES.add(f);
-        }
-
-        else if(LOCKED_FILES.contains(f))
-        {
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
-                    Toast.LENGTH_LONG).show();
-        }
-    }*/
-
-   /*public void unlock( final BaseFile f)
-    {
-
-       // if (LOCKED_FILES.contains(f))
-       // {
-            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-            final String inputpassword = "";
-            a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
-                @Override
-                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-
-                }
-            });
-            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-            a.title(getResources().getString(R.string.unlock));
-            a.callback(new MaterialDialog.ButtonCallback() {
-                @Override
-                public void onPositive(MaterialDialog materialDialog) {
-                    String inputpassword = materialDialog.getInputEditText().getText().toString();
-
-                }
-
-                @Override
-                public void onNegative(MaterialDialog materialDialog) {
-
-                    materialDialog.cancel();
-                }
-            });
-            a.positiveText(R.string.unlock);
-            a.negativeText(R.string.cancel);
-            int color = Color.parseColor(fabSkin);
-            a.positiveColor(color).negativeColor(color).widgetColor(color);
-            a.build().show();
-
-            LOCKED_FILES.remove(f);
-       // }
-      /* else if (!LOCKED_FILES.contains(f))
-        {
-
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_has_no_lock),
-                    Toast.LENGTH_SHORT).show();
-
-
-
-
-        }
-    }*/
 
 
     public void computeScroll() {

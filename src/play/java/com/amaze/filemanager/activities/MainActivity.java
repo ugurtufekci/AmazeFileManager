@@ -1149,7 +1149,7 @@ public class MainActivity extends BaseActivity implements
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
                 break;
-            case R.id.
+           /* case R.id.
                 MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
                 final String inputpassword = "";
                 l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
@@ -1167,7 +1167,7 @@ public class MainActivity extends BaseActivity implements
                 l.positiveColor(color).negativeColor(color).widgetColor(color);
                 l.build().show();
                 return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
