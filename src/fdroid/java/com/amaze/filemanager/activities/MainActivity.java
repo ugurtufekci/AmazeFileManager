@@ -278,9 +278,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         favorites.initializeTable(DataUtils.FAVORITES, 0);
         favorites.initializeTable(DataUtils.HIDDEN, 0);
 
-        labelHistory = new HistoryManager(this,"Table5");
-        favorites.initializeTable(DataUtils.LABELHISTORY, 0);
-        favorites.initializeTable(DataUtils.HIDDEN, 0);
+        labelHistory = new HistoryManager(this,"history");
+        labelHistory.initializeTable(DataUtils.LABELHISTORY, 0);
+        labelHistory.initializeTable(DataUtils.HIDDEN, 0);
 
 
 

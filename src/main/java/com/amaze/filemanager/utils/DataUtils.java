@@ -42,7 +42,7 @@ public class DataUtils {
 
 
     public static final String FAVORITES = "favorites",DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="Table5";
+    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="history";
 
 
 

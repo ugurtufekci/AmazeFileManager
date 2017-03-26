@@ -1392,7 +1392,7 @@ public class Futils {
         b.onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                DataUtils.clearHistory();
+                DataUtils.clearLabelHistory();
             }
         });
         b.theme(appTheme.getMaterialDialogTheme());

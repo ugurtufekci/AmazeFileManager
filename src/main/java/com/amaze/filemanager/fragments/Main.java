@@ -1248,12 +1248,19 @@ public class Main extends android.support.v4.app.Fragment {
                 String name = materialDialog.getInputEditText().getText().toString();
                 String temp = name;
                 String check = materialDialog.getInputEditText().getText().toString();
+                String extent ="";
                 for (int i = 0; i < selected.size(); i++) {
                     String nameOrjinal = selected.get(i).getName();
 
                     if (name.trim().length()!=0) {
                         name=name.trim();
-                        name = nameOrjinal + "+" + name;
+                        if (nameOrjinal.contains(".") && !nameOrjinal.endsWith(".")) {
+                            extent = nameOrjinal.substring(nameOrjinal.indexOf("."));
+                            name = nameOrjinal.substring(0,nameOrjinal.indexOf("."))+"+" + name+extent;
+
+                        }
+                       else
+                            name = nameOrjinal + "+" + name;
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
@@ -1759,7 +1766,7 @@ public class Main extends android.support.v4.app.Fragment {
     // values, if true, new values are added to the adapter.
     public void addSearchResult(BaseFile a) {
 
-        LIST_ELEMENTS.clear();                 //s
+       // LIST_ELEMENTS.clear();                 //s
 
         if (listView != null) {
 
@@ -1785,6 +1792,7 @@ public class Main extends android.support.v4.app.Fragment {
     }
 
     public void onSearchCompleted() {
+
         if (!results) {
             // no results were found                // EGER ELEMAN BULUNAMAMISSA
             LIST_ELEMENTS.clear();
@@ -1793,6 +1801,7 @@ public class Main extends android.support.v4.app.Fragment {
             @Override
             protected Void doInBackground(Void... params) {
                 Collections.sort(LIST_ELEMENTS, new FileListSorter(dsort, sortby, asc, BaseActivity.rootMode));
+
                 return null;
             }
 
@@ -1801,8 +1810,11 @@ public class Main extends android.support.v4.app.Fragment {
                 createViews(LIST_ELEMENTS, true, (CURRENT_PATH), openMode, true, !IS_LIST);
                 pathname.setText(MAIN_ACTIVITY.getString(R.string.empty));
                 mFullPath.setText(MAIN_ACTIVITY.getString(R.string.searchresults));
+
             }
+
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     private void launch(final SmbFile smbFile, final long si) {

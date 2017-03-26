@@ -299,7 +299,7 @@ public class MainActivityHelper {
             for (int i = 0; i < h.addlabelHistory().size(); i++) {
 
                 if (h.labelget(i).equals(oldPath)) {
-                    h.addlabelHistory().set(i, null);
+                    h.addlabelHistory().remove(i);
                 }
             }
 
