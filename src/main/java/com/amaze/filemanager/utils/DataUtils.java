@@ -42,7 +42,7 @@ public class DataUtils {
 
 
     public static final String FAVORITES = "favorites",DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="table5";
+    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="Table5";
 
 
 
@@ -116,6 +116,12 @@ public class DataUtils {
         }
         return -1;
     }
+
+
+
+
+
+
     public static void removeBook(int i){
         if(books.size()>i)
             books.remove(i);
@@ -180,19 +186,34 @@ public class DataUtils {
             dataChangeListener.onHistoryAdded(i);
     }
 
-    public static void addlabelHistory(String i)
+    public static void addLabelHistory(String i)
     {
         labelHistory.add(i);
         if(dataChangeListener!=null)
-            dataChangeListener.onHistoryAdded(i);
+            dataChangeListener.onLabelHistoryAdded(i);
     }
 
+    public static ArrayList<String> addlabelHistory()
+    {
+        return labelHistory;
+    }
 
+    public static String  labelget(int i )
+    {
+        return labelHistory.get(i);
+    }
     public static void addFavoritesFile(String i)
     {
         favorites.add(i);
         if(dataChangeListener!=null)
             dataChangeListener.onFavoritesAdded(i);
+    }
+
+    public static void removeFavoritesFile(String i)
+    {
+        favorites.remove(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onFavoritesRemoved(i);
     }
     //*************************************
 
@@ -279,7 +300,13 @@ public class DataUtils {
 
 
     //********************************
+    public static void  onHistoryLabelCleared(){
+      labelHistory=new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onLabelHistoryCleared();
 
+
+  }
 
 
 
@@ -301,6 +328,11 @@ public class DataUtils {
         favorites=new ArrayList<>();
         if(dataChangeListener!=null)
             dataChangeListener.onFavoritesCleared();
+    }
+    public static void clearLabelHistory() {
+        labelHistory=new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onLabelHistoryCleared();
     }
 
     public static List<String> getStorages() {
@@ -328,7 +360,10 @@ public class DataUtils {
         void onHiddenFileAdded(String path);
         void onHiddenFileRemoved(String path);
         void onHistoryAdded(String path);
+        void onLabelHistoryAdded(String path);
         void onFavoritesAdded(String path);
+        void onFavoritesRemoved(String path);
+
         void onTrashAdded(String path);
 
 
@@ -339,7 +374,7 @@ public class DataUtils {
         void onHistoryCleared();
         void onFavoritesCleared();
         void onTrashCleared();
-
+        void onLabelHistoryCleared();
 
         void onHiddenCleared();
     }

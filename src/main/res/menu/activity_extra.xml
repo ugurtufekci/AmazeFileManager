@@ -72,7 +72,6 @@
 
     <item
         android:id="@+id/searchWith"
-        android:icon="?android:attr/actionModeWebSearchDrawable"
         android:title="@string/searchWith"
         android:visible="true">
 
@@ -80,20 +79,15 @@
         <menu>
 
             <item
-                android:id="@+id/Post"
+                android:id="@+id/postprelabel"
                 android:checkable="false"
                 android:icon="@android:drawable/ic_input_get"
-                android:title="@string/Post"
+                android:title="@string/postprelabel"
                 android:visible="true" />/ tools:checkable="false"
 
             />
 
-            <item
-                android:id="@+id/Pre"
-                android:checkable="false"
-                android:icon="@android:drawable/ic_input_get"
-                android:title="@string/Pre"
-                android:visible="true" />/ tools:checkable="false"/>
+
         </menu>
 
     </item>

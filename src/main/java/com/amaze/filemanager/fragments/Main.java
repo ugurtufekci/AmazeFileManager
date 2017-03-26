@@ -112,8 +112,9 @@ import jcifs.smb.SmbFile;
 public class Main extends android.support.v4.app.Fragment {
     private UtilitiesProviderInterface utilsProvider;
     private Futils utils;
+    public static String lastSearch="";
 
-    public ArrayList<Layoutelements> LIST_ELEMENTS;
+    public static ArrayList<Layoutelements> LIST_ELEMENTS;
     public static ArrayList<BaseFile> LOCKED_FILES= new ArrayList<>();
     public Recycleradapter adapter;
     public ActionMode mActionMode;
@@ -868,8 +869,9 @@ public class Main extends android.support.v4.app.Fragment {
                         if (!DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())) {
                             DataUtils.addFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
                             Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Already added to Favorites", Toast.LENGTH_SHORT).show();
+                        } else if(DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())){
+                            DataUtils.removeFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
+                            Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -931,6 +933,7 @@ public class Main extends android.support.v4.app.Fragment {
 
             // check to initialize search results
             // if search task is been running, cancel it
+
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             SearchAsyncHelper fragment = (SearchAsyncHelper) fragmentManager
                     .findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
@@ -939,6 +942,8 @@ public class Main extends android.support.v4.app.Fragment {
                 if (fragment.mSearchTask.getStatus() == AsyncTask.Status.RUNNING) {
 
                     fragment.mSearchTask.cancel(true);
+                   // lastSearch="";
+
                 }
                 getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
@@ -1220,19 +1225,19 @@ public class Main extends android.support.v4.app.Fragment {
 
                 String name = materialDialog.getInputEditText().getText().toString();
                 String temp = name;
-
+                String check = materialDialog.getInputEditText().getText().toString();
                 for (int i = 0; i < selected.size(); i++) {
                     String nameOrjinal = selected.get(i).getName();
 
                     if (name.trim().length()!=0) {
-
+                        name=name.trim();
                         name = nameOrjinal + "+" + name;
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
 
                         MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
 
                     }
@@ -1242,7 +1247,7 @@ public class Main extends android.support.v4.app.Fragment {
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
                         MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
 
                     }
@@ -1285,23 +1290,21 @@ public class Main extends android.support.v4.app.Fragment {
 
                 String name = materialDialog.getInputEditText().getText().toString();
                 String temp =name ;
+                String check = materialDialog.getInputEditText().getText().toString();
                 for (int i = 0; i < selected.size(); i++) {
                     String orjinalName = selected.get(i).getName();
 
                     //"+";
                     if (name.trim().length() != 0) {
                         name = name + "+" + orjinalName;
+                        name=name.trim();
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
 
                         MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
-                    }
-                    else if (name.contains("+"))
-                    {
-
                     }
                     else
                     {
@@ -1310,7 +1313,7 @@ public class Main extends android.support.v4.app.Fragment {
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
                         MAIN_ACTIVITY.mainActivityHelper.pre(openMode, selected.get(i).getPath(),
-                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                                CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
                         name = temp;
                     }
                 }
@@ -1578,39 +1581,50 @@ public class Main extends android.support.v4.app.Fragment {
 
     // method to add search result entry to the LIST_ELEMENT arrayList
     private void addTo(BaseFile mFile) {
-        File f = new File(mFile.getPath());
-        String size = "";
-        if (!DataUtils.hiddenfiles.contains(mFile.getPath())) {
-            if (mFile.isDirectory()) {
-                size = "";
-                Layoutelements layoutelements = utils.newElement(folder, f.getPath(), mFile.getPermisson(), mFile.getLink(), size, 0, true, false, mFile.getDate() + "");
-                layoutelements.setMode(mFile.getMode());
-                LIST_ELEMENTS.add(layoutelements);
-                folder_count++;
-            } else {
-                long longSize = 0;
-                try {
-                    if (mFile.getSize() != -1) {
-                        longSize = Long.valueOf(mFile.getSize());
-                        size = Formatter.formatFileSize(getContext(), longSize);
-                    } else {
-                        size = "";
-                        longSize = 0;
-                    }
-                } catch (NumberFormatException e) {
-                    //e.printStackTrace();
-                }
-                try {
-                    Layoutelements layoutelements = utils.newElement(Icons.loadMimeIcon(f.getPath(), !IS_LIST, res), f.getPath(), mFile.getPermisson(), mFile.getLink(), size, longSize, false, false, mFile.getDate() + "");
+
+
+
+
+            File f = new File(mFile.getPath());
+            String size = "";
+            if (!DataUtils.hiddenfiles.contains(mFile.getPath())) {
+                if (mFile.isDirectory()) {
+                    size = "";
+                    Layoutelements layoutelements = utils.newElement(folder, f.getPath(), mFile.getPermisson(), mFile.getLink(), size, 0, true, false, mFile.getDate() + "");
                     layoutelements.setMode(mFile.getMode());
-                    LIST_ELEMENTS.add(layoutelements);
-                    file_count++;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if(!LIST_ELEMENTS.contains(mFile)) {
+
+                        LIST_ELEMENTS.add(layoutelements);
+                        folder_count++;
+                    }
+                } else {
+                    long longSize = 0;
+                    try {
+                        if (mFile.getSize() != -1) {
+                            longSize = Long.valueOf(mFile.getSize());
+                            size = Formatter.formatFileSize(getContext(), longSize);
+                        } else {
+                            size = "";
+                            longSize = 0;
+                        }
+                    } catch (NumberFormatException e) {
+                        //e.printStackTrace();
+                    }
+                    try {
+                        Layoutelements layoutelements = utils.newElement(Icons.loadMimeIcon(f.getPath(), !IS_LIST, res), f.getPath(), mFile.getPermisson(), mFile.getLink(), size, longSize, false, false, mFile.getDate() + "");
+                        layoutelements.setMode(mFile.getMode());
+                        if(!LIST_ELEMENTS.contains(mFile)) {
+                            LIST_ELEMENTS.add(layoutelements);
+                            file_count++;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
         }
-    }
+
 
     @Override
     public void onDestroy() {
@@ -1660,12 +1674,10 @@ public class Main extends android.support.v4.app.Fragment {
     // values, if true, new values are added to the adapter.
     public void addSearchResult(BaseFile a) {
 
-        LIST_ELEMENTS.clear();                 //s
-
         if (listView != null) {
 
             // initially clearing the array for new result set
-            if (!results) {
+             if (!results) {
                 LIST_ELEMENTS.clear();                         // ARRAYI CLEAR EDIYOR.
                 file_count = 0;
                 folder_count = 0;
@@ -1687,9 +1699,10 @@ public class Main extends android.support.v4.app.Fragment {
 
     public void onSearchCompleted() {
         if (!results) {
-            // no results were found                // EGER ELEMAN BULUNAMAMISSA
+                     // no results were found                // EGER ELEMAN BULUNAMAMISSA
             LIST_ELEMENTS.clear();
         }
+
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -1702,8 +1715,29 @@ public class Main extends android.support.v4.app.Fragment {
                 createViews(LIST_ELEMENTS, true, (CURRENT_PATH), openMode, true, !IS_LIST);
                 pathname.setText(MAIN_ACTIVITY.getString(R.string.empty));
                 mFullPath.setText(MAIN_ACTIVITY.getString(R.string.searchresults));
+
+                SearchAsyncHelper.isItFirstSearch=false;
+
+                /*
+
+                isItFirstSearch will always be false, because if the code reaches here, that means
+                at least once search operation is completed.
+
+                --Meriç BALGAMIŞ
+
+                 */
+
+
+                if(lastSearch.equalsIgnoreCase(SearchAsyncHelper.lastSearch)) {
+
+                    Toast.makeText(getActivity(),
+                            "Same Search", Toast.LENGTH_SHORT).show();
+                }
+                lastSearch = SearchAsyncHelper.lastSearch;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+
     }
 
     private void launch(final SmbFile smbFile, final long si) {
