@@ -1270,6 +1270,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 searchViewEditText.setText("");
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
+
+                mainFragment.LIST_ELEMENTS.clear();
+
                 break;
 
 
@@ -2207,6 +2210,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     void initialiseFab() {
+
         String folder_skin = getColorPreference().getColorAsString(ColorUsage.ICON_SKIN);
         int fabSkinPressed = PreferenceUtils.getStatusColor(BaseActivity.accentSkin);
         int folderskin = Color.parseColor(folder_skin);
@@ -2937,7 +2941,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onProgressUpdate(BaseFile val) {
 
-        mainFragment.addSearchResult(val);
+
+            mainFragment.addSearchResult(val);
+
     }
 
     @Override
@@ -2957,6 +2963,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onFavoritesAdded(String path) {
         favorites.addPath(null, path, DataUtils.FAVORITES, 0);
+    }
+
+    @Override
+    public void onFavoritesRemoved(String path) {
+        favorites.removePath(path, DataUtils.FAVORITES);
     }
 
     @Override

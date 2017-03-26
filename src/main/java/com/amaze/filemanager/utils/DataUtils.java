@@ -194,6 +194,13 @@ public class DataUtils {
         if(dataChangeListener!=null)
             dataChangeListener.onFavoritesAdded(i);
     }
+
+    public static void removeFavoritesFile(String i)
+    {
+        favorites.remove(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onFavoritesRemoved(i);
+    }
     //*************************************
 
     public static void addTrashFile(/*String i*/ BaseFile i)
@@ -329,6 +336,8 @@ public class DataUtils {
         void onHiddenFileRemoved(String path);
         void onHistoryAdded(String path);
         void onFavoritesAdded(String path);
+        void onFavoritesRemoved(String path);
+
         void onTrashAdded(String path);
 
 
