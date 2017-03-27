@@ -25,6 +25,7 @@
         android:icon="@drawable/ic_action_lock21"
         app:showAsAction="always"
         android:visible="false" />
+
     <item
         android:id="@+id/paste"
         android:title="@string/paste"
@@ -169,6 +170,12 @@
         app:showAsAction="ifRoom"
         android:id="@+id/locklist"
         android:title="Lock List"
+        />
+    <item
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:id="@+id/password"
+        android:title="Password"
         />
 
 

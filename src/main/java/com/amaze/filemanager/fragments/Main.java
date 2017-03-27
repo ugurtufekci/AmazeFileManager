@@ -748,7 +748,7 @@ public class Main extends android.support.v4.app.Fragment {
                     rename(f);
                     mode.finish();
                     return true;
-                  //######################################################################################################
+                  //******************************************************************
                   /*
                     Son değiştirilme tarihi : 27.03.2017
                     Metot yazarı : Elif Aybike Aydemir
@@ -782,7 +782,7 @@ public class Main extends android.support.v4.app.Fragment {
                     pre(j, selectAllpre);
                     mode.finish();
                     return true;
-                //######################################################################################################
+                //****************************************************************************************
                 case R.id.lock2:
                     if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc())) {
                         DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
@@ -808,7 +808,7 @@ public class Main extends android.support.v4.app.Fragment {
                         l.positiveColor(color).negativeColor(color).widgetColor(color);
                         l.build().show();
 
-                        ////////////////////////////////////////////////
+
                         Toast.makeText(getActivity(), "UNLOCKING",
                                 Toast.LENGTH_LONG).show();
                         DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
@@ -816,34 +816,7 @@ public class Main extends android.support.v4.app.Fragment {
 
                     }
                     return true;
-               /* case R.id.passwordET:
-                    if(){
-                    }
-                    else
-                    {
-                        MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
-                        final String inputpassword = "";
-                        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
-                            }
-                        });
-                        l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-                        l.title(getResources().getString(R.string.unlock));
-
-                        l.positiveText(R.string.ok);
-                        l.negativeText(R.string.cancel);
-                        int color = Color.parseColor(fabSkin);
-                        l.positiveColor(color).negativeColor(color).widgetColor(color);
-                        l.build().show();
-
-
-
-
-
-                    }
-                    return true;*/
 
 
 
