@@ -1446,12 +1446,6 @@ public class Futils {
 
 
 
-        // CLEAR VE RESTORE CLAER LİST BOŞKEN TIKLANINCA HATA VERİP UYGULAMAYI KAPATIYOR ?
-        // PROGRAM KAPATILIP AÇILINCA CLEAR VE RESTORE'A BASILINCA UYGULAMA YİNE KAPANIYOR
-
-
-
-
        /* for(BaseFile i : file)
             list.add(i);*/
 
@@ -1479,7 +1473,7 @@ public class Futils {
                 @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 //showRestoreDialog(m,appTheme);
-                // hiddenFile arrayindekiler geri alınmalı !!
+                
 
 
                     MainActivityHelper mainAct = new MainActivityHelper();
