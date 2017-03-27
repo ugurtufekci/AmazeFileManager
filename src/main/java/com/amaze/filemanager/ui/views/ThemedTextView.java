@@ -13,7 +13,7 @@ import com.amaze.filemanager.utils.theme.AppTheme;
  * Class sets text color based on current theme, without explicit method call in app lifecycle
  */
 
-public class ThemedTextView extends TextView {
+public class ThemedTextView extends TextView  {
 
     public ThemedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);

@@ -20,36 +20,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/lock2"
+        android:title="@string/lock2"
+        android:icon="@drawable/ic_action_lock21"
+        app:showAsAction="always"
+        android:visible="false" />
+
+    <item
         android:id="@+id/paste"
         android:title="@string/paste"
         android:icon="@drawable/ic_content_paste_white_36dp"
         app:showAsAction="always"
         android:visible="false" />
+
+
+    <item android:id="@+id/Favorites"
+        android:title="@string/favorites"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_favorites"
+        android:visible="false"
+        />
+
     <item
         android:id="@+id/search"
-        android:title="@string/search"
         android:icon="@drawable/ic_action_search"
+        android:title="@string/search"
         app:showAsAction="always">
 
-        <menu>
-
-            <item
-                android:visible="true"
-                android:id="@+id/post"
-                android:title="@string/post"
-
-                />
-
-            <item
-                android:visible="true"
-                android:id="@+id/pre"
-                android:title="@string/pre" />
-            <item
-                android:visible="true"
-                android:id="@+id/other"
-                android:title="@string/other" />
-
-        </menu>
 
     </item>
     <item android:id="@+id/home"
@@ -71,6 +68,50 @@
         </menu>
 
     </item>
+
+
+    <item
+        android:id="@+id/searchWith"
+        android:title="@string/searchWith"
+        android:visible="true">
+
+
+        <menu>
+
+            <item
+                android:id="@+id/postprelabel"
+                android:checkable="false"
+                android:icon="@android:drawable/ic_input_get"
+                android:title="@string/postprelabel"
+                android:visible="true" />/ tools:checkable="false"
+
+            />
+
+
+        </menu>
+
+    </item>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <item android:id="@+id/history"
         android:icon="@drawable/ic_history_white_48dp"
         app:showAsAction="ifRoom"
@@ -103,13 +144,49 @@
     <item
         android:visible="true"
         app:showAsAction="ifRoom"
+        android:id="@+id/favorite_button"
+        android:title="Favorites"
+        />
+
+
+
+
+
+    <item
+        android:visible="true"
+        app:showAsAction="ifRoom"
         android:id="@+id/trash"
         android:title="Trash"
+        />
 
 
 
 
-       />
+
+
+
+    <item
+        android:id="@+id/labelHistory"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/labelHistory"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+
+
+    <item
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:id="@+id/locklist"
+        android:title="Lock List"
+        />
+    <item
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:id="@+id/password"
+        android:title="Password"
+        />
+
 
 
 

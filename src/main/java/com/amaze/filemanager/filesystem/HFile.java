@@ -33,6 +33,7 @@ public class HFile {
 
 
 
+
     //public static final int ROOT_MODE=3,LOCAL_MODE=0,SMB_MODE=1,UNKNOWN=-1;
     OpenMode mode = OpenMode.FILE;
 
@@ -40,10 +41,12 @@ public class HFile {
 /*
 All openmode types initialy has no lock.
 */
+
     public HFile(OpenMode mode, String path) {
         this.path = path;
         this.mode = mode;
-        this.hasLocked =false;
+
+
 
     }
 
@@ -72,7 +75,8 @@ All openmode types initialy has no lock.
 
     public HFile(OpenMode mode, String path, String name, boolean isDirectory) {
         this.mode = mode;
-        this.hasLocked =false;
+
+
         if (path.startsWith("smb://") || isSmb()) {
             if (!isDirectory) this.path = path + name;
             else if (!name.endsWith("/")) this.path = path + name + "/";
@@ -108,6 +112,7 @@ All openmode types initialy has no lock.
         }
 
     }
+
 
     public void setMode(OpenMode mode) {
         this.mode = mode;
@@ -503,16 +508,31 @@ All openmode types initialy has no lock.
         return inputStream;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     public boolean exists() {
         boolean exists = false;
         if (isSmb()) {
             try {
                 SmbFile smbFile = getSmbFile(2000);
+
                 exists = smbFile != null ? smbFile.exists() : false;
             } catch (SmbException e) {
                 exists = false;
             }
-        } else if (isLocal()) exists = new File(path).exists();
+        } else if (isLocal())
+            exists = new File(path).exists();
         else if (isRoot()) {
             try {
                 return RootHelper.fileExists(path);

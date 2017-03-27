@@ -561,7 +561,8 @@ public class TextReader extends BaseActivity implements TextWatcher, View.OnClic
                 }else Toast.makeText(this,R.string.not_allowed,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.find:
-                if (searchViewLayout.isShown()) hideSearchView();
+                if (searchViewLayout.isShown())
+                    hideSearchView();
                 else revealSearchView();
                 break;
             default:

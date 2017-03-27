@@ -21,6 +21,7 @@
     <dimen name="icon_margin_top">16dp</dimen>
     <dimen name="check_view_margin">2dp</dimen>
 
+
     <dimen name="material_generic">16dp</dimen>
     <dimen name="material_generic_medium">32dp</dimen>
     <dimen name="material_generic_large">72dp</dimen>

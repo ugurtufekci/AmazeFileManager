@@ -107,8 +107,14 @@ public class FileListSorter implements Comparator<Layoutelements> {
 
                 return 1;
 
+
+            }else
+                return 1;
+
             }
-        }
+
+
+
 
         else if (dirsOnTop == 1) {          // Directoryler üstte ise
 
@@ -121,7 +127,9 @@ public class FileListSorter implements Comparator<Layoutelements> {
                 return -1;
             }
 
-            else{return 1;}
+            else{
+                return 1;
+            }
         }
 
 

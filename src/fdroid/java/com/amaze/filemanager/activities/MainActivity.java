@@ -19,6 +19,7 @@
 
 package com.amaze.filemanager.activities;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -58,6 +59,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -173,7 +175,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public LinearLayout pathbar;
     public FrameLayout buttonBarFrame;
     public boolean isDrawerLocked = false;
-    HistoryManager history, grid,trash;
+
+    HistoryManager favorites , history, grid, trash , lockHistory,labelHistory;
+
     Futils utils;
 
     MainActivity mainActivity = this;
@@ -230,7 +234,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     private int TOOLBAR_START_INSET;
     private RelativeLayout searchViewLayout;
-    private AppCompatEditText searchViewEditText;
+    private AppCompatEditText searchViewEditText,searchViewEditTextpre,searchViewEditTextpost;
     private int[] searchCoords = new int[2];
     private CoordinatorLayout mScreenLayout;
     private View fabBgView;
@@ -265,6 +269,21 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         mainActivityHelper = new MainActivityHelper(this);
         initialiseFab();
 
+        lockHistory = new HistoryManager(this, "Table4");
+        lockHistory.initializeTable(DataUtils.LOCK, 0);
+        lockHistory.initializeTable(DataUtils.HIDDEN, 0);
+
+
+        favorites = new HistoryManager(this,"favorites");
+        favorites.initializeTable(DataUtils.FAVORITES, 0);
+        favorites.initializeTable(DataUtils.HIDDEN, 0);
+
+        labelHistory = new HistoryManager(this,"history");
+        labelHistory.initializeTable(DataUtils.LABELHISTORY, 0);
+        labelHistory.initializeTable(DataUtils.HIDDEN, 0);
+
+
+
         history = new HistoryManager(this, "Table2");
         history.initializeTable(DataUtils.HISTORY, 0);
         history.initializeTable(DataUtils.HIDDEN, 0);
@@ -289,6 +308,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             grid.make(DataUtils.BOOKS);
             Sp.edit().putBoolean("booksadded", true).commit();
         }
+        //DataUtils.setLockedfiles(lockHistory.readTable(DataUtils.LOCK));
         DataUtils.setHiddenfiles(history.readTable(DataUtils.HIDDEN));
         DataUtils.setGridfiles(grid.readTable(DataUtils.GRID));
         DataUtils.setListfiles(grid.readTable(DataUtils.LIST));
@@ -301,6 +321,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         //*****************
         util = new IconUtils(Sp, this);
         icons = new IconUtils(Sp, this);
+
 
         timer = new CountDownTimer(5000, 1000) {
             @Override
@@ -641,6 +662,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void invalidatePasteButton(MenuItem paste) {
         if (MOVE_PATH != null || COPY_PATH != null) {
             paste.setVisible(true);
+
         } else {
             paste.setVisible(false);
         }
@@ -894,6 +916,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         MenuItem s = menu.findItem(R.id.view);
         MenuItem search = menu.findItem(R.id.search);
         MenuItem paste = menu.findItem(R.id.paste);
+
+        MenuItem postpre= menu.findItem(R.id.postprelabel);
+        MenuItem historyLabel= menu.findItem(R.id.labelHistory);
+
         String f = null;
         Fragment fragment;
         try {
@@ -921,15 +947,29 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             initiatebbar();
             if (Build.VERSION.SDK_INT >= 21) toolbar.setElevation(0);
             invalidatePasteButton(paste);
+
+
+
             search.setVisible(true);
             if (indicator_layout != null) indicator_layout.setVisibility(View.VISIBLE);
             menu.findItem(R.id.search).setVisible(true);
             menu.findItem(R.id.home).setVisible(true);
+            menu.findItem(R.id.favorite_button).setVisible(true);
+
             menu.findItem(R.id.history).setVisible(true);
+            menu.findItem(R.id.postprelabel).setVisible(true);
+            menu.findItem(R.id.labelHistory).setVisible(true);
 
             //*************************
             menu.findItem(R.id.trash).setVisible(true);
+
             //**********************************
+
+
+            menu.findItem(R.id.locklist).setVisible(true);
+
+
+
 
             menu.findItem(R.id.sethome).setVisible(true);
 
@@ -938,20 +978,26 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.view).setVisible(true);
             menu.findItem(R.id.extract).setVisible(false);
             invalidatePasteButton(menu.findItem(R.id.paste));
+
+
             findViewById(R.id.buttonbarframe).setVisibility(View.VISIBLE);
         } else if (f.contains("AppsList") || f.contains("ProcessViewer") ||
                 f.contains(FTPServerFragment.class.getName())) {
             appBarLayout.setExpanded(true);
             menu.findItem(R.id.sethome).setVisible(false);
+
             if (indicator_layout != null) indicator_layout.setVisibility(View.GONE);
             findViewById(R.id.buttonbarframe).setVisibility(View.GONE);
             menu.findItem(R.id.search).setVisible(false);
             menu.findItem(R.id.home).setVisible(false);
-            menu.findItem(R.id.history).setVisible(false);
+            menu.findItem(R.id.favorite_button).setVisible(false);
 
+            menu.findItem(R.id.history).setVisible(false);
+            menu.findItem(R.id.postprelabel).setVisible(false);
+            menu.findItem(R.id.labelHistory).setVisible(false);
             //***************************
             menu.findItem(R.id.trash).setVisible(false);
-
+            menu.findItem(R.id.locklist).setVisible(false);
 
             menu.findItem(R.id.extract).setVisible(false);
             if (f.contains("ProcessViewer")) menu.findItem(R.id.item10).setVisible(false);
@@ -980,9 +1026,16 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             menu.findItem(R.id.home).setVisible(false);
             menu.findItem(R.id.history).setVisible(false);
 
+            menu.findItem(R.id.postprelabel).setVisible(false);
+            menu.findItem(R.id.labelHistory).setVisible(false);
+
+            menu.findItem(R.id.favorite_button).setVisible(false);
+
+
             //*******************************
             menu.findItem(R.id.trash).setVisible(false);
 
+            menu.findItem(R.id.locklist).setVisible(false);
             menu.findItem(R.id.item10).setVisible(false);
             menu.findItem(R.id.hiddenitems).setVisible(false);
             menu.findItem(R.id.view).setVisible(false);
@@ -1038,14 +1091,67 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         } catch (Exception e) {
         }
         switch (item.getItemId()) {
+     //*****************************************************************************************************************
+             /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi :labelHistory listener #17
+                    Etiketleme özelliği sayesinde searching option olarak searchwith seceneği eklendi bu seneğe göre etikete göre arama yapılabiliyor
+                    Listener tanımlanması #18
+                    Search işlemini yapan metodun yeri : SearchAsynHelper.java
+
+
+
+                 */
+            case R.id.labelHistory://#17
+
+                if(ma != null) {
+
+                    utils.showLabelHistoryDialog(ma, getAppTheme());
+
+                }
+
+            break;
+
+            case R.id.postprelabel ://#18
+
+                if(ma != null) {
+                    View searchItem = toolbar.findViewById(R.id.search);
+                    searchViewEditText.setText("");
+                    searchItem.getLocationOnScreen(searchCoords);
+                    revealSearchView();
+
+                }
+                break;
+
+     //***************************************************************************************************************
+
             case R.id.home:
                 if (ma != null)
                     ma.home();
                 break;
+
             case R.id.history:
                 if (ma != null)
                     utils.showHistoryDialog(ma, getAppTheme());
                 break;
+            case R.id.locklist:
+                if (ma != null)
+                    utils.showLockDialog(ma, getAppTheme());
+                break;
+            case R.id.password:
+                if (ma != null)
+                    utils.showPasswordDialog(ma, getAppTheme());
+                break;
+
+
+            case R.id.favorite_button:
+                if (ma != null)
+                    utils.showFavoritesDialog(ma, getAppTheme());
+                break;
+
 
             //****************************
 
@@ -1056,8 +1162,11 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
                     utils.showTrashDialog(ma, getAppTheme());
 
+
                 }
             break;
+
+
 
             //*******************
             case R.id.sethome:
@@ -1166,6 +1275,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 MOVE_PATH = null;
 
                 invalidatePasteButton(item);
+                invalidatePasteButton(item);
+
+
+
                 break;
             case R.id.extract:
                 Fragment fragment1 = getSupportFragmentManager().findFragmentById(R.id.content_frame);
@@ -1177,7 +1290,13 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 searchViewEditText.setText("");
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
+
+                mainFragment.LIST_ELEMENTS.clear();
+
                 break;
+
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1215,6 +1334,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             public void onAnimationEnd(Animator animation) {
 
                 searchViewEditText.requestFocus();
+              //  searchViewEditText.setText();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(searchViewEditText, InputMethodManager.SHOW_IMPLICIT);
                 isSearchViewEnabled = true;
@@ -1648,12 +1768,14 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                     break;
                 case DataUtils.POST:
                     Main ma7 = ((Main) getFragment().getTab());
-                    mainActivityHelper.post(ma7.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    String a ="";
+                    mainActivityHelper.post(ma7.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode,a);
                     ma7.updateList();
                     break;
                 case DataUtils.PRE:
                     Main ma8 = ((Main) getFragment().getTab());
-                    mainActivityHelper.pre(ma8.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode);
+                    String b="";
+                    mainActivityHelper.pre(ma8.openMode, (oppathe), (oppathe1), mainActivity, BaseActivity.rootMode,b);
                     ma8.updateList();
                     break;
                 case DataUtils.NEW_FILE:
@@ -2060,6 +2182,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     void initialiseFab() {
+
         String folder_skin = getColorPreference().getColorAsString(ColorUsage.ICON_SKIN);
         int fabSkinPressed = PreferenceUtils.getStatusColor(BaseActivity.accentSkin);
         int folderskin = Color.parseColor(folder_skin);
@@ -2681,7 +2804,18 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 
-   //****************************************************************
+
+    @Override
+    public void onLockedAdded(String path) {
+        lockHistory.addPath(null, path, DataUtils.LOCK, 0); //addPath mode 0 equals(path)
+                                                          // mode 1 equals (name+path)
+    }
+    @Override
+    public void onLockedRemoved(String path) {
+        lockHistory.removePath(path, DataUtils.LOCK);
+    }
+
+    @Override
     public void onHiddenFileAdded(String path) {
         history.addPath(null, path, DataUtils.HIDDEN, 0);
     }
@@ -2720,7 +2854,6 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 //**************************************
 
 
-
     @Override
     public void onBookAdded(String[] path, boolean refreshdrawer) {
         grid.addPath(path[0], path[1], DataUtils.BOOKS, 1);
@@ -2743,17 +2876,29 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
-    @Override
-    public void onTrash2Cleared() {
-        trash.clear(DataUtils.TRASH);
+                    Değişikliğin amacı/işlevi :
 
-    }
-//**************************************************
+>>>>>>> 3f42cfbe7017697519310e0a888c70a445c35768
 
+                 */
 
 //*************************************************
+public void onLabelAdded( BaseFile path) {
 
+
+    labelHistory.addPath(null, path.getPath(), DataUtils.LABELHISTORY, 0);
+}
+
+    public void onHistoryLabelCleared() {
+    labelHistory.clear(DataUtils.LABELHISTORY);
+
+}
 
     @Override
     public void onHiddenCleared() {
@@ -2762,11 +2907,6 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
 //**************************************************
-
-
-
-
-
 
     @Override
     public void delete(String title, String path) {
@@ -2796,7 +2936,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     @Override
     public void onProgressUpdate(BaseFile val) {
 
-        mainFragment.addSearchResult(val);
+
+            mainFragment.addSearchResult(val);
+
     }
 
     @Override
@@ -2806,4 +2948,44 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 mainFragment.openMode, false, !mainFragment.IS_LIST);
         mainFragment.mSwipeRefreshLayout.setRefreshing(false);
     }
+
+
+    @Override
+    public void onFavoritesCleared() {
+        favorites.clear(DataUtils.FAVORITES);
+    }
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi :
+
+
+                 */
+    @Override
+    public void onLabelHistoryAdded(String path) {
+        labelHistory.addPath(null, path, DataUtils.LABELHISTORY, 0);
+    }
+    @Override
+    public void onLabelHistoryCleared() {
+        labelHistory.clear(DataUtils.LABELHISTORY);
+    }//******************************************************************
+    @Override
+    public void onFavoritesAdded(String path) {
+        favorites.addPath(null, path, DataUtils.FAVORITES, 0);
+    }
+
+    @Override
+    public void onFavoritesRemoved(String path) {
+        favorites.removePath(path, DataUtils.FAVORITES);
+    }
+
+    @Override
+    public void onTrashAdded(String path) {
+
+    }
+
+
 }
