@@ -54,6 +54,14 @@ public class MainActivityHelper {
         this.utils = mainActivity.getFutils();
     }
 
+
+    public MainActivityHelper(){
+
+
+
+    }
+
+
     public void showFailedOperationDialog(ArrayList<BaseFile> failedOps, boolean move, Context contextc) {
         MaterialDialog.Builder mat = new MaterialDialog.Builder(contextc);
         mat.title("Operation Unsuccessful");
@@ -686,6 +694,148 @@ public class MainActivityHelper {
             }
         });
     }
+
+
+
+    //**********************************************
+
+
+    public static String s ;
+
+
+  // restore da çağırıyorum programı kapatıyor ama adoğru çalşıyor ?!!
+
+    public void mkFile2(final ArrayList<HFile> path,final Main ma) {
+        final Toast toast=Toast.makeText(ma.getActivity(), ma.getString(R.string.done),
+                Toast.LENGTH_SHORT);
+        toast.show();
+
+
+        for(int i=0;i<path.size();i++) {
+
+           // for(HFile i : path){
+
+            //final int finalI = i;
+
+            // s = path.get(i).getPath();
+
+            Operations.mkfile(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
+                @Override
+                public void exists(final HFile file) {
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (toast != null) toast.cancel();
+                            Toast.makeText(mainActivity, mainActivity.getString(R.string.fileexist),
+                                    Toast.LENGTH_SHORT).show();
+                            if (ma != null && ma.getActivity() != null) {
+                                // retry with dialog prompted again
+                                mkfile(file.getMode(), file.getParent(), ma);
+                            }
+
+                        }
+                    });
+                }
+
+                @Override
+                public void launchSAF(final HFile file) {
+
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (toast != null) toast.cancel();
+
+
+                            // for(int i=0;i<path.size();i++)
+
+                            mainActivity.oppathe = /*path.get(i).getPath()*/file.getPath();
+                            mainActivity.operation = DataUtils.NEW_FOLDER;
+                            guideDialogForLEXA(mainActivity.oppathe);
+
+                        }
+                    });
+
+                }
+
+                @Override
+                public void launchSAF(HFile file, HFile file1) {
+
+                }
+
+                @Override
+                public void done(HFile hFile, final boolean b) {
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (b) {
+                                ma.updateList();
+                            } else
+                                Toast.makeText(ma.getActivity(), ma.getString(R.string.operationunsuccesful),
+                                        Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+
+                @Override
+                public void invalidName(final HFile file) {
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (toast != null) toast.cancel();
+                            Toast.makeText(ma.getActivity(), ma.getString(R.string.invalid_name)
+                                    + ": " + file.getName(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //**************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void mkDir(final HFile path,final Main ma) {
         final Toast toast=Toast.makeText(ma.getActivity(), ma.getString(R.string.creatingfolder),

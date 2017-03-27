@@ -23,6 +23,16 @@ public class BaseFile extends HFile implements Parcelable {
         this.path = path;
     }
 
+
+    //****************
+
+    public void setPath(String path){
+
+        this.path = path;
+    }
+
+    //*************
+
     public BaseFile(OpenMode mode, String path,boolean hasLocked,String password) {
         super(OpenMode.FILE, path);
         this.path = path;

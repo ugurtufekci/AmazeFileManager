@@ -11,16 +11,20 @@ import java.util.List;
  */
 
 //Central data being used across activity,fragments and classes
+
+
 public class DataUtils {
-    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>();
-   /* ,trash3 = new ArrayList<>();*/
+    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
+    ,trash2 = new ArrayList<>();
+
 
    public static ArrayList<BaseFile> trash = new ArrayList<>();
-    //public static ArrayList<BaseFile> hiddenfiles = new ArrayList<>();
+
+    public static ArrayList<BaseFile> hiddenfiles2 = new ArrayList<>();
 
 
 
-   // public static ArrayList<DataPackage> trash = new ArrayList<>();
+
 
 
 
@@ -30,6 +34,10 @@ public class DataUtils {
 
     public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
     ,TRASH = "Table3"  ;
+
+
+
+
 
     public static ArrayList<Item> list=new ArrayList<>();
     public static ArrayList<String[]> servers=new ArrayList<>(),books=new ArrayList<>(),accounts=new ArrayList<>();
@@ -67,7 +75,7 @@ public class DataUtils {
         accounts=new ArrayList<>();
 
          trash = new ArrayList<>();
-       // trash3 = new ArrayList<>();
+       trash2 = new ArrayList<>();
 
 
 
@@ -127,6 +135,18 @@ public class DataUtils {
         if(dataChangeListener!=null)
             dataChangeListener.onHiddenFileAdded(i);
     }
+//********************
+public static void addHiddenFile2(BaseFile i)
+{
+    hiddenfiles2.add(i);
+
+    if(dataChangeListener!=null)
+        dataChangeListener.onHiddenFileAdded2(i);
+}
+
+
+    //*********************
+
     public static void removeHiddenFile(String i)
     {
         hiddenfiles.remove(i);
@@ -148,10 +168,10 @@ public class DataUtils {
 
     public static void addTrashFile(/*String i*/ BaseFile i)
     {
-        trash.add(i);
+        trash.add(i);// trash arrayine ekliyor
 
         if(dataChangeListener!=null)
-            dataChangeListener.onTrashAdded(i);
+            dataChangeListener.onTrashAdded(i);// trash table'ına ekliyor
     }
     //******************************
 
@@ -202,6 +222,27 @@ public class DataUtils {
         DataUtils.gridfiles = gridfiles;
     }
 
+    //********************************
+
+    public static void setTrash(ArrayList<String> trash1) {
+       BaseFile a;
+        if(trash1!=null)
+            if(DataUtils.trash==null){
+            for(int i=0;i<trash.size();i++) {
+                a = new BaseFile(trash1.get(i));
+                trash.add(a);
+
+            }
+
+           /* a= new BaseFile(trash1.get(0));
+            trash.add(a);*/
+    }
+
+    }
+
+
+    //********************************
+
     public static ArrayList<String> getListfiles() {
         return listfiles;
     }
@@ -229,7 +270,16 @@ public class DataUtils {
 
     //********************************
 
+//*************************
 
+
+    public static void clearTrash2(){
+
+        trash2 = new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onTrash2Cleared();
+
+    }
 
 
     //******************************
@@ -276,6 +326,10 @@ public class DataUtils {
 
         void onTrashCleared();
 
+        void onTrash2Cleared();
+
         void onHiddenCleared();
+
+        void onHiddenFileAdded2(BaseFile i);
     }
 }

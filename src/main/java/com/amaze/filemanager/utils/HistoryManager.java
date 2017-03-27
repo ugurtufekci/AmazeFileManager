@@ -26,6 +26,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
+import com.amaze.filemanager.filesystem.BaseFile;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -34,6 +36,11 @@ public class HistoryManager {
     Context c;
     String dbname;
     String[] a;
+
+    //*************
+    ArrayList<BaseFile> x ;
+
+    //******
     public HistoryManager(Context c ,String dbname) {
         this.c = c;
         this.dbname=dbname;
@@ -47,6 +54,41 @@ public class HistoryManager {
                 sd + Environment.DIRECTORY_PICTURES
         };
     }
+
+
+    //**********************************
+
+    public HistoryManager(Context c, ArrayList<BaseFile> files,String dbname){
+
+        this.c=c;
+        this.x=files;
+        this.dbname=dbname;
+        open();
+        String sd = Environment.getExternalStorageDirectory() + "/";
+        a = new String[] {
+                sd + Environment.DIRECTORY_DCIM,
+                sd + Environment.DIRECTORY_DOWNLOADS,
+                sd + Environment.DIRECTORY_MOVIES,
+                sd + Environment.DIRECTORY_MUSIC,
+                sd + Environment.DIRECTORY_PICTURES
+        };
+
+    }
+
+
+
+    //***********************
+
+
+
+
+
+
+
+
+
+
+
     public void make(String table){
         for(String d:a){
             addPath(new File(d).getName(),d,table,1);
@@ -59,6 +101,9 @@ public class HistoryManager {
             db.execSQL("CREATE TABLE IF NOT EXISTS " + table + " (NAME VARCHAR,PATH VARCHAR)");
 
     }
+
+
+
     //single column
     public boolean rename(String path,String name,String table){
     ArrayList<String[]> arrayList=readTableSecondary(table);
@@ -78,6 +123,8 @@ public class HistoryManager {
 
     public ArrayList<String> readTable(String table) {
         Cursor c = db.rawQuery("SELECT * FROM " + table, null);
+
+
         c.moveToLast();
         ArrayList<String> paths = new ArrayList<String>();
         do {
@@ -95,10 +142,18 @@ public class HistoryManager {
         } catch (Exception e) {
         }
     }
+
+
+
+
+
     //common
     public void clear(String table){
         db.execSQL("DELETE FROM "+table+" WHERE PATH is NOT NULL");
     }
+
+
+
 
     public void addPath(String name,String path,String table,int mode) {
 

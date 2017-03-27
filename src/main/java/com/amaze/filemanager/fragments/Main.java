@@ -19,7 +19,6 @@
 
 package com.amaze.filemanager.fragments;
 
-import android.support.design.widget.Snackbar;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -67,7 +66,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
-
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.Recycleradapter;
@@ -1585,8 +1583,8 @@ public class Main extends android.support.v4.app.Fragment {
         ArrayList<Layoutelements> a = new ArrayList<Layoutelements>();
         if (searchHelper.size() > 500) searchHelper.clear();
         for (int i = 0; i < mFile.length; i++) {
-            if (DataUtils.hiddenfiles.contains(mFile[i].getPath()))
-                continue;
+            //if (DataUtils.hiddenfiles.contains(mFile[i].getPath()))
+                //continue;
             String name = mFile[i].getName();
             name = (mFile[i].isDirectory() && name.endsWith("/")) ? name.substring(0, name.length() - 1) : name;
             if (path.equals(smbPath)) {

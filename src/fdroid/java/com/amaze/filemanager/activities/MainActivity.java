@@ -185,7 +185,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     FragmentTransaction pending_fragmentTransaction;
     String pending_path;
     boolean openprocesses = false;
-    int hidemode;
+    int mode;
     public int operation = -1;
     public ArrayList<BaseFile> oparrayList;
 
@@ -272,8 +272,8 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
         //******************************************************
         trash = new HistoryManager(this,"Table3");
-        trash.initializeTable(DataUtils.TRASH, 0);
         trash.initializeTable(DataUtils.HIDDEN, 0);
+       // trash.initializeTable(DataUtils.TRASH, 0);
 
         //*****************************************************
 
@@ -295,7 +295,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
         //**********************
 
-      //  DataUtils.setTrash(trash.readTable(DataUtils.TRASH));
+        DataUtils.setTrash(DataUtils.getHiddenfiles());
 
 
         //*****************
@@ -747,6 +747,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         list.add(new EntryItem(getResources().getString(R.string.audio), "2", ContextCompat.getDrawable(this, R.drawable.ic_doc_audio_am)));
         list.add(new EntryItem(getResources().getString(R.string.documents), "3", ContextCompat.getDrawable(this, R.drawable.ic_doc_doc_am)));
         list.add(new EntryItem(getResources().getString(R.string.apks), "4", ContextCompat.getDrawable(this, R.drawable.ic_doc_apk_grid)));
+
+        //list.add(new EntryItem("Trash","7",ContextCompat.getDrawable(this,R.drawable.ic_clear_black)));
+
         DataUtils.setList(list);
         adapter = new DrawerAdapter(this, this, list, MainActivity.this, Sp);
         mDrawerList.setAdapter(adapter);
@@ -926,7 +929,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
             //*************************
             menu.findItem(R.id.trash).setVisible(true);
-
+            //**********************************
 
             menu.findItem(R.id.sethome).setVisible(true);
 
@@ -1819,7 +1822,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     void initialisePreferences() {
-        hidemode = Sp.getInt("hidemode", 0);
+         int hidemode = Sp.getInt("hidemode", 0);
         showHidden = Sp.getBoolean("showHidden", false);
         aBoolean = Sp.getBoolean("view", true);
         currentTab = Sp.getInt(PreferenceUtils.KEY_CURRENT_TAB, PreferenceUtils.DEFAULT_CURRENT_TAB);
@@ -2684,7 +2687,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
 
-
+    public void onHiddenFileAdded2(BaseFile path) {
+        history.addPath(null, path.getPath(), DataUtils.HIDDEN, 0);
+    }
 
     public void onHiddenFileRemoved(String path) {
         history.removePath(path, DataUtils.HIDDEN);
@@ -2708,7 +2713,9 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public void onTrashAdded(/*String path*/ BaseFile path) {
 
 
-        trash.addPath(null, path.getPath(), DataUtils.TRASH, 0);
+        trash.addPath(path.getName(), path.getPath(), DataUtils.TRASH, 0);
+
+        // trash table'ına tıklanınca açılan yere eklenen dosyanın pathini ekliyor
     }
 //**************************************
 
@@ -2735,6 +2742,13 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         trash.clear(DataUtils.TRASH);
 
     }
+
+
+    @Override
+    public void onTrash2Cleared() {
+        trash.clear(DataUtils.TRASH);
+
+    }
 //**************************************************
 
 
@@ -2746,6 +2760,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         history.clear(DataUtils.HIDDEN);
 
     }
+
 //**************************************************
 
 
