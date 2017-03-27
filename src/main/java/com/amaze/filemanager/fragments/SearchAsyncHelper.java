@@ -28,7 +28,9 @@ public class SearchAsyncHelper extends Fragment {
     public SearchTask mSearchTask;
     private OpenMode mOpenMode;
     private boolean mRootMode, isRegexEnabled, isMatchesEnabled;
-    public boolean isDone=false;
+    public static boolean isItFirstSearch=true;
+
+
 
     public static final String KEY_PATH = "path";
     public static final String KEY_INPUT = "input";
@@ -150,23 +152,36 @@ public class SearchAsyncHelper extends Fragment {
         private void search(HFile file, String query) {
             query=query.trim();
 
-            if(!query.equals(lastSearch)) {
-                lastSearch = query;
-                isDone = true;
-            }
-            else if(isDone == false){
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        Toast toast  = Toast.makeText( getActivity(), "Same search " , Toast.LENGTH_SHORT);
-                        //if(toast!=null)toast.cancel();
-                        toast.show();
 
-                    }});
+            /*
 
-                isDone = true;
-            }
+                isFirstSearch --> true if there are no search before it.
+                                  false if there are a search before it.
+                 (Looking if you just open the phone and searching something).
+
+                 I need a control like that because , when printing 'Same Search' to screen ,
+                 if isFirstSearch is true then lastSearch will be empty. Otherwise it will
+                 not be empty.
+
+                 lastSearch --> keeps the recently searched text.
+
+                --Meriç BALGAMIŞ
+             */
+            //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : Search metodu contains e göre çalışmaktadır. Fakat etiketlemeye göre arama seçeneği ile
+                    o etikete sahip olan dosyaları yalnızca göstermek için yapılan değişikler //#19
+
+
+                 */
+        if(isItFirstSearch == true) {
+
+            lastSearch = query;
 
             if (file.isDirectory()) {
                 ArrayList<BaseFile> f = file.listFiles(mRootMode);
@@ -178,22 +193,20 @@ public class SearchAsyncHelper extends Fragment {
                             if (x.isDirectory()) {
 
 
-
-                                if (query.contains("+")) {
+                                if (query.contains("+")) {//#19
                                     //pre
                                     if (query.charAt(query.length() - 1) == '+') {
                                         if (x.getName().startsWith(query))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                    if (query.charAt(0) == '+') {
-                                        if (x.getName().endsWith(query))
+                                    if (query.charAt(0) == '+') {//#19
+                                        //post
+                                        if ((x.getName().endsWith(query) ) || (x.getName().contains(".") && x.getName().substring(x.getName().indexOf('+'),x.getName().indexOf('.')).equals(query)))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                }
-
-                                else {
+                                } else {//#19
                                     if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
                                         publishProgress(x);
                                     }
@@ -201,27 +214,22 @@ public class SearchAsyncHelper extends Fragment {
                                 }
 
 
+                            } else {
 
 
-                            }
-                            else {
-
-
-                                if (query.contains("+")) {
+                                if (query.contains("+")) {//#19
                                     //pre
                                     if (query.charAt(query.length() - 1) == '+') {
                                         if (x.getName().startsWith(query))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                    if (query.charAt(0) == '+') {
-                                        if (x.getName().endsWith(query))
+                                    if (query.charAt(0) == '+') {//#19
+                                        if (x.getName().endsWith(query)|| (x.getName().contains(".") && x.getName().substring(x.getName().indexOf('+'),x.getName().indexOf('.')).equals(query)))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                }
-
-                                else {
+                                } else {//#19
                                     if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
                                         publishProgress(x);
                                     }
@@ -234,11 +242,93 @@ public class SearchAsyncHelper extends Fragment {
 
                 else return;
 
-            } else {
-                System.out
-                        .println(file.getPath() + "Permission Denied");
             }
         }
+
+
+           else{
+
+            if(!query.equalsIgnoreCase(lastSearch)) {
+                lastSearch = query;
+            }
+
+                if (file.isDirectory()) {
+                    ArrayList<BaseFile> f = file.listFiles(mRootMode);
+                    // do you have permission to read this directory?
+                    if (!isCancelled())
+
+                        for (BaseFile x : f) {
+                            if (!isCancelled()) {
+                                if (x.isDirectory()) {
+
+
+                                    if (query.contains("+")) {
+                                        //pre
+                                        if (query.charAt(query.length() - 1) == '+') {
+                                            if (x.getName().startsWith(query))
+                                                publishProgress(x);
+                                            if (!isCancelled()) search(x, query);
+                                        }
+                                        if (query.charAt(0) == '+') {
+                                            if (x.getName().endsWith(query))
+                                                publishProgress(x);
+                                            if (!isCancelled()) search(x, query);
+                                        }
+                                    } else {
+                                        if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
+                                            publishProgress(x);
+                                        }
+                                        if (!isCancelled()) search(x, query);
+                                    }
+
+
+                                } else {
+
+
+                                    if (query.contains("+")) {
+                                        //pre
+                                        if (query.charAt(query.length() - 1) == '+') {
+                                            if (x.getName().startsWith(query))
+                                                publishProgress(x);
+                                            if (!isCancelled()) search(x, query);
+                                        }
+                                        if (query.charAt(0) == '+') {
+                                            if (x.getName().endsWith(query))
+                                                publishProgress(x);
+                                            if (!isCancelled()) search(x, query);
+                                        }
+                                    } else {
+                                        if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
+                                            publishProgress(x);
+                                        }
+                                        if (!isCancelled()) search(x, query);
+                                    }
+
+                                }
+                            } else return;
+                        }
+
+                    else return;
+
+                }
+
+
+
+
+
+
+
+            /*
+
+            If the code reaches here. Then the code block in Main.java (1791. row) will print to screen
+            'Same Search'.
+
+             */
+            }
+
+        }
+
+
 
         /**
          * Recursively find a java regex pattern {@link Pattern} in the file names and publish the result

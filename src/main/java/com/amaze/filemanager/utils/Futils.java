@@ -1357,7 +1357,6 @@ public class Futils {
 
    }
 
-
     public void showHistoryDialog(final Main m, AppTheme appTheme) {
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         a.positiveText(R.string.cancel);
@@ -1382,6 +1381,22 @@ public class Futils {
         x.show();
 
     }
+
+
+    //**************************************************************************************************************************
+
+        /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : HistoryLabel window
+                    Bir sonraki değişiklik yapılan class : MainActivity.java
+                 */
+    //***************************************************************
+
+
+
     public void showLabelHistoryDialog(final Main m, AppTheme appTheme) {
         final MaterialDialog.Builder b = new MaterialDialog.Builder(m.getActivity());
         b.positiveText(R.string.cancel);

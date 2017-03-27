@@ -1083,8 +1083,21 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         } catch (Exception e) {
         }
         switch (item.getItemId()) {
+     //*****************************************************************************************************************
+             /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
-            case R.id.labelHistory:
+                    Değişikliğin amacı/işlevi :labelHistory listener #17
+                    Etiketleme özelliği sayesinde searching option olarak searchwith seceneği eklendi bu seneğe göre etikete göre arama yapılabiliyor
+                    Listener tanımlanması #18
+                    Search işlemini yapan metodun yeri : SearchAsynHelper.java
+
+
+
+                 */
+            case R.id.labelHistory://#17
 
                 if(ma != null) {
 
@@ -1094,7 +1107,18 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
             break;
 
+            case R.id.postprelabel ://#18
 
+                if(ma != null) {
+                    View searchItem = toolbar.findViewById(R.id.search);
+                    searchViewEditText.setText("");
+                    searchItem.getLocationOnScreen(searchCoords);
+                    revealSearchView();
+
+                }
+                break;
+
+     //***************************************************************************************************************
 
             case R.id.home:
                 if (ma != null)
@@ -1130,16 +1154,6 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 }
             break;
 
-            case R.id.postprelabel :
-
-                if(ma != null) {
-                    View searchItem = toolbar.findViewById(R.id.search);
-                    searchViewEditText.setText("");
-                    searchItem.getLocationOnScreen(searchCoords);
-                    revealSearchView();
-
-                }
-                break;
 
 
             //*******************
@@ -1264,63 +1278,16 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 searchViewEditText.setText("");
                 searchItem.getLocationOnScreen(searchCoords);
                 revealSearchView();
+
+                mainFragment.LIST_ELEMENTS.clear();
+
                 break;
 
 
 
         }
         return super.onOptionsItemSelected(item);
-    }    void revealSearchViewpost() {
-
-        final int START_RADIUS = 16;
-        int endRadius = Math.max(toolbar.getWidth(), toolbar.getHeight());
-
-        Animator animator;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            animator = ViewAnimationUtils.createCircularReveal(searchViewLayout,
-                    searchCoords[0] + 32, searchCoords[1] - 16, START_RADIUS, endRadius);
-        } else {
-            // TODO:ViewAnimationUtils.createCircularReveal
-            animator = new ObjectAnimator().ofFloat(searchViewLayout, "alpha", 0f, 1f);
-        }
-
-        utils.revealShow(fabBgView, true);
-
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(600);
-        searchViewLayout.setVisibility(View.VISIBLE);
-        animator.start();
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-                searchViewEditText.requestFocus();
-
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                searchViewEditTextpost.setText("+"+searchViewEditTextpost.getText());
-                imm.showSoftInput(searchViewEditTextpost, InputMethodManager.SHOW_IMPLICIT);
-                isSearchViewEnabled = true;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
     }
-
-
 
     /**
      * show search view with a circular reveal animation
@@ -2203,6 +2170,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     }
 
     void initialiseFab() {
+
         String folder_skin = getColorPreference().getColorAsString(ColorUsage.ICON_SKIN);
         int fabSkinPressed = PreferenceUtils.getStatusColor(BaseActivity.accentSkin);
         int folderskin = Color.parseColor(folder_skin);
@@ -2868,11 +2836,6 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         trash.addPath(null, path.getPath(), DataUtils.TRASH, 0);
     }
 //**************************************
-public void onLabelAdded(/*String path*/ BaseFile path) {
-
-
-    labelHistory.addPath(null, path.getPath(), DataUtils.LABELHISTORY, 0);
-}
 
 
     @Override
@@ -2896,11 +2859,25 @@ public void onLabelAdded(/*String path*/ BaseFile path) {
         trash.clear(DataUtils.TRASH);
 
     }
-//**************************************************
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
+                    Değişikliğin amacı/işlevi :
+
+
+                 */
 
 //*************************************************
-public void onHistoryLabelCleared() {
+public void onLabelAdded( BaseFile path) {
+
+
+    labelHistory.addPath(null, path.getPath(), DataUtils.LABELHISTORY, 0);
+}
+
+    public void onHistoryLabelCleared() {
     labelHistory.clear(DataUtils.LABELHISTORY);
 
 }
@@ -2940,7 +2917,9 @@ public void onHistoryLabelCleared() {
     @Override
     public void onProgressUpdate(BaseFile val) {
 
-        mainFragment.addSearchResult(val);
+
+            mainFragment.addSearchResult(val);
+
     }
 
     @Override
@@ -2956,19 +2935,34 @@ public void onHistoryLabelCleared() {
     public void onFavoritesCleared() {
         favorites.clear(DataUtils.FAVORITES);
     }
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
-    @Override
-    public void onLabelHistoryCleared() {
-        labelHistory.clear(DataUtils.LABELHISTORY);
-    }
-    @Override
-    public void onFavoritesAdded(String path) {
-        favorites.addPath(null, path, DataUtils.FAVORITES, 0);
-    }
+                    Değişikliğin amacı/işlevi :
+
+
+                 */
     @Override
     public void onLabelHistoryAdded(String path) {
         labelHistory.addPath(null, path, DataUtils.LABELHISTORY, 0);
     }
+    @Override
+    public void onLabelHistoryCleared() {
+        labelHistory.clear(DataUtils.LABELHISTORY);
+    }//******************************************************************
+    @Override
+    public void onFavoritesAdded(String path) {
+        favorites.addPath(null, path, DataUtils.FAVORITES, 0);
+    }
+
+    @Override
+    public void onFavoritesRemoved(String path) {
+        favorites.removePath(path, DataUtils.FAVORITES);
+    }
+
     @Override
     public void onTrashAdded(String path) {
 

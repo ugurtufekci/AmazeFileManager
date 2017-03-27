@@ -112,8 +112,9 @@ import jcifs.smb.SmbFile;
 public class Main extends android.support.v4.app.Fragment {
     private UtilitiesProviderInterface utilsProvider;
     private Futils utils;
+    public static String lastSearch="";
 
-    public ArrayList<Layoutelements> LIST_ELEMENTS;
+    public static ArrayList<Layoutelements> LIST_ELEMENTS;
     public static ArrayList<BaseFile> LOCKED_FILES= new ArrayList<>();
     public Recycleradapter adapter;
     public ActionMode mActionMode;
@@ -747,12 +748,19 @@ public class Main extends android.support.v4.app.Fragment {
                     rename(f);
                     mode.finish();
                     return true;
+                  //######################################################################################################
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
+                    Değişikliğin amacı/işlevi : Etiketleme (label) özelliği için pre/post olmak üzere listenerlar eklendi .
+                    Çoklu seçim özelliği için BaseFile Arraylistleri kullanıldı. Böylelikle birden fazla dosyanın aynı anda
+                    etiketlenmesi sağlandı.
+
+                 */
                 case R.id.post:
                     ActionMode a = mode;
-                    // withpost();
-
-
                     ArrayList<BaseFile> selectAllpost = new ArrayList<>();
                     BaseFile g;
 
@@ -774,7 +782,7 @@ public class Main extends android.support.v4.app.Fragment {
                     pre(j, selectAllpre);
                     mode.finish();
                     return true;
-
+                //######################################################################################################
                 case R.id.lock2:
                     if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc())) {
                         DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
@@ -895,8 +903,9 @@ public class Main extends android.support.v4.app.Fragment {
                         if (!DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())) {
                             DataUtils.addFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
                             Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Already added to Favorites", Toast.LENGTH_SHORT).show();
+                        } else if(DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())){
+                            DataUtils.removeFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
+                            Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -958,6 +967,7 @@ public class Main extends android.support.v4.app.Fragment {
 
             // check to initialize search results
             // if search task is been running, cancel it
+
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             SearchAsyncHelper fragment = (SearchAsyncHelper) fragmentManager
                     .findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
@@ -966,6 +976,8 @@ public class Main extends android.support.v4.app.Fragment {
                 if (fragment.mSearchTask.getStatus() == AsyncTask.Status.RUNNING) {
 
                     fragment.mSearchTask.cancel(true);
+                   // lastSearch="";
+
                 }
                 getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
@@ -1222,11 +1234,18 @@ public class Main extends android.support.v4.app.Fragment {
 
 
     }
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
+                    Değişikliğin amacı/işlevi : Post seçeneğine tıklandığınde etiketi girebilmek için pencere konuldu .
+                    Boşluk kullanılarak etiketleme yapılamaz. #1
+                    Uzantılı dosyalarda örneğin : aybike.txt uzantının işlevliğinin kaybolmaması için etiket yeri belirlendi.#2
+                    Bir sonraki değişiklik :MainActivityHelper.java #4
 
-
-
-
+                 */
 
     public void post(final BaseFile k ,final ArrayList <BaseFile> selected) {
 
@@ -1247,31 +1266,34 @@ public class Main extends android.support.v4.app.Fragment {
 
                 String name = materialDialog.getInputEditText().getText().toString();
                 String temp = name;
+                //#2
                 String check = materialDialog.getInputEditText().getText().toString();
                 String extent ="";
-                for (int i = 0; i < selected.size(); i++) {
+                for (int i = 0; i < selected.size(); i++) {//seçili tüm dosyaların alınması için
                     String nameOrjinal = selected.get(i).getName();
 
                     if (name.trim().length()!=0) {
-                        name=name.trim();
-                        if (nameOrjinal.contains(".") && !nameOrjinal.endsWith(".")) {
+                        name=name.trim();   // #1
+
+                        if (nameOrjinal.contains(".") && !nameOrjinal.endsWith(".")) { // #2
                             extent = nameOrjinal.substring(nameOrjinal.indexOf("."));
                             name = nameOrjinal.substring(0,nameOrjinal.indexOf("."))+"+" + name+extent;
 
                         }
                        else
-                            name = nameOrjinal + "+" + name;
+                            name = nameOrjinal + "+" + name;//#3
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
 
                         MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
                                 CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
+                        //#4
                         name = temp;
 
                     }
                     else {
-                        name ="   ";
+                        name ="   ";//#1
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
@@ -1300,6 +1322,16 @@ public class Main extends android.support.v4.app.Fragment {
         b.positiveColor(color).negativeColor(color).widgetColor(color);
 
     }
+
+       //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : pre etiketleme.
+
+                 */
 
 
 
@@ -1360,6 +1392,16 @@ public class Main extends android.support.v4.app.Fragment {
         c.build().show();
     }
 
+    //********************************************************************
+  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi :Renamede yalnızca boşluk ile etiketleme yapılmaması için #
+
+                 */
+
     public void rename( final BaseFile f) {
         MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
         final String orjinalName = f.getName();
@@ -1379,9 +1421,18 @@ public class Main extends android.support.v4.app.Fragment {
                 if (f.isSmb())
                     if (f.isDirectory() && !name.endsWith("/"))
                         name = name + "/";
-
-                MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                 if (orjinalName.trim().length()!=0){
+                     MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                             CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                 }
+                 else { //#1
+                     name="   ";
+                     if (f.isSmb())
+                         if (f.isDirectory() && !name.endsWith("/"))
+                             name = name + "/";
+                     MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                             CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                 }
             }
 
             @Override
@@ -1396,8 +1447,6 @@ public class Main extends android.support.v4.app.Fragment {
         a.positiveColor(color).negativeColor(color).widgetColor(color);
         a.build().show();
     }
-
-
 
 
 
@@ -1684,39 +1733,50 @@ public class Main extends android.support.v4.app.Fragment {
 
     // method to add search result entry to the LIST_ELEMENT arrayList
     private void addTo(BaseFile mFile) {
-        File f = new File(mFile.getPath());
-        String size = "";
-        if (!DataUtils.hiddenfiles.contains(mFile.getPath())) {
-            if (mFile.isDirectory()) {
-                size = "";
-                Layoutelements layoutelements = utils.newElement(folder, f.getPath(), mFile.getPermisson(), mFile.getLink(), size, 0, true, false, mFile.getDate() + "");
-                layoutelements.setMode(mFile.getMode());
-                LIST_ELEMENTS.add(layoutelements);
-                folder_count++;
-            } else {
-                long longSize = 0;
-                try {
-                    if (mFile.getSize() != -1) {
-                        longSize = Long.valueOf(mFile.getSize());
-                        size = Formatter.formatFileSize(getContext(), longSize);
-                    } else {
-                        size = "";
-                        longSize = 0;
-                    }
-                } catch (NumberFormatException e) {
-                    //e.printStackTrace();
-                }
-                try {
-                    Layoutelements layoutelements = utils.newElement(Icons.loadMimeIcon(f.getPath(), !IS_LIST, res), f.getPath(), mFile.getPermisson(), mFile.getLink(), size, longSize, false, false, mFile.getDate() + "");
+
+
+
+
+            File f = new File(mFile.getPath());
+            String size = "";
+            if (!DataUtils.hiddenfiles.contains(mFile.getPath())) {
+                if (mFile.isDirectory()) {
+                    size = "";
+                    Layoutelements layoutelements = utils.newElement(folder, f.getPath(), mFile.getPermisson(), mFile.getLink(), size, 0, true, false, mFile.getDate() + "");
                     layoutelements.setMode(mFile.getMode());
-                    LIST_ELEMENTS.add(layoutelements);
-                    file_count++;
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if(!LIST_ELEMENTS.contains(mFile)) {
+
+                        LIST_ELEMENTS.add(layoutelements);
+                        folder_count++;
+                    }
+                } else {
+                    long longSize = 0;
+                    try {
+                        if (mFile.getSize() != -1) {
+                            longSize = Long.valueOf(mFile.getSize());
+                            size = Formatter.formatFileSize(getContext(), longSize);
+                        } else {
+                            size = "";
+                            longSize = 0;
+                        }
+                    } catch (NumberFormatException e) {
+                        //e.printStackTrace();
+                    }
+                    try {
+                        Layoutelements layoutelements = utils.newElement(Icons.loadMimeIcon(f.getPath(), !IS_LIST, res), f.getPath(), mFile.getPermisson(), mFile.getLink(), size, longSize, false, false, mFile.getDate() + "");
+                        layoutelements.setMode(mFile.getMode());
+                        if(!LIST_ELEMENTS.contains(mFile)) {
+                            LIST_ELEMENTS.add(layoutelements);
+                            file_count++;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
         }
-    }
+
 
     @Override
     public void onDestroy() {
@@ -1766,12 +1826,10 @@ public class Main extends android.support.v4.app.Fragment {
     // values, if true, new values are added to the adapter.
     public void addSearchResult(BaseFile a) {
 
-       // LIST_ELEMENTS.clear();                 //s
-
         if (listView != null) {
 
             // initially clearing the array for new result set
-            if (!results) {
+             if (!results) {
                 LIST_ELEMENTS.clear();                         // ARRAYI CLEAR EDIYOR.
                 file_count = 0;
                 folder_count = 0;
@@ -1794,9 +1852,10 @@ public class Main extends android.support.v4.app.Fragment {
     public void onSearchCompleted() {
 
         if (!results) {
-            // no results were found                // EGER ELEMAN BULUNAMAMISSA
+                     // no results were found                // EGER ELEMAN BULUNAMAMISSA
             LIST_ELEMENTS.clear();
         }
+
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -1811,9 +1870,30 @@ public class Main extends android.support.v4.app.Fragment {
                 pathname.setText(MAIN_ACTIVITY.getString(R.string.empty));
                 mFullPath.setText(MAIN_ACTIVITY.getString(R.string.searchresults));
 
+
+                SearchAsyncHelper.isItFirstSearch=false;
+
+                /*
+
+                isItFirstSearch will always be false, because if the code reaches here, that means
+                at least once search operation is completed.
+
+                --Meriç BALGAMIŞ
+
+                 */
+
+
+                if(lastSearch.equalsIgnoreCase(SearchAsyncHelper.lastSearch)) {
+
+                    Toast.makeText(getActivity(),
+                            "Same Search", Toast.LENGTH_SHORT).show();
+                }
+                lastSearch = SearchAsyncHelper.lastSearch;
+
             }
 
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
 
     }
 

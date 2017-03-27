@@ -24,7 +24,9 @@ public class DataUtils {
 
    public static ArrayList<BaseFile> trash = new ArrayList<>();
 
-    public static ArrayList<String> labelHistory = new ArrayList<>();
+
+
+    public static ArrayList<String> labelHistory = new ArrayList<>(); //#13
     //public static ArrayList<BaseFile> hiddenfiles = new ArrayList<>();
 
 
@@ -186,27 +188,19 @@ public class DataUtils {
             dataChangeListener.onHistoryAdded(i);
     }
 
-    public static void addLabelHistory(String i)
-    {
-        labelHistory.add(i);
-        if(dataChangeListener!=null)
-            dataChangeListener.onLabelHistoryAdded(i);
-    }
 
-    public static ArrayList<String> addlabelHistory()
-    {
-        return labelHistory;
-    }
-
-    public static String  labelget(int i )
-    {
-        return labelHistory.get(i);
-    }
     public static void addFavoritesFile(String i)
     {
         favorites.add(i);
         if(dataChangeListener!=null)
             dataChangeListener.onFavoritesAdded(i);
+    }
+
+    public static void removeFavoritesFile(String i)
+    {
+        favorites.remove(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onFavoritesRemoved(i);
     }
     //*************************************
 
@@ -292,8 +286,23 @@ public class DataUtils {
 
 
 
-    //********************************
-    public static void  onHistoryLabelCleared(){
+    //**************************************************************************************************************************
+
+        /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : labelHistory için arraylist oluşturuldu #13
+                    Pencerede clear seçeneği seçildiğinde labelhistoryinin temizlenmesi için #14
+                    LabelHistorye ekleme #15
+                    Post / pre / rename 'in diğer classlardan arraylistte erişebilmesi için #16
+
+
+                 */
+    //***************************************************************
+
+    public static void  onHistoryLabelCleared(){ //#14
       labelHistory=new ArrayList<>();
         if(dataChangeListener!=null)
             dataChangeListener.onLabelHistoryCleared();
@@ -301,9 +310,30 @@ public class DataUtils {
 
   }
 
+    public static void addLabelHistory(String i)
+    {//#15
+        labelHistory.add(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onLabelHistoryAdded(i);
+    }
 
+    public static ArrayList<String> addlabelHistory()
+    {//#16
+        return labelHistory;
+    }
 
-    //******************************
+    public static String  labelget(int i )
+    {//#16
+        return labelHistory.get(i);
+    }
+    public static void clearLabelHistory() {
+        //#14
+        labelHistory=new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onLabelHistoryCleared();
+    }
+
+    //****************************************************************************************************
 
     public static void clearHidden() {
         hiddenfiles=new ArrayList<>();
@@ -314,18 +344,12 @@ public class DataUtils {
 
 
 
-    //********************************
 
 
     public static void clearFavorites() {
         favorites=new ArrayList<>();
         if(dataChangeListener!=null)
             dataChangeListener.onFavoritesCleared();
-    }
-    public static void clearLabelHistory() {
-        labelHistory=new ArrayList<>();
-        if(dataChangeListener!=null)
-            dataChangeListener.onLabelHistoryCleared();
     }
 
     public static List<String> getStorages() {
@@ -355,6 +379,8 @@ public class DataUtils {
         void onHistoryAdded(String path);
         void onLabelHistoryAdded(String path);
         void onFavoritesAdded(String path);
+        void onFavoritesRemoved(String path);
+
         void onTrashAdded(String path);
 
 
