@@ -149,12 +149,21 @@
         />
 
 
+
+
+
     <item
         android:visible="true"
         app:showAsAction="ifRoom"
         android:id="@+id/trash"
         android:title="Trash"
         />
+
+
+
+
+
+
 
     <item
         android:id="@+id/labelHistory"
@@ -177,7 +186,6 @@
         android:id="@+id/password"
         android:title="Password"
         />
-
 
 
 

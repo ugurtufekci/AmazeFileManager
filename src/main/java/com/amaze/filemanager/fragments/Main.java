@@ -19,8 +19,10 @@
 
 package com.amaze.filemanager.fragments;
 
+
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
+
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -68,7 +70,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amaze.filemanager.R;
-
 import com.amaze.filemanager.activities.BaseActivity;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.Recycleradapter;
@@ -752,12 +753,19 @@ public class Main extends android.support.v4.app.Fragment {
                     rename(f);
                     mode.finish();
                     return true;
+                  //******************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
+                    Değişikliğin amacı/işlevi : Etiketleme (label) özelliği için pre/post olmak üzere listenerlar eklendi .
+                    Çoklu seçim özelliği için BaseFile Arraylistleri kullanıldı. Böylelikle birden fazla dosyanın aynı anda
+                    etiketlenmesi sağlandı.
+
+                 */
                 case R.id.post:
                     ActionMode a = mode;
-                    // withpost();
-
-
                     ArrayList<BaseFile> selectAllpost = new ArrayList<>();
                     BaseFile g;
 
@@ -779,7 +787,6 @@ public class Main extends android.support.v4.app.Fragment {
                     pre(j, selectAllpre);
                     mode.finish();
                     return true;
-
 
                 case R.id.lock2:
                      String str="";
@@ -1216,11 +1223,18 @@ public class Main extends android.support.v4.app.Fragment {
 
 
     }
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
+                    Değişikliğin amacı/işlevi : Post seçeneğine tıklandığınde etiketi girebilmek için pencere konuldu .
+                    Boşluk kullanılarak etiketleme yapılamaz. #1
+                    Uzantılı dosyalarda örneğin : aybike.txt uzantının işlevliğinin kaybolmaması için etiket yeri belirlendi.#2
+                    Bir sonraki değişiklik :MainActivityHelper.java #4
 
-
-
-
+                 */
 
     public void post(final BaseFile k ,final ArrayList <BaseFile> selected) {
 
@@ -1241,24 +1255,34 @@ public class Main extends android.support.v4.app.Fragment {
 
                 String name = materialDialog.getInputEditText().getText().toString();
                 String temp = name;
+                //#2
                 String check = materialDialog.getInputEditText().getText().toString();
-                for (int i = 0; i < selected.size(); i++) {
+                String extent ="";
+                for (int i = 0; i < selected.size(); i++) {//seçili tüm dosyaların alınması için
                     String nameOrjinal = selected.get(i).getName();
 
                     if (name.trim().length()!=0) {
-                        name=name.trim();
-                        name = nameOrjinal + "+" + name;
+                        name=name.trim();   // #1
+
+                        if (nameOrjinal.contains(".") && !nameOrjinal.endsWith(".")) { // #2
+                            extent = nameOrjinal.substring(nameOrjinal.indexOf("."));
+                            name = nameOrjinal.substring(0,nameOrjinal.indexOf("."))+"+" + name+extent;
+
+                        }
+                       else
+                            name = nameOrjinal + "+" + name;//#3
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
 
                         MAIN_ACTIVITY.mainActivityHelper.post(openMode, selected.get(i).getPath(),
                                 CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode,check);
+                        //#4
                         name = temp;
 
                     }
                     else {
-                        name ="   ";
+                        name ="   ";//#1
                         if (selected.get(i).isSmb())
                             if (selected.get(i).isDirectory() && !name.endsWith("/"))
                                 name = name + "/";
@@ -1287,6 +1311,16 @@ public class Main extends android.support.v4.app.Fragment {
         b.positiveColor(color).negativeColor(color).widgetColor(color);
 
     }
+
+       //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : pre etiketleme.
+
+                 */
 
 
 
@@ -1347,6 +1381,16 @@ public class Main extends android.support.v4.app.Fragment {
         c.build().show();
     }
 
+    //********************************************************************
+  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi :Renamede yalnızca boşluk ile etiketleme yapılmaması için #
+
+                 */
+
     public void rename( final BaseFile f) {
         MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
         final String orjinalName = f.getName();
@@ -1366,9 +1410,18 @@ public class Main extends android.support.v4.app.Fragment {
                 if (f.isSmb())
                     if (f.isDirectory() && !name.endsWith("/"))
                         name = name + "/";
-
-                MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                 if (orjinalName.trim().length()!=0){
+                     MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                             CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                 }
+                 else { //#1
+                     name="   ";
+                     if (f.isSmb())
+                         if (f.isDirectory() && !name.endsWith("/"))
+                             name = name + "/";
+                     MAIN_ACTIVITY.mainActivityHelper.rename(openMode, f.getPath(),
+                             CURRENT_PATH + "/" + name, getActivity(), BaseActivity.rootMode);
+                 }
             }
 
             @Override
@@ -1384,6 +1437,78 @@ public class Main extends android.support.v4.app.Fragment {
         a.build().show();
     }
 
+
+
+   /*
+
+    public void lock (final BaseFile f)
+
+    {
+
+
+        if(!LOCKED_FILES.contains(f))
+        {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.lock));
+
+            LOCKED_FILES.add(f);
+        }
+
+        else if(LOCKED_FILES.contains(f))
+        {
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
+                    Toast.LENGTH_LONG).show();
+        }
+    }*/
+
+   /*public void unlock( final BaseFile f)
+    {
+
+       // if (LOCKED_FILES.contains(f))
+       // {
+            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
+            final String inputpassword = "";
+            a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+                @Override
+                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+                }
+            });
+            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+            a.title(getResources().getString(R.string.unlock));
+            a.callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(MaterialDialog materialDialog) {
+                    String inputpassword = materialDialog.getInputEditText().getText().toString();
+
+                }
+
+                @Override
+                public void onNegative(MaterialDialog materialDialog) {
+
+                    materialDialog.cancel();
+                }
+            });
+            a.positiveText(R.string.unlock);
+            a.negativeText(R.string.cancel);
+            int color = Color.parseColor(fabSkin);
+            a.positiveColor(color).negativeColor(color).widgetColor(color);
+            a.build().show();
+
+            LOCKED_FILES.remove(f);
+       // }
+      /* else if (!LOCKED_FILES.contains(f))
+        {
+
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_has_no_lock),
+                    Toast.LENGTH_SHORT).show();
+
+
+
+
+        }
+    }*/
 
 
     public void computeScroll() {
@@ -1562,8 +1687,8 @@ public class Main extends android.support.v4.app.Fragment {
         ArrayList<Layoutelements> a = new ArrayList<Layoutelements>();
         if (searchHelper.size() > 500) searchHelper.clear();
         for (int i = 0; i < mFile.length; i++) {
-            if (DataUtils.hiddenfiles.contains(mFile[i].getPath()))
-                continue;
+            //if (DataUtils.hiddenfiles.contains(mFile[i].getPath()))
+                //continue;
             String name = mFile[i].getName();
             name = (mFile[i].isDirectory() && name.endsWith("/")) ? name.substring(0, name.length() - 1) : name;
             if (path.equals(smbPath)) {
@@ -1714,6 +1839,7 @@ public class Main extends android.support.v4.app.Fragment {
     }
 
     public void onSearchCompleted() {
+
         if (!results) {
                      // no results were found                // EGER ELEMAN BULUNAMAMISSA
             LIST_ELEMENTS.clear();
@@ -1723,6 +1849,7 @@ public class Main extends android.support.v4.app.Fragment {
             @Override
             protected Void doInBackground(Void... params) {
                 Collections.sort(LIST_ELEMENTS, new FileListSorter(dsort, sortby, asc, BaseActivity.rootMode));
+
                 return null;
             }
 
@@ -1731,6 +1858,7 @@ public class Main extends android.support.v4.app.Fragment {
                 createViews(LIST_ELEMENTS, true, (CURRENT_PATH), openMode, true, !IS_LIST);
                 pathname.setText(MAIN_ACTIVITY.getString(R.string.empty));
                 mFullPath.setText(MAIN_ACTIVITY.getString(R.string.searchresults));
+
 
                 SearchAsyncHelper.isItFirstSearch=false;
 
@@ -1750,7 +1878,9 @@ public class Main extends android.support.v4.app.Fragment {
                             "Same Search", Toast.LENGTH_SHORT).show();
                 }
                 lastSearch = SearchAsyncHelper.lastSearch;
+
             }
+
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 

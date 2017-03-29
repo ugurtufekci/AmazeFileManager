@@ -26,3 +26,7 @@ Label seceneğindeki pos ve pre ye Rename deki özelliklerin aynısı eklendi. S
 23.03.2017
 
 "23.03.2017 Searchwith seceneğinde pre ve post göre arama yapabilen toolbar var doğru sonuç bulmuyor düzeltilicek  " 
+
+25.03.2017
+
+"25.03.2017 HistoryLabel eklendi . Clear seçeneği çalışmıyor.Pre / postta isim vermedeki geçersiz karakterler güncellendi.Searchwith menusu düzeltildi. #14  " 

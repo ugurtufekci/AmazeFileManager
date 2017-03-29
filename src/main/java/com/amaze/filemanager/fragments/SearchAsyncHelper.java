@@ -168,7 +168,17 @@ public class SearchAsyncHelper extends Fragment {
 
                 --Meriç BALGAMIŞ
              */
+            //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
+                    Değişikliğin amacı/işlevi : Search metodu contains e göre çalışmaktadır. Fakat etiketlemeye göre arama seçeneği ile
+                    o etikete sahip olan dosyaları yalnızca göstermek için yapılan değişikler //#19
+
+
+                 */
         if(isItFirstSearch == true) {
 
             lastSearch = query;
@@ -183,19 +193,20 @@ public class SearchAsyncHelper extends Fragment {
                             if (x.isDirectory()) {
 
 
-                                if (query.contains("+")) {
+                                if (query.contains("+")) {//#19
                                     //pre
                                     if (query.charAt(query.length() - 1) == '+') {
                                         if (x.getName().startsWith(query))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                    if (query.charAt(0) == '+') {
-                                        if (x.getName().endsWith(query))
+                                    if (query.charAt(0) == '+') {//#19
+                                        //post
+                                        if ((x.getName().endsWith(query) ) || (x.getName().contains(".") && x.getName().substring(x.getName().indexOf('+'),x.getName().indexOf('.')).equals(query)))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                } else {
+                                } else {//#19
                                     if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
                                         publishProgress(x);
                                     }
@@ -206,19 +217,19 @@ public class SearchAsyncHelper extends Fragment {
                             } else {
 
 
-                                if (query.contains("+")) {
+                                if (query.contains("+")) {//#19
                                     //pre
                                     if (query.charAt(query.length() - 1) == '+') {
                                         if (x.getName().startsWith(query))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                    if (query.charAt(0) == '+') {
-                                        if (x.getName().endsWith(query))
+                                    if (query.charAt(0) == '+') {//#19
+                                        if (x.getName().endsWith(query)|| (x.getName().contains(".") && x.getName().substring(x.getName().indexOf('+'),x.getName().indexOf('.')).equals(query)))
                                             publishProgress(x);
                                         if (!isCancelled()) search(x, query);
                                     }
-                                } else {
+                                } else {//#19
                                     if (x.getName().toLowerCase().contains(query.toLowerCase())) {   // EGER DIRECTORY ISE ICINI DE GEZ
                                         publishProgress(x);
                                     }
