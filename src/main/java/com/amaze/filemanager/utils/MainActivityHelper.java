@@ -734,7 +734,6 @@ public class MainActivityHelper {
     public static String s ;
 
 
-  // restore da çağırıyorum programı kapatıyor ama adoğru çalşıyor ?!!
 
     public void mkFile2(final ArrayList<HFile> path,final Main ma) {
         final Toast toast=Toast.makeText(ma.getActivity(), ma.getString(R.string.done),

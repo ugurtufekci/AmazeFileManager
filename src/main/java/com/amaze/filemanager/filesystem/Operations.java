@@ -150,6 +150,7 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
+    //mkfile 2 yaz aynı içerik / isnam
     public static void mkfile(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack)
     {
         // IS it okey ?
