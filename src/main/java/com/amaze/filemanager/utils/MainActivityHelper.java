@@ -794,13 +794,17 @@ public class MainActivityHelper {
                 }
 
                 @Override
-                public void done(HFile hFile, final boolean b) {
+                public void done(final HFile hFile, final boolean b) {
                     ma.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
                             if (b) {
+                                h.addLabelHistory(hFile.getPath());
                                 ma.updateList();
+
+
+
                             } else
                                 Toast.makeText(ma.getActivity(), ma.getString(R.string.operationunsuccesful),
                                         Toast.LENGTH_SHORT).show();

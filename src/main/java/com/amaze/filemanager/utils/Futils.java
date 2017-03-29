@@ -673,7 +673,6 @@ public class Futils {
                 Toast.makeText(b.getActivity(), b.getResources().getString(R.string.deleting), Toast.LENGTH_SHORT).show();
                 //b.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(todelete);
 
-
 //******************************
 
                 for (int i = 0; i < pos2.size(); i++) {
@@ -686,10 +685,10 @@ public class Futils {
                     DataUtils.addTrashFile(a2.get(pos2.get(i)).generateBaseFile());
 
 
+
                     b.hide(a2.get(pos2.get(i)).generateBaseFile().getPath());
 
                     // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
-
 
 
 
