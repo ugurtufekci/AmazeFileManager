@@ -14,7 +14,7 @@ import java.util.List;
 public class DataUtils {
 
     public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
-    ,lock_array =new ArrayList<>();
+    ,lock_array =new ArrayList<>(),passwordarr=new ArrayList<>();
 
 
     public static ArrayList<String>  favorites = new ArrayList<>();
@@ -42,7 +42,7 @@ public class DataUtils {
 
 
     public static final String FAVORITES = "favorites",DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="Table5";
+    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="Table5",PASS="Table5";
 
 
 
@@ -91,6 +91,7 @@ public class DataUtils {
 
          trash = new ArrayList<>();
         lock_array = new ArrayList<>();
+        passwordarr = new ArrayList<>();
 
 
     }
@@ -148,6 +149,13 @@ public class DataUtils {
             servers.add(i);
     }
 
+
+    public static void addPassword(String i)
+    {
+        passwordarr.add(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onPassAdded(i);
+    }
 
     public static void addLockFile(String i)
     {
@@ -357,6 +365,7 @@ public class DataUtils {
     public interface DataChangeListener{
         void onLockedAdded(String path);
         void onLockedRemoved(String path);
+        void onPassAdded(String path);
         void onHiddenFileAdded(String path);
         void onHiddenFileRemoved(String path);
         void onHistoryAdded(String path);

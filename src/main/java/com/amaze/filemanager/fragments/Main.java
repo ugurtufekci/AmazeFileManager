@@ -19,6 +19,7 @@
 
 package com.amaze.filemanager.fragments;
 
+import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -109,6 +110,9 @@ import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 
 
+
+
+
 public class Main extends android.support.v4.app.Fragment {
     private UtilitiesProviderInterface utilsProvider;
     private Futils utils;
@@ -127,7 +131,7 @@ public class Main extends android.support.v4.app.Fragment {
     public LinearLayout pathbar;
     public OpenMode openMode = OpenMode.FILE;
     public android.support.v7.widget.RecyclerView listView;
-
+    public String checkPassword = "";
 
 
 
@@ -776,7 +780,9 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
 
+
                 case R.id.lock2:
+                     String str="";
                     if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc())) {
                         DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
                         Toast.makeText(getActivity(), getResources().getString(R.string.locking),
@@ -784,30 +790,40 @@ public class Main extends android.support.v4.app.Fragment {
                     }
                     else
                     {
-                        MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
-                        final String inputpassword = "";
-                        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                        final MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
+                        l.input("", checkPassword, false, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
+                                }
+                            });
+                            if(!(DataUtils.passwordarr.get(0).equals(checkPassword)))
+                            {
+                                Toast.makeText(getActivity(), getResources().getString(R.string.wrongpassword),
+                                        Toast.LENGTH_LONG).show();
                             }
-                        });
-                        l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-                        l.title(getResources().getString(R.string.unlock));
-
-                        l.positiveText(R.string.unlock);
-                        l.negativeText(R.string.cancel);
-                        int color = Color.parseColor(fabSkin);
-                        l.positiveColor(color).negativeColor(color).widgetColor(color);
-                        l.build().show();
+                            else
+                            {
 
 
-                        Toast.makeText(getActivity(), "UNLOCKING",
-                                Toast.LENGTH_LONG).show();
-                        DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+                                l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+                                l.title(getResources().getString(R.string.unlock));
+
+                                l.positiveText(R.string.unlock);
+                                l.negativeText(R.string.cancel);
+                                int color = Color.parseColor(fabSkin);
+                                l.positiveColor(color).negativeColor(color).widgetColor(color);
+                                l.build().show();
 
 
+                                Toast.makeText(getActivity(), "UNLOCKING",
+                                        Toast.LENGTH_LONG).show();
+                                DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+                            }
                     }
+
+
+
                     return true;
 
 
