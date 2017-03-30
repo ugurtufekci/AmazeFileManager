@@ -608,7 +608,6 @@ public class Futils {
 
 
 
-
     public void deleteFiles(ArrayList<Layoutelements> a, final Main b, List<Integer> pos, AppTheme appTheme) {
 
 
@@ -624,14 +623,14 @@ public class Futils {
 
         for (int i = 0; i < pos.size(); i++) {
 
-                //********************************************
+            //********************************************
 
 
 
 
-               // DataUtils.trash2.add(a.get(pos.get(i)).getTitle());
+            // DataUtils.trash2.add(a.get(pos.get(i)).getTitle());
 
-           //* DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
+            //* DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
 
 
 
@@ -640,7 +639,7 @@ public class Futils {
 
             //* b.hide(a.get(pos.get(i)).generateBaseFile().getPath());
 
-           // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
+            // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
 
 
 
@@ -673,7 +672,10 @@ public class Futils {
                 Toast.makeText(b.getActivity(), b.getResources().getString(R.string.deleting), Toast.LENGTH_SHORT).show();
                 //b.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(todelete);
 
+
 //******************************
+
+                ArrayList<BaseFile> dirList = new ArrayList<BaseFile>();
 
                 for (int i = 0; i < pos2.size(); i++) {
 
@@ -682,13 +684,32 @@ public class Futils {
 
                     // DataUtils.trash2.add(a.get(pos.get(i)).getTitle());
 
-                    DataUtils.addTrashFile(a2.get(pos2.get(i)).generateBaseFile());
+                    //directory'ler direct siliniyor trash'e atılmadan/ trash'te directory görünmüyor.
+
+                    //**************
+                    if(a2.get(i).isDirectory()) {
+                        b.MAIN_ACTIVITY.delete(a2.get(i).getTitle(), a2.get(i).generateBaseFile().getPath());
+                        dirList.add(a2.get(i).generateBaseFile());
+
+                        b.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(dirList);
 
 
+                    }
+                    //********************************
+                    else {
 
-                    b.hide(a2.get(pos2.get(i)).generateBaseFile().getPath());
+                        // silinecek file labelHistoryde bulunuyorsa silindiği zaman labelHistory
+                        // arrayinden kaldırılmalı
+                        for(int j=0;j<DataUtils.labelHistory.size();j++)
+                            if(DataUtils.labelHistory.get(j).equals(a2.get(i).generateBaseFile().getPath()))
+                                DataUtils.labelHistory.remove(j);
 
+                        DataUtils.addTrashFile(a2.get(pos2.get(i)).generateBaseFile());
+
+                        b.hide(a2.get(pos2.get(i)).generateBaseFile().getPath());
+                    }
                     // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
+
 
 
 
@@ -696,7 +717,7 @@ public class Futils {
                 }
 
                 //***************
-                    b.updateList();
+                b.updateList();
 
             }
 
@@ -708,7 +729,6 @@ public class Futils {
         });
         c.build().show();
     }
-
 
 
 
@@ -921,11 +941,19 @@ public class Futils {
         boolean b=true;
         for(File file:f.listFiles()){
             boolean c;
-            if(file.isDirectory()){c=deletedirectory(file);}
-            else {c=file.delete();}
+            if(file.isDirectory()){
+
+                c=deletedirectory(file);
+            }
+            else {
+                c=file.delete();
+            }
             if(!c)b=false;
 
-        }if(b)b=f.delete();
+        }
+
+        if(b)
+            b=f.delete();
         return b;
     }
 
@@ -1472,7 +1500,7 @@ public class Futils {
                 @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 //showRestoreDialog(m,appTheme);
-                
+
 
 
                     MainActivityHelper mainAct = new MainActivityHelper();
@@ -1486,7 +1514,9 @@ public class Futils {
                     }
 
 
+
                 mainAct.mkFile2(liste,m);
+
 
                     /* for(int i=0;i< liste.size();i++)
                     mainAct.mkFile(liste.get(i),m);*/
@@ -1524,9 +1554,13 @@ public class Futils {
                 if(DataUtils.hiddenfiles!=null) {
                     DataUtils.clearHidden();
 
+
+
+
                     if (DataUtils.trash != null) {
 
                         m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.trash);
+
 
                     }
 

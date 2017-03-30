@@ -150,6 +150,7 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
+    //mkfile 2 yaz aynı içerik / isnam
     public static void mkfile(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack)
     {
         // IS it okey ?
@@ -226,7 +227,82 @@ public class Operations {
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+    public static void mkfile2(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack)
+    {
+        // IS it okey ?
+        if(file==null || errorCallBack==null)return;
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
 
+                // check whether filename is valid or not
+                if (!Operations.isFileNameValidpostpre(file.getName())) {
+                    errorCallBack.invalidName(file);
+                    return null;
+                }
+
+                if(file.exists()) {
+                    errorCallBack.exists(file);
+                    return null;
+                }
+                if(file.isSmb()){
+                    try {
+                        file.getSmbFile(2000).createNewFile();
+                    } catch (SmbException e) {
+                        Logger.log(e,file.getPath(),context);
+                        errorCallBack.done(file,false);
+                        return null;
+                    }
+                    errorCallBack.done(file,file.exists());
+                    return null;
+                } else if (file.isOtgFile()) {
+
+                    // first check whether new file already exists
+                    DocumentFile fileToCreate = RootHelper.getDocumentFile(file.getPath(), context, false);
+                    if (fileToCreate!=null) errorCallBack.exists(file);
+
+                    DocumentFile parentDirectory = RootHelper.getDocumentFile(file.getParent(), context, false);
+                    if (parentDirectory.isDirectory())  {
+                        parentDirectory.createFile(file.getName().substring(file.getName().lastIndexOf(".")),
+                                file.getName());
+                        errorCallBack.done(file, true);
+                    } else errorCallBack.done(file, false);
+                    return null;
+                } else {
+                    if (file.isLocal() || file.isRoot()) {
+                        int mode = checkFolder(new File(file.getParent()), context);
+                        if (mode == 2) {
+                            errorCallBack.launchSAF(file);
+                            return null;
+                        }
+                        if (mode == 1 || mode == 0)
+                            try {
+                                FileUtil.mkfile(file.getFile(), context);
+                            } catch (IOException e) {
+                            }
+                        if (!file.exists() && rootMode) {
+                            file.setMode(OpenMode.ROOT);
+                            if (file.exists()) errorCallBack.exists(file);
+                            try {
+
+                                RootUtils.mkFile(file.getPath());
+                            } catch (RootNotPermittedException e) {
+                                Logger.log(e, file.getPath(), context);
+                            }
+                            errorCallBack.done(file, file.exists());
+                            return null;
+                        }
+                        errorCallBack.done(file, file.exists());
+                        return null;
+                    }
+                    errorCallBack.done(file, file.exists());
+
+
+                }
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
     //********************************************************************
                   /*
