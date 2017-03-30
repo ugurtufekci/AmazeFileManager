@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
     public FrameLayout buttonBarFrame;
     public boolean isDrawerLocked = false;
 
-    HistoryManager favorites , history, grid, trash , lockHistory,labelHistory;
+    HistoryManager favorites , history, grid, trash , lockHistory,labelHistory,passHistory;
 
     Futils utils;
 
@@ -268,6 +268,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         utils = getFutils();
         mainActivityHelper = new MainActivityHelper(this);
         initialiseFab();
+
+        passHistory = new HistoryManager(this, "Table5");
+        passHistory.initializeTable(DataUtils.PASS, 0);
+        passHistory.initializeTable(DataUtils.HIDDEN, 0);
 
         lockHistory = new HistoryManager(this, "Table4");
         lockHistory.initializeTable(DataUtils.LOCK, 0);
@@ -967,6 +971,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
 
             menu.findItem(R.id.locklist).setVisible(true);
+            menu.findItem(R.id.password).setVisible(true);
 
 
 
@@ -998,6 +1003,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             //***************************
             menu.findItem(R.id.trash).setVisible(false);
             menu.findItem(R.id.locklist).setVisible(false);
+            menu.findItem(R.id.password).setVisible(false);
 
             menu.findItem(R.id.extract).setVisible(false);
             if (f.contains("ProcessViewer")) menu.findItem(R.id.item10).setVisible(false);
@@ -1034,7 +1040,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
             //*******************************
             menu.findItem(R.id.trash).setVisible(false);
-
+            menu.findItem(R.id.password).setVisible(false);
             menu.findItem(R.id.locklist).setVisible(false);
             menu.findItem(R.id.item10).setVisible(false);
             menu.findItem(R.id.hiddenitems).setVisible(false);
@@ -2804,7 +2810,10 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
     }
 
+    public void onPassAdded(String path) {
 
+        passHistory.addPath(null, path, DataUtils.PASS,0);
+    }
     @Override
     public void onLockedAdded(String path) {
         lockHistory.addPath(null, path, DataUtils.LOCK, 0); //addPath mode 0 equals(path)

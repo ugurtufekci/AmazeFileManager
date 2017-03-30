@@ -19,6 +19,10 @@
 
 package com.amaze.filemanager.fragments;
 
+
+import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
+
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -107,6 +111,9 @@ import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 
 
+
+
+
 public class Main extends android.support.v4.app.Fragment {
     private UtilitiesProviderInterface utilsProvider;
     private Futils utils;
@@ -125,7 +132,7 @@ public class Main extends android.support.v4.app.Fragment {
     public LinearLayout pathbar;
     public OpenMode openMode = OpenMode.FILE;
     public android.support.v7.widget.RecyclerView listView;
-
+    public String checkPassword = "";
 
 
 
@@ -780,45 +787,78 @@ public class Main extends android.support.v4.app.Fragment {
                     pre(j, selectAllpre);
                     mode.finish();
                     return true;
-                //****************************************************************************************
+
+                case R.id.password: // password yoksa password ekle
+                 //   if(!DataUtils.passwordarr.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc())) {
+                        DataUtils.addPassword(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+                        Toast.makeText(getActivity(),"Create Password",
+                                Toast.LENGTH_LONG).show();
+
+                    return true;
+
                 case R.id.lock2:
-                    if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc())) {
+                     //dosya locklanırken.
+                    if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc()))
+                    {
                         DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
                         Toast.makeText(getActivity(), getResources().getString(R.string.locking),
                                 Toast.LENGTH_LONG).show();
                     }
-                    else
+                    else //dosya unlocklanırken
                     {
-                        MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
-                        final String inputpassword = "";
-                        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                        //önce password olusturulmasını isteyecek.Password olusturulacak arraye atıcak
+                        if(!(DataUtils.passwordarr.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc())))
+                        {
+                            Toast.makeText(getActivity(), "Create Password before unlocking",
+                                    Toast.LENGTH_LONG).show();
+                            DataUtils.addPassword(LIST_ELEMENTS.get(plist.get(0)).getDesc());
 
+
+                            final MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
+                            l.input("", checkPassword, false, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+                                }
+                            });
+
+                        }//passwordun oldugu duruma geçiş
+                        else
+                        {
+                            if(!(DataUtils.passwordarr.get(0).equals(checkPassword)))   //unlock yapılırken girilen password yanlıs ise.
+                            {
+                                Toast.makeText(getActivity(), getResources().getString(R.string.wrongpassword),
+                                        Toast.LENGTH_LONG).show();
                             }
-                        });
-                        l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-                        l.title(getResources().getString(R.string.unlock));
+                            else   //unlock islemi yapılırken girilen password dogru ise dosya acılacak.
+                            {
+                                final MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
+                                l.input("", checkPassword, false, new MaterialDialog.InputCallback() {
+                                    @Override
+                                    public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
-                        l.positiveText(R.string.unlock);
-                        l.negativeText(R.string.cancel);
-                        int color = Color.parseColor(fabSkin);
-                        l.positiveColor(color).negativeColor(color).widgetColor(color);
-                        l.build().show();
+                                    }
+                                });
+
+                                l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+                                l.title(getResources().getString(R.string.unlock));
+
+                                l.positiveText(R.string.unlock);
+                                l.negativeText(R.string.cancel);
+                                int color = Color.parseColor(fabSkin);
+                                l.positiveColor(color).negativeColor(color).widgetColor(color);
+                                l.build().show();
 
 
-                        Toast.makeText(getActivity(), "UNLOCKING",
-                                Toast.LENGTH_LONG).show();
-                        DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
-
+                                Toast.makeText(getActivity(), "UNLOCKING",
+                                        Toast.LENGTH_LONG).show();
+                                DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+                            }
+                        }
 
                     }
+
                     return true;
-
-
-
-
-
 
                 case R.id.hide:
                     for (int i1 = 0; i1 < plist.size(); i1++) {
@@ -1421,76 +1461,6 @@ public class Main extends android.support.v4.app.Fragment {
 
 
 
-   /*
-
-    public void lock (final BaseFile f)
-
-    {
-
-
-        if(!LOCKED_FILES.contains(f))
-        {
-            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-            a.title(getResources().getString(R.string.lock));
-
-            LOCKED_FILES.add(f);
-        }
-
-        else if(LOCKED_FILES.contains(f))
-        {
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_already_lock),
-                    Toast.LENGTH_LONG).show();
-        }
-    }*/
-
-   /*public void unlock( final BaseFile f)
-    {
-
-       // if (LOCKED_FILES.contains(f))
-       // {
-            MaterialDialog.Builder a = new MaterialDialog.Builder(getActivity());
-            final String inputpassword = "";
-            a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
-                @Override
-                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-
-                }
-            });
-            a.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-            a.title(getResources().getString(R.string.unlock));
-            a.callback(new MaterialDialog.ButtonCallback() {
-                @Override
-                public void onPositive(MaterialDialog materialDialog) {
-                    String inputpassword = materialDialog.getInputEditText().getText().toString();
-
-                }
-
-                @Override
-                public void onNegative(MaterialDialog materialDialog) {
-
-                    materialDialog.cancel();
-                }
-            });
-            a.positiveText(R.string.unlock);
-            a.negativeText(R.string.cancel);
-            int color = Color.parseColor(fabSkin);
-            a.positiveColor(color).negativeColor(color).widgetColor(color);
-            a.build().show();
-
-            LOCKED_FILES.remove(f);
-       // }
-      /* else if (!LOCKED_FILES.contains(f))
-        {
-
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_file_has_no_lock),
-                    Toast.LENGTH_SHORT).show();
-
-
-
-
-        }
-    }*/
 
 
     public void computeScroll() {
