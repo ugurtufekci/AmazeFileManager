@@ -1344,6 +1344,7 @@ public class Futils {
         l.negativeText(R.string.cancel);
         l.build().show();
 
+
         HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.passwordarr),null,true);
         l.adapter(adapter, null);
 
