@@ -613,6 +613,7 @@ public class Futils {
 
 
 
+
         final MaterialDialog.Builder c = new MaterialDialog.Builder(b.getActivity());
         c.title(b.getResources().getString(R.string.confirm));
         String names = "";
