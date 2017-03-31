@@ -750,9 +750,11 @@ public class MainActivityHelper {
             // s = path.get(i).getPath();
 
 
+
 if(!path.get(i).getPath().contains("Android"))
 
             Operations.mkfile(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
+
                 @Override
                 public void exists(final HFile file) {
                     ma.getActivity().runOnUiThread(new Runnable() {
@@ -796,13 +798,17 @@ if(!path.get(i).getPath().contains("Android"))
                 }
 
                 @Override
-                public void done(HFile hFile, final boolean b) {
+                public void done(final HFile hFile, final boolean b) {
                     ma.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
                             if (b) {
+                                h.addLabelHistory(hFile.getPath());
                                 ma.updateList();
+
+
+
                             } else
                                 Toast.makeText(ma.getActivity(), ma.getString(R.string.operationunsuccesful),
                                         Toast.LENGTH_SHORT).show();

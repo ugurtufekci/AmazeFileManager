@@ -591,6 +591,7 @@
     <string name="clipboard_path_copy">Path copied to clipboard</string>
     <string name="error_busybox">Busybox not found. Closing interactive shell.</string>
     <string name="service_timer">Time Elapsed</string>
+    <string name="wrongpassword">Wrong Password!</string>
     <string name="please_wait">Please Wait</string>
     <string name="restore" />
 </resources>

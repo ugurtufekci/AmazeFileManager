@@ -100,6 +100,8 @@ public class Futils {
     public static final int EXECUTE = 1;
     private Toast studioCount;
 
+    public String inputpassword = "";
+    HistoryManager h;
 
 
 
@@ -608,12 +610,12 @@ public class Futils {
 
 
 
-
     public void deleteFiles(ArrayList<Layoutelements> a, final Main b, List<Integer> pos, AppTheme appTheme) {
 
 
         final ArrayList<Layoutelements> a2 =a;
         final  List<Integer> pos2 = pos;
+
 
 
         final MaterialDialog.Builder c = new MaterialDialog.Builder(b.getActivity());
@@ -624,14 +626,14 @@ public class Futils {
 
         for (int i = 0; i < pos.size(); i++) {
 
-                //********************************************
+            //********************************************
 
 
 
 
-               // DataUtils.trash2.add(a.get(pos.get(i)).getTitle());
+            // DataUtils.trash2.add(a.get(pos.get(i)).getTitle());
 
-           //* DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
+            //* DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
 
 
 
@@ -640,7 +642,7 @@ public class Futils {
 
             //* b.hide(a.get(pos.get(i)).generateBaseFile().getPath());
 
-           // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
+            // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
 
 
 
@@ -699,14 +701,17 @@ public class Futils {
 
                     }
                     //********************************
-            else {
+                    else {
 
                         // silinecek file labelHistoryde bulunuyorsa silindiği zaman labelHistory
+
                             // arrayinden kaldırılmalı
                         for(int j=0;j<DataUtils.labelHistory.size();j++) {
                             if (DataUtils.labelHistory.get(j).equals(a2.get(i).generateBaseFile().getPath()))
                                 DataUtils.labelHistory.remove(j);
                         }
+
+
 
                         DataUtils.addTrashFile(a2.get(pos2.get(i)).generateBaseFile());
 
@@ -721,7 +726,7 @@ public class Futils {
                 }
 
                 //***************
-                    b.updateList();
+                b.updateList();
 
             }
 
@@ -733,7 +738,6 @@ public class Futils {
         });
         c.build().show();
     }
-
 
 
 
@@ -1328,42 +1332,30 @@ public class Futils {
    }
     public void showPasswordDialog(final Main m, AppTheme appTheme)
     {
+
+
         MaterialDialog.Builder l = new MaterialDialog.Builder(m.getActivity());
-        final String inputpassword = "";
         l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
             }
         });
+
         l.theme(Theme.DARK);
         l.title(" Enter your password ");
-
+        //l.toString();
         l.positiveText(R.string.ok);
         l.negativeText(R.string.cancel);
         l.build().show();
 
 
-       /* final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
-        a.positiveText(R.string.ok);
-        a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
-        a.title("Create/Change your password");
-        final String inputpassword = "";
-        a.input("", inputpassword, false, new MaterialDialog.InputCallback() {
-        @Override
-        public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.passwordarr),null,true);
+        l.adapter(adapter, null);
 
-        }
-    });
-        a.theme(appTheme.getMaterialDialogTheme());
-
-        a.autoDismiss(true);
-        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.lock_array),null,true);
-        a.adapter(adapter, null);
-
-        MaterialDialog x= a.build();
+        MaterialDialog x= l.build();
         adapter.updateDialog(x);
-        x.show();*/
+        x.show();
 
     }
 
