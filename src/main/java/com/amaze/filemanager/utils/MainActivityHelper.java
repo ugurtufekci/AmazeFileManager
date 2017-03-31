@@ -753,7 +753,8 @@ public class MainActivityHelper {
 
 if(!path.get(i).getPath().contains("Android"))
 
-            Operations.mkfile(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
+
+            Operations.mkfile2(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
 
                 @Override
                 public void exists(final HFile file) {
