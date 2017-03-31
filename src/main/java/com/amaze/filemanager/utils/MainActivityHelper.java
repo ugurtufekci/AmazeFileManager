@@ -55,6 +55,14 @@ public class MainActivityHelper {
         this.utils = mainActivity.getFutils();
     }
 
+
+    public MainActivityHelper(){
+
+
+
+    }
+
+
     public void showFailedOperationDialog(ArrayList<BaseFile> failedOps, boolean move, Context contextc) {
         MaterialDialog.Builder mat = new MaterialDialog.Builder(contextc);
         mat.title("Operation Unsuccessful");
@@ -226,6 +234,19 @@ public class MainActivityHelper {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         mainActivity.startActivityForResult(intent, 3);
     }
+
+  //******************************************************************************************************************
+                /*
+                     Son değiştirilme tarihi : 27.03.2017
+                     Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                   Değişikliğin amacı/işlevi : Renamede yalnızca boşluk girilerek isimlendirilme yapılınca artık error mesajı veririyor.#5
+                   LabelHistoryde bir dosyanın etiketi rename sayesinde kaldırıldığında arrayden burda siliyor #6
+                   Bir sonraki değişikler : Operations.java / DataUtils.java (historyLabel)
+
+
+            */
     public void rename(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
         final Toast toast = Toast.makeText(context, context.getString(R.string.renaming),
                 Toast.LENGTH_SHORT);
@@ -253,7 +274,6 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (toast != null) toast.cancel();
                         mainActivity.oppathe = file.getPath();
                         mainActivity.oppathe1 = file1.getPath();
                         mainActivity.operation = DataUtils.RENAME;
@@ -286,26 +306,37 @@ public class MainActivityHelper {
 
                         if (toast != null) toast.cancel();
                         if (file.getName().trim().length() == 0)
-                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + "whitespace", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + "whitespace", Toast.LENGTH_LONG).show(); //#5
                         else
                             Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + file.getName(), Toast.LENGTH_LONG).show();
                     }
                 });
             }
         });
-
+       // #6 arrayden silme
         if (oldPath.contains("+")) {
 
             for (int i = 0; i < h.addlabelHistory().size(); i++) {
 
                 if (h.labelget(i).equals(oldPath)) {
-                    h.addlabelHistory().set(i, null);
+                    h.addlabelHistory().remove(i);
                 }
             }
 
         }
     }
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
 
+                    Değişikliğin amacı/işlevi : Daha önceden etiketlenmiş olup olmadığının hata mesajı #7
+                    Boşluk karekterinin hata mesajı #8
+                    Etiketleme işlemi başarılı olursa label historye ekleme işlemi #9
+
+
+                 */
     public void post(OpenMode mode, final String oldPath, final String newPath, final Activity context, boolean rootmode,final String orjinalname) {
         final Toast z=Toast.makeText(context, context.getString(R.string.postLabel), Toast.LENGTH_SHORT);
 
@@ -316,7 +347,7 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // arraye burda ekle
+
                         if (z != null) z.cancel();
 
                         Toast.makeText(mainActivity, context.getString(R.string.fileexist),
@@ -350,7 +381,9 @@ public class MainActivityHelper {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (b) {h.addLabelHistory(newPath);
+                        if (b) {
+                             //#9
+                            h.addLabelHistory(newPath);
                             Intent intent = new Intent("loadlist");
                             mainActivity.sendBroadcast(intent);
                         } else
@@ -371,10 +404,10 @@ public class MainActivityHelper {
                         if (file.getName().trim().length()==0) {
 
                             Toast.makeText(context, context.getString(R.string.invalid_name) + ": " + "whitespace", Toast.LENGTH_LONG).show();
-                            //check=false;
-
+                           //#8
                         }
                         else if (oldPath.contains("+")){
+                            //#7
 
                             Toast.makeText(context, context.getString(R.string.alreadyLabel), Toast.LENGTH_LONG).show();
 
@@ -391,7 +424,19 @@ public class MainActivityHelper {
         });
 
 
-    }
+    }               /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : Daha önceden etiketlenmiş olup olmadığının hata mesajı #7
+                    Boşluk karekterinin hata mesajı #8
+                    Etiketleme işlemi başarılı olursa label historye ekleme işlemi #9 pre ile aynı
+                    Bir sonraki değişiklik yapılan class : Operations.java
+
+
+                 */
+    //********************************************************************
     public void pre(OpenMode mode, final String oldPath, final String newPath, final Activity context, boolean rootmode, final String orjinalname) {
         final Toast toast=Toast.makeText(context, context.getString(R.string.preLabel),Toast.LENGTH_SHORT);
         toast.show();
@@ -440,6 +485,7 @@ public class MainActivityHelper {
                         if (b) {
                             Intent intent = new Intent("loadlist");
                             mainActivity.sendBroadcast(intent);
+                            //#9
                             h.addLabelHistory(newPath);
                         } else
                             Toast.makeText(context, context.getString(R.string.operationunsuccesful),
@@ -481,7 +527,7 @@ public class MainActivityHelper {
 
     }
 
-
+    //******************************************************************************************
 
     //copy from rename "examine later"
    /* public void lock(OpenMode mode, String oldPath, final String newPath, final Activity context, boolean rootmode) {
@@ -679,6 +725,151 @@ public class MainActivityHelper {
             }
         });
     }
+
+
+
+    //**********************************************
+
+
+    public static String s ;
+
+
+
+    public void mkFile2(final ArrayList<HFile> path,final Main ma) {
+        final Toast toast=Toast.makeText(ma.getActivity(), ma.getString(R.string.done),
+                Toast.LENGTH_SHORT);
+        toast.show();
+
+
+        for(int i=0;i<path.size();i++) {
+
+           // for(HFile i : path){
+
+            //final int finalI = i;
+
+            // s = path.get(i).getPath();
+
+            Operations.mkfile2(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
+                @Override
+                public void exists(final HFile file) {
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (toast != null) toast.cancel();
+                            Toast.makeText(mainActivity, mainActivity.getString(R.string.fileexist),
+                                    Toast.LENGTH_SHORT).show();
+                            if (ma != null && ma.getActivity() != null) {
+                                // retry with dialog prompted again
+                                mkfile(file.getMode(), file.getParent(), ma);
+                            }
+
+                        }
+                    });
+                }
+
+                @Override
+                public void launchSAF(final HFile file) {
+
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (toast != null) toast.cancel();
+
+
+                            // for(int i=0;i<path.size();i++)
+
+                            mainActivity.oppathe = /*path.get(i).getPath()*/file.getPath();
+                            mainActivity.operation = DataUtils.NEW_FOLDER;
+                            guideDialogForLEXA(mainActivity.oppathe);
+
+                        }
+                    });
+
+                }
+
+                @Override
+                public void launchSAF(HFile file, HFile file1) {
+
+                }
+
+                @Override
+                public void done(final HFile hFile, final boolean b) {
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (b) {
+                                h.addLabelHistory(hFile.getPath());
+                                ma.updateList();
+
+
+
+                            } else
+                                Toast.makeText(ma.getActivity(), ma.getString(R.string.operationunsuccesful),
+                                        Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+
+                @Override
+                public void invalidName(final HFile file) {
+                    ma.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (toast != null) toast.cancel();
+                            Toast.makeText(ma.getActivity(), ma.getString(R.string.invalid_name)
+                                    + ": " + file.getName(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //**************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void mkDir(final HFile path,final Main ma) {
         final Toast toast=Toast.makeText(ma.getActivity(), ma.getString(R.string.creatingfolder),

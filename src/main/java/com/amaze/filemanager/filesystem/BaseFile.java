@@ -15,12 +15,37 @@ public class BaseFile extends HFile implements Parcelable {
     String permisson;
     String name;
 
+
+
+    //String password;
+
+
+
     String link="";
 
     public BaseFile(String path) {
         super(OpenMode.FILE, path);
         this.path = path;
     }
+
+
+
+    //****************
+
+    public void setPath(String path){
+
+        this.path = path;
+    }
+
+    //*************
+
+    /*public BaseFile(OpenMode mode, String path,boolean hasLocked,String password) {
+        super(OpenMode.FILE, path);
+        this.path = path;
+        this.mode = mode;
+        this.hasLocked =hasLocked;
+       // this.password= password;
+    }*/
 
 
     public BaseFile(String path, String permisson, long date, long size, boolean isDirectory) {

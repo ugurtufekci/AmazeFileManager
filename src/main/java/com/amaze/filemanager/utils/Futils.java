@@ -100,7 +100,9 @@ public class Futils {
     public static final int EXECUTE = 1;
     private Toast studioCount;
 
+    public String inputpassword = "";
     HistoryManager h;
+
 
 
     public Futils() {
@@ -608,9 +610,11 @@ public class Futils {
 
 
 
-
     public void deleteFiles(ArrayList<Layoutelements> a, final Main b, List<Integer> pos, AppTheme appTheme) {
 
+
+        final ArrayList<Layoutelements> a2 =a;
+        final  List<Integer> pos2 = pos;
 
 
 
@@ -619,27 +623,26 @@ public class Futils {
         String names = "";
         final ArrayList<BaseFile> todelete = new ArrayList<>();
 
-        final ArrayList<BaseFile> trash2 = new ArrayList<>();
+
         for (int i = 0; i < pos.size(); i++) {
 
-                //********************************************
-
-
-            //DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
-
-               // trash2.add(a.get(pos.get(i)).generateBaseFile());
-
-            DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
+            //********************************************
 
 
 
 
-            //asıl menüdeki dosyayı hidenFiles arrayine atıyor
-            // trash'te clear edilince hiddenFiles'ta temizlenmeli !!!
+            // DataUtils.trash2.add(a.get(pos.get(i)).getTitle());
+
+            //* DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
 
 
-             b.hide(a.get(pos.get(i)).generateBaseFile().getPath());
 
+
+
+
+            //* b.hide(a.get(pos.get(i)).generateBaseFile().getPath());
+
+            // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
 
 
 
@@ -659,8 +662,6 @@ public class Futils {
         }
 
 
-       final  ArrayList<Layoutelements> a2 = a;
-        final List<Integer> pos2 = pos;
 
         c.content(b.getResources().getString(R.string.questiondelete) + names);
         c.theme(appTheme.getMaterialDialogTheme());
@@ -675,74 +676,51 @@ public class Futils {
                 //b.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(todelete);
 
 
+//******************************
 
-                    b.updateList();
+                ArrayList<BaseFile> dirList = new ArrayList<BaseFile>();
 
-            }
-
-            @Override
-            public void onNegative(MaterialDialog materialDialog) {
-
-                //materialDialog.cancel();
-            }
-        });
-        c.build().show();
-    }
+                for (int i = 0; i < pos2.size(); i++) {
 
 
 
-    //*************************************************************
+
+                    // DataUtils.trash2.add(a.get(pos.get(i)).getTitle());
+
+                    //directory'ler direct siliniyor trash'e atılmadan/ trash'te directory görünmüyor.
+
+                    //**************
+                    if(a2.get(i).isDirectory()) {
+                        b.MAIN_ACTIVITY.delete(a2.get(i).getTitle(), a2.get(i).generateBaseFile().getPath());
+                        dirList.add(a2.get(i).generateBaseFile());
+
+                        b.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(dirList);
 
 
-/*
+                    }
+                    //********************************
+                    else {
 
-    public void RealdeleteFiles(ArrayList<Layoutelements> a, final Main b, List<Integer> pos, AppTheme appTheme) {
+                        // silinecek file labelHistoryde bulunuyorsa silindiği zaman labelHistory
+                        // arrayinden kaldırılmalı
+                        for(int j=0;j<DataUtils.labelHistory.size();j++)
+                            if(DataUtils.labelHistory.get(j).equals(a2.get(i).generateBaseFile().getPath()))
+                                DataUtils.labelHistory.remove(j);
 
+                        DataUtils.addTrashFile(a2.get(pos2.get(i)).generateBaseFile());
 
-
-        final MaterialDialog.Builder c = new MaterialDialog.Builder(b.getActivity());
-        c.title(b.getResources().getString(R.string.confirm));
-        String names = "";
-        final ArrayList<BaseFile> todelete = new ArrayList<>();
-
-       // final ArrayList<BaseFile> trash2 = new ArrayList<>();
-        for (int i = 0; i < pos.size(); i++) {
-
-            //********************************************
-
-
-            //DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
-
-           // trash2.add(a.get(pos.get(i)).generateBaseFile());
-
-         // DataUtils.addTrashFile(a.get(pos.get(i)).generateBaseFile());
+                        b.hide(a2.get(pos2.get(i)).generateBaseFile().getPath());
+                    }
+                    // DataUtils.addHiddenFile2(a.get(pos.get(i)).generateBaseFile());
 
 
 
 
 
+                }
 
-            //**************************************
-
-            todelete.add(a.get(pos.get(i)).generateBaseFile());
-
-
-
-
-            names = names + "\n" + (i + 1) + ". " + a.get(pos.get(i)).getTitle();
-        }
-        c.content(b.getResources().getString(R.string.questiondelete) + names);
-        c.theme(appTheme.getMaterialDialogTheme());
-        c.negativeText(b.getResources().getString(R.string.no));
-        c.positiveText(b.getResources().getString(R.string.yes));
-        c.positiveColor(Color.parseColor(b.fabSkin));
-        c.negativeColor(Color.parseColor(b.fabSkin));
-        c.callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog materialDialog) {
-               // Toast.makeText(b.getActivity(), b.getResources().getString(R.string.deleting), Toast.LENGTH_SHORT).show();
-                 b.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(todelete);
-
+                //***************
+                b.updateList();
 
             }
 
@@ -754,24 +732,6 @@ public class Futils {
         });
         c.build().show();
     }
-
-
-
-*/
-
-
-    //********************************************************************
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -984,11 +944,19 @@ public class Futils {
         boolean b=true;
         for(File file:f.listFiles()){
             boolean c;
-            if(file.isDirectory()){c=deletedirectory(file);}
-            else {c=file.delete();}
+            if(file.isDirectory()){
+
+                c=deletedirectory(file);
+            }
+            else {
+                c=file.delete();
+            }
             if(!c)b=false;
 
-        }if(b)b=f.delete();
+        }
+
+        if(b)
+            b=f.delete();
         return b;
     }
 
@@ -1211,7 +1179,7 @@ public class Futils {
     public ArrayList<HFile> toHFileArray2(ArrayList<BaseFile> a) {
         ArrayList<HFile> b = new ArrayList<>();
         for (int i = 0; i < a.size(); i++) {
-            HFile hFile=new HFile(OpenMode.UNKNOWN,a.get(i),true);
+            HFile hFile=new HFile(OpenMode.UNKNOWN,a.get(i)/*,true)*/);
             hFile.generateMode(null);
             b.add(hFile);
         }
@@ -1339,15 +1307,14 @@ public class Futils {
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         a.positiveText(R.string.cancel);
         a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
-        a.title(R.string.lock2);
+        a.title("Locked files/folders");
         a.onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 DataUtils.clearHistory();
             }
         });
-        a.theme(appTheme.getMaterialDialogTheme());
-
+         a.theme(appTheme.getMaterialDialogTheme());
         a.autoDismiss(true);
         HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.lock_array),null,true);
         a.adapter(adapter, null);
@@ -1357,7 +1324,34 @@ public class Futils {
         x.show();
 
    }
+    public void showPasswordDialog(final Main m, AppTheme appTheme)
+    {
 
+
+        MaterialDialog.Builder l = new MaterialDialog.Builder(m.getActivity());
+        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+            }
+        });
+
+        l.theme(Theme.DARK);
+        l.title(" Enter your password ");
+        //l.toString();
+        l.positiveText(R.string.ok);
+        l.negativeText(R.string.cancel);
+        l.build().show();
+
+
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.passwordarr),null,true);
+        l.adapter(adapter, null);
+
+        MaterialDialog x= l.build();
+        adapter.updateDialog(x);
+        x.show();
+
+    }
 
     public void showHistoryDialog(final Main m, AppTheme appTheme) {
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
@@ -1383,6 +1377,22 @@ public class Futils {
         x.show();
 
     }
+
+
+    //**************************************************************************************************************************
+
+        /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : HistoryLabel window
+                    Bir sonraki değişiklik yapılan class : MainActivity.java
+                 */
+    //***************************************************************
+
+
+
     public void showLabelHistoryDialog(final Main m, AppTheme appTheme) {
         final MaterialDialog.Builder b = new MaterialDialog.Builder(m.getActivity());
         b.positiveText(R.string.cancel);
@@ -1393,7 +1403,7 @@ public class Futils {
         b.onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                DataUtils.clearHistory();
+                DataUtils.clearLabelHistory();
             }
         });
         b.theme(appTheme.getMaterialDialogTheme());
@@ -1444,7 +1454,13 @@ public class Futils {
     /*public static BaseFile[] file = BaseFile.CREATOR.newArray(DataUtils.hiddenfiles.size());
     public static ArrayList<BaseFile> list = new ArrayList<>(file.length);*/
 
+
+
+   // HistoryManager h ;
+
+   // MainActivity mAct;
     public void showTrashDialog(final Main m, final AppTheme appTheme) {
+
 
 
 
@@ -1454,12 +1470,58 @@ public class Futils {
 
 
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
-        a.positiveText("Cancel");
-
-        a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+       // a.positiveText("Cancel");
         a.negativeText("Clear");
+        a.positiveText("Restore");
+        a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+
         a.negativeColor(Color.parseColor(BaseActivity.accentSkin));
         a.title("Trash");
+
+
+        final ArrayList<HFile> liste = toHFileArray(DataUtils.getHiddenfiles());
+
+
+
+
+
+
+            a.onPositive(new MaterialDialog.SingleButtonCallback(){
+
+                @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                //showRestoreDialog(m,appTheme);
+
+
+
+                    MainActivityHelper mainAct = new MainActivityHelper();
+
+                    if(DataUtils.hiddenfiles!=null)
+                        DataUtils.clearHidden();
+
+                    if (DataUtils.trash != null) {
+                        m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.trash);
+                        DataUtils.clearTrash();
+                    }
+
+
+
+                mainAct.mkFile2(liste,m);
+
+
+                    /* for(int i=0;i< liste.size();i++)
+                    mainAct.mkFile(liste.get(i),m);*/
+
+
+
+
+
+
+            }
+        });
+
+
+
         a.onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1470,17 +1532,36 @@ public class Futils {
 
               //  m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(list);
 
+               // DataUtils.clearTrash2();
 
 
-                m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.trash);
-
-               // m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.hiddenfiles);
-                //hiddenfiles Strng arrayi olduğu için bu metotla kullanımlamıyor
+               // m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.hiddenfiles2);
 
 
 
-                DataUtils.clearTrash();
-                DataUtils.clearHidden();
+               // DataUtils.clearTrash();
+
+
+                if(DataUtils.hiddenfiles!=null) {
+                    DataUtils.clearHidden();
+
+
+
+
+                    if (DataUtils.trash != null) {
+
+                        m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.trash);
+
+
+                    }
+
+                }
+
+
+
+
+
+
 
 
             }
@@ -1491,9 +1572,12 @@ public class Futils {
         a.theme(appTheme.getMaterialDialogTheme());
 
         a.autoDismiss(true);
-        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray2(DataUtils.trash),null,true);
-        a.adapter(adapter, null);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.getHiddenfiles()),null,true);
 
+
+
+        a.adapter(adapter, null);
+        a.dividerColor(Color.BLUE);
         MaterialDialog x= a.build();
         adapter.updateDialog(x);
         x.show();
@@ -1522,6 +1606,50 @@ public class Futils {
         x.show();
 
     }
+
+
+    //****************************
+
+
+
+    public void showRestoreDialog(final Main m, AppTheme appTheme) {
+        final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
+       // a.positiveText(R.string.cancel);
+       // a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+        a.title("Files");
+        a.theme(appTheme.getMaterialDialogTheme());
+        a.autoDismiss(true);
+        HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.getHiddenfiles()),null,false);
+        a.adapter(adapter, null);
+        a.dividerColor(Color.GRAY);
+        MaterialDialog x= a.build();
+        adapter.updateDialog(x);
+        x.show();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //********************
+
+
     public boolean isAtleastKitkat(){
         return Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT;
     }

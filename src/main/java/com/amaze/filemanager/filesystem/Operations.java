@@ -8,7 +8,6 @@ import android.support.v4.provider.DocumentFile;
 
 import com.amaze.filemanager.exceptions.RootNotPermittedException;
 import com.amaze.filemanager.utils.Logger;
-import com.amaze.filemanager.utils.MainActivityHelper;
 import com.amaze.filemanager.utils.OpenMode;
 import com.amaze.filemanager.utils.RootUtils;
 
@@ -151,6 +150,7 @@ public class Operations {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
+    //mkfile 2 yaz aynı içerik / isnam
     public static void mkfile(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack)
     {
         // IS it okey ?
@@ -227,14 +227,104 @@ public class Operations {
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-//********
+    public static void mkfile2(final HFile file,final Context context,final boolean rootMode,@NonNull final ErrorCallBack errorCallBack)
+    {
+        // IS it okey ?
+        if(file==null || errorCallBack==null)return;
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                // check whether filename is valid or not
+                if (!Operations.isFileNameValidpostpre(file.getName())) {
+                    errorCallBack.invalidName(file);
+                    return null;
+                }
+
+                if(file.exists()) {
+                    errorCallBack.exists(file);
+                    return null;
+                }
+                if(file.isSmb()){
+                    try {
+                        file.getSmbFile(2000).createNewFile();
+                    } catch (SmbException e) {
+                        Logger.log(e,file.getPath(),context);
+                        errorCallBack.done(file,false);
+                        return null;
+                    }
+                    errorCallBack.done(file,file.exists());
+                    return null;
+                } else if (file.isOtgFile()) {
+
+                    // first check whether new file already exists
+                    DocumentFile fileToCreate = RootHelper.getDocumentFile(file.getPath(), context, false);
+                    if (fileToCreate!=null) errorCallBack.exists(file);
+
+                    DocumentFile parentDirectory = RootHelper.getDocumentFile(file.getParent(), context, false);
+                    if (parentDirectory.isDirectory())  {
+                        parentDirectory.createFile(file.getName().substring(file.getName().lastIndexOf(".")),
+                                file.getName());
+                        errorCallBack.done(file, true);
+                    } else errorCallBack.done(file, false);
+                    return null;
+                } else {
+                    if (file.isLocal() || file.isRoot()) {
+                        int mode = checkFolder(new File(file.getParent()), context);
+                        if (mode == 2) {
+                            errorCallBack.launchSAF(file);
+                            return null;
+                        }
+                        if (mode == 1 || mode == 0)
+                            try {
+                                FileUtil.mkfile(file.getFile(), context);
+                            } catch (IOException e) {
+                            }
+                        if (!file.exists() && rootMode) {
+                            file.setMode(OpenMode.ROOT);
+                            if (file.exists()) errorCallBack.exists(file);
+                            try {
+
+                                RootUtils.mkFile(file.getPath());
+                            } catch (RootNotPermittedException e) {
+                                Logger.log(e, file.getPath(), context);
+                            }
+                            errorCallBack.done(file, file.exists());
+                            return null;
+                        }
+                        errorCallBack.done(file, file.exists());
+                        return null;
+                    }
+                    errorCallBack.done(file, file.exists());
+
+
+                }
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi :Etiketleme işleminde "+" kullanılabilmesi için yeni isFileNameValidpostpre metodud yazıldı,boşluk kontrollü de
+                    bu metotta yapılıyor #10
+                    Tekrar aynı isimle etiketleme yapılmaması için rename için önceden kullanılan isFileNameValid kullanıldı . Ayrıca bu metot sayesinde yalnızca label
+                    özelliğine ait olan "+" karekteri yasaklandı.#11
+
+                 */
+
+
 public static void post(final String orjinalname,final HFile oldFile, final HFile newFile, final boolean rootMode,
                           final Context context, final ErrorCallBack errorCallBack){
     new AsyncTask<Void, Void, Void>() {
         @Override
         protected Void doInBackground(Void... params) {
 
-            // check whether file names for new file are valid or recursion occurs
+            // #10 , #11
             if (!Operations.isFileNameValidpostpre(newFile.getName()) ||  !Operations.isFileNameValid(orjinalname)) {
                 errorCallBack.invalidName(newFile);
                 return null;
@@ -324,8 +414,7 @@ public static void post(final String orjinalname,final HFile oldFile, final HFil
     }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 }
-
-//**************************************************************
+//**************************************************************************************
 
     public static void pre(final String orjinalname,final HFile oldFile, final HFile newFile, final boolean rootMode,
                             final Context context, final ErrorCallBack errorCallBack){
@@ -427,57 +516,23 @@ public static void post(final String orjinalname,final HFile oldFile, final HFil
 
 
 
+    //********************************************************************
+                  /*
+                    Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : Rename de MainActivityHelper.isNewDirectoryRecursive(newFile)
+                    metodu yüzünden dosyanın parenti ile aynı ismi alamıyordu.Bu metot devre dışı bırakıldı #12
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //**********************************************************************************
+                 */
     public static void rename(final HFile oldFile, final HFile newFile, final boolean rootMode,
                               final Context context, final ErrorCallBack errorCallBack){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-
-
-                /* oldfile : eski adı , newfile yeni isim  -
-
-                 kontrol  : newfile name ile parenttin adının aynı olabilmesi
-
-
-                */
-                /*if (MainActivityHelper.isNewDirectoryRecursive(newFile) || !Operations.isFileNameValid(newFile.getName()))
-
-                MainActivityHelper.isNewDirectoryRecursive(newFile) kaldırılmıştır böylelikle parentla aynı ismi alabilir
-                   check whether file names for new file are valid or recursion occurs
-                */
-
+                 // #12
                 if ( !Operations.isFileNameValid(newFile.getName())) {
                     errorCallBack.invalidName(newFile);
                     return null;

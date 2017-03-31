@@ -11,10 +11,22 @@ import java.util.List;
  */
 
 //Central data being used across activity,fragments and classes
+
+
 public class DataUtils {
 
+   /* public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
+    ,trash2 = new ArrayList<>();*/
+
+
+   public static ArrayList<BaseFile> trash = new ArrayList<>();
+
+    public static ArrayList<BaseFile> hiddenfiles2 = new ArrayList<>();
+
+
+
     public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
-    ,lock_array =new ArrayList<>();
+    ,lock_array =new ArrayList<>(),passwordarr=new ArrayList<>();
 
 
     public static ArrayList<String>  favorites = new ArrayList<>();
@@ -22,14 +34,16 @@ public class DataUtils {
 
    /* ,trash3 = new ArrayList<>();*/
 
-   public static ArrayList<BaseFile> trash = new ArrayList<>();
 
-    public static ArrayList<String> labelHistory = new ArrayList<>();
+
+
+
+    public static ArrayList<String> labelHistory = new ArrayList<>(); //#13
     //public static ArrayList<BaseFile> hiddenfiles = new ArrayList<>();
 
 
 
-   // public static ArrayList<DataPackage> trash = new ArrayList<>();
+
 
 
 
@@ -42,7 +56,13 @@ public class DataUtils {
 
 
     public static final String FAVORITES = "favorites",DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid"
-    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="Table5";
+
+    ,TRASH = "Table3" , LOCK = "Table4",LABELHISTORY="Table5",PASS="Table5";
+
+
+
+
+
 
 
 
@@ -88,9 +108,12 @@ public class DataUtils {
         // trash3 = new ArrayList<>();
 
 
+      // trash2 = new ArrayList<>();
 
-         trash = new ArrayList<>();
+
+
         lock_array = new ArrayList<>();
+        passwordarr = new ArrayList<>();
 
 
     }
@@ -149,6 +172,13 @@ public class DataUtils {
     }
 
 
+    public static void addPassword(String i)
+    {
+        passwordarr.add(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onPassAdded(i);
+    }
+
     public static void addLockFile(String i)
     {
         lock_array.add(i);
@@ -171,6 +201,18 @@ public class DataUtils {
         if(dataChangeListener!=null)
             dataChangeListener.onHiddenFileAdded(i);
     }
+//********************
+public static void addHiddenFile2(BaseFile i)
+{
+    hiddenfiles2.add(i);
+
+    if(dataChangeListener!=null)
+        dataChangeListener.onHiddenFileAdded2(i);
+}
+
+
+    //*********************
+
     public static void removeHiddenFile(String i)
     {
         hiddenfiles.remove(i);
@@ -186,22 +228,7 @@ public class DataUtils {
             dataChangeListener.onHistoryAdded(i);
     }
 
-    public static void addLabelHistory(String i)
-    {
-        labelHistory.add(i);
-        if(dataChangeListener!=null)
-            dataChangeListener.onLabelHistoryAdded(i);
-    }
 
-    public static ArrayList<String> addlabelHistory()
-    {
-        return labelHistory;
-    }
-
-    public static String  labelget(int i )
-    {
-        return labelHistory.get(i);
-    }
     public static void addFavoritesFile(String i)
     {
         favorites.add(i);
@@ -219,10 +246,10 @@ public class DataUtils {
 
     public static void addTrashFile(/*String i*/ BaseFile i)
     {
-        trash.add(i);
+        trash.add(i);// trash arrayine ekliyor
 
         if(dataChangeListener!=null)
-            dataChangeListener.onTrashAdded(i);
+            dataChangeListener.onTrashAdded(i);// trash table'ına ekliyor
     }
     //******************************
 
@@ -274,6 +301,27 @@ public class DataUtils {
         DataUtils.gridfiles = gridfiles;
     }
 
+    //********************************
+
+    public static void setTrash(ArrayList<String> trash1) {
+       BaseFile a;
+        if(trash1!=null)
+            if(DataUtils.trash==null){
+            for(int i=0;i<trash.size();i++) {
+                a = new BaseFile(trash1.get(i));
+                trash.add(a);
+
+            }
+
+           /* a= new BaseFile(trash1.get(0));
+            trash.add(a);*/
+    }
+
+    }
+
+
+    //********************************
+
     public static ArrayList<String> getListfiles() {
         return listfiles;
     }
@@ -299,8 +347,24 @@ public class DataUtils {
 
 
 
-    //********************************
-    public static void  onHistoryLabelCleared(){
+    //**************************************************************************************************************************
+
+
+              /*      Son değiştirilme tarihi : 27.03.2017
+                    Metot yazarı : Elif Aybike Aydemir
+                    İssue : #14
+
+                    Değişikliğin amacı/işlevi : labelHistory için arraylist oluşturuldu #13
+                    Pencerede clear seçeneği seçildiğinde labelhistoryinin temizlenmesi için #14
+                    LabelHistorye ekleme #15
+                    Post / pre / rename 'in diğer classlardan arraylistte erişebilmesi için #16
+
+
+
+                 */
+    //***************************************************************
+
+    public static void  onHistoryLabelCleared(){ //#14
       labelHistory=new ArrayList<>();
         if(dataChangeListener!=null)
             dataChangeListener.onLabelHistoryCleared();
@@ -308,9 +372,30 @@ public class DataUtils {
 
   }
 
+    public static void addLabelHistory(String i)
+    {//#15
+        labelHistory.add(i);
+        if(dataChangeListener!=null)
+            dataChangeListener.onLabelHistoryAdded(i);
+    }
 
+    public static ArrayList<String> addlabelHistory()
+    {//#16
+        return labelHistory;
+    }
 
-    //******************************
+    public static String  labelget(int i )
+    {//#16
+        return labelHistory.get(i);
+    }
+    public static void clearLabelHistory() {
+        //#14
+        labelHistory=new ArrayList<>();
+        if(dataChangeListener!=null)
+            dataChangeListener.onLabelHistoryCleared();
+    }
+
+    //****************************************************************************************************
 
     public static void clearHidden() {
         hiddenfiles=new ArrayList<>();
@@ -321,18 +406,12 @@ public class DataUtils {
 
 
 
-    //********************************
 
 
     public static void clearFavorites() {
         favorites=new ArrayList<>();
         if(dataChangeListener!=null)
             dataChangeListener.onFavoritesCleared();
-    }
-    public static void clearLabelHistory() {
-        labelHistory=new ArrayList<>();
-        if(dataChangeListener!=null)
-            dataChangeListener.onLabelHistoryCleared();
     }
 
     public static List<String> getStorages() {
@@ -357,6 +436,7 @@ public class DataUtils {
     public interface DataChangeListener{
         void onLockedAdded(String path);
         void onLockedRemoved(String path);
+        void onPassAdded(String path);
         void onHiddenFileAdded(String path);
         void onHiddenFileRemoved(String path);
         void onHistoryAdded(String path);
@@ -376,6 +456,10 @@ public class DataUtils {
         void onTrashCleared();
         void onLabelHistoryCleared();
 
+
+
         void onHiddenCleared();
+
+        void onHiddenFileAdded2(BaseFile i);
     }
 }

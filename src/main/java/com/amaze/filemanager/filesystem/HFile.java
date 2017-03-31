@@ -52,10 +52,10 @@ All openmode types initialy has no lock.
 
 
     //***********************************************************
-    public HFile(OpenMode mode, BaseFile path,boolean hasLocked) {
+    public HFile(OpenMode mode, BaseFile path/*,boolean hasLocked*/) {
         this.path = path.getPath();
         this.mode = mode;
-        this.hasLocked =hasLocked;
+        //this.hasLocked =hasLocked;
     }
 
     //**************************************************************

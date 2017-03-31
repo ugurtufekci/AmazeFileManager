@@ -365,6 +365,7 @@
     <string name="needsaccesssummary1">\tto grant write access to operate </string>
     <string name="smb_con">SMB Connection</string>
     <string name="smb_server">Server IP Address</string>
+
     <string name="username">Username</string>
 
     <string name="lock2">lock2</string>
@@ -590,6 +591,7 @@
     <string name="clipboard_path_copy">Path copied to clipboard</string>
     <string name="error_busybox">Busybox not found. Closing interactive shell.</string>
     <string name="service_timer">Time Elapsed</string>
+    <string name="wrongpassword">Wrong Password!</string>
     <string name="please_wait">Please Wait</string>
     <string name="restore" />
 </resources>
