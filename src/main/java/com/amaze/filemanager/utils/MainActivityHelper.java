@@ -749,6 +749,9 @@ public class MainActivityHelper {
 
             // s = path.get(i).getPath();
 
+
+if(!path.get(i).getPath().contains("Android"))
+
             Operations.mkfile(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
                 @Override
                 public void exists(final HFile file) {
@@ -776,7 +779,7 @@ public class MainActivityHelper {
                             if (toast != null) toast.cancel();
 
 
-                            // for(int i=0;i<path.size();i++)
+                             //for(int i=0;i<path.size();i++)
 
                             mainActivity.oppathe = /*path.get(i).getPath()*/file.getPath();
                             mainActivity.operation = DataUtils.NEW_FOLDER;

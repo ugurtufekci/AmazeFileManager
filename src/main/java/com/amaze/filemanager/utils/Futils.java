@@ -689,8 +689,10 @@ public class Futils {
 
                     //**************
                     if(a2.get(i).isDirectory()) {
-                        b.MAIN_ACTIVITY.delete(a2.get(i).getTitle(), a2.get(i).generateBaseFile().getPath());
+
                         dirList.add(a2.get(i).generateBaseFile());
+                        b.MAIN_ACTIVITY.delete(a2.get(i).getTitle(), a2.get(i).generateBaseFile().getPath());
+
 
                         b.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(dirList);
 
@@ -701,9 +703,10 @@ public class Futils {
 
                         // silinecek file labelHistoryde bulunuyorsa silindiği zaman labelHistory
                             // arrayinden kaldırılmalı
-                        for(int j=0;j<DataUtils.labelHistory.size();j++)
-                        if(DataUtils.labelHistory.get(j).equals(a2.get(i).generateBaseFile().getPath()))
-                            DataUtils.labelHistory.remove(j);
+                        for(int j=0;j<DataUtils.labelHistory.size();j++) {
+                            if (DataUtils.labelHistory.get(j).equals(a2.get(i).generateBaseFile().getPath()))
+                                DataUtils.labelHistory.remove(j);
+                        }
 
                         DataUtils.addTrashFile(a2.get(pos2.get(i)).generateBaseFile());
 
@@ -1165,7 +1168,7 @@ public class Futils {
         ArrayList<HFile> b = new ArrayList<>();
         for (int i = 0; i < a.size(); i++) {
 
-            HFile hFile=new HFile(OpenMode.UNKNOWN,a.get(i));
+            HFile hFile=new HFile(OpenMode.FILE,a.get(i));//UNKNOWN
             hFile.generateMode(null);
             b.add(hFile);
         }
@@ -1504,20 +1507,20 @@ public class Futils {
                 //showRestoreDialog(m,appTheme);
 
 
-
                     MainActivityHelper mainAct = new MainActivityHelper();
 
-                    if(DataUtils.hiddenfiles!=null)
+
+                    if(DataUtils.hiddenfiles!=null) {
                         DataUtils.clearHidden();
 
-                    if (DataUtils.trash != null) {
-                        m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.trash);
-                        DataUtils.clearTrash();
+                        if (DataUtils.trash != null) {
+                            m.MAIN_ACTIVITY.mainActivityHelper.deleteFiles(DataUtils.trash);
+                            DataUtils.clearTrash();
+                        }
+
+
+                        mainAct.mkFile2(liste, m);
                     }
-
-
-
-                mainAct.mkFile2(liste,m);
 
 
                     /* for(int i=0;i< liste.size();i++)
