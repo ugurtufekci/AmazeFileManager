@@ -31,6 +31,12 @@
         android:icon="@drawable/ic_action_lock21"
         app:showAsAction="always" />
     <item
+
+        android:id="@+id/password"
+        android:title="@string/password"
+        android:icon="@drawable/ic_action_password22"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/Favorites"
         android:title="@string/favorites"
         android:icon="@drawable/ic_action_favorites"

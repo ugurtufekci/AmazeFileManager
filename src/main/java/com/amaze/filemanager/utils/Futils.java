@@ -1325,30 +1325,27 @@ public class Futils {
         x.show();
 
    }
+   //girilen passwordu test amaclı gormek icin olan bölüm
     public void showPasswordDialog(final Main m, AppTheme appTheme)
     {
 
 
-        MaterialDialog.Builder l = new MaterialDialog.Builder(m.getActivity());
-        l.input("", inputpassword, false, new MaterialDialog.InputCallback() {
+        final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
+        a.positiveText(R.string.cancel);
+        a.positiveColor(Color.parseColor(BaseActivity.accentSkin));
+        a.title("Given password");
+        a.onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                DataUtils.clearHistory();
             }
         });
-
-        l.theme(Theme.DARK);
-        l.title(" Enter your password ");
-        //l.toString();
-        l.positiveText(R.string.ok);
-        l.negativeText(R.string.cancel);
-        l.build().show();
-
-
+        a.theme(appTheme.getMaterialDialogTheme());
+        a.autoDismiss(true);
         HiddenAdapter adapter = new HiddenAdapter(m.getActivity(),m, this, R.layout.bookmarkrow, toHFileArray(DataUtils.passwordarr),null,true);
-        l.adapter(adapter, null);
+        a.adapter(adapter, null);
 
-        MaterialDialog x= l.build();
+        MaterialDialog x= a.build();
         adapter.updateDialog(x);
         x.show();
 

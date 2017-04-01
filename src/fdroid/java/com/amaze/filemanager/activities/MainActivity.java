@@ -486,6 +486,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
         if (rootMode) {
 
             handlerThread = new HandlerThread("handler");
+
             handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
             shellInteractive = (new Shell.Builder()).useSU().setHandler(handler).open();

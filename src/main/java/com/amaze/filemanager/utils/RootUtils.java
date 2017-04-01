@@ -47,7 +47,7 @@ public class RootUtils {
      * @throws RootNotPermittedException
      */
     public static void chmod(String path, int octalNotation) throws RootNotPermittedException {
-
+        //locklanan dosyanın permissionlarını chmod kullanarak 000 yap unlock yaparken 777 yap
         String mountPoint = mountFileSystemRW(path);
 
         String command = "chmod %d \"%s\"";
