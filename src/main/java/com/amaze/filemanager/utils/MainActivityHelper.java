@@ -749,7 +749,13 @@ public class MainActivityHelper {
 
             // s = path.get(i).getPath();
 
-            Operations.mkfile(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
+
+
+if(!path.get(i).getPath().contains("Android"))
+
+
+            Operations.mkfile2(path.get(i), ma.getActivity(), BaseActivity.rootMode, new Operations.ErrorCallBack() {
+
                 @Override
                 public void exists(final HFile file) {
                     ma.getActivity().runOnUiThread(new Runnable() {
@@ -776,7 +782,7 @@ public class MainActivityHelper {
                             if (toast != null) toast.cancel();
 
 
-                            // for(int i=0;i<path.size();i++)
+                             //for(int i=0;i<path.size();i++)
 
                             mainActivity.oppathe = /*path.get(i).getPath()*/file.getPath();
                             mainActivity.operation = DataUtils.NEW_FOLDER;
@@ -793,13 +799,17 @@ public class MainActivityHelper {
                 }
 
                 @Override
-                public void done(HFile hFile, final boolean b) {
+                public void done(final HFile hFile, final boolean b) {
                     ma.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
                             if (b) {
+                                h.addLabelHistory(hFile.getPath());
                                 ma.updateList();
+
+
+
                             } else
                                 Toast.makeText(ma.getActivity(), ma.getString(R.string.operationunsuccesful),
                                         Toast.LENGTH_SHORT).show();

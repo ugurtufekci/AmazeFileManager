@@ -720,7 +720,18 @@ public class Main extends android.support.v4.app.Fragment {
                     }
                     return true;*/
                 case R.id.delete:
+
+                    for (int k = 0; k < plist.size(); k++) {
+
+                        if(DataUtils.favorites.contains(LIST_ELEMENTS.get(plist.get(k)).getDesc())){
+                            DataUtils.removeFavoritesFile(LIST_ELEMENTS.get(plist.get(k)).getDesc());
+                        }
+                    }
+
+
                     utils.deleteFiles(LIST_ELEMENTS, ma, plist, utilsProvider.getAppTheme());
+
+
 
 
                     return true;
@@ -948,6 +959,8 @@ public class Main extends android.support.v4.app.Fragment {
 
                         }
                     }
+
+                    ma.updateList();
 
                 default:
                     return false;
