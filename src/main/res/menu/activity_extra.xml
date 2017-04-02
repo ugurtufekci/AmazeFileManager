@@ -19,12 +19,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- <item
-          android:id="@+id/lock2"
-          android:title="@string/lock2"
-          android:icon="@drawable/ic_action_lock21"
-          app:showAsAction="always"
-          android:visible="false" /> -->
+
 
     <item
         android:id="@+id/paste"
@@ -187,9 +182,9 @@
     <item
         android:visible="true"
         app:showAsAction="ifRoom"
-        android:id="@+id/password"
-        android:title="Password"
-        android:text="Enter Your Name..."
+        android:id="@+id/passwordlist"
+        android:title="PasswordList"
+
         />
 
 

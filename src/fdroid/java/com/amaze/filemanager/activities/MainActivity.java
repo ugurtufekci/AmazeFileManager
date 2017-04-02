@@ -972,7 +972,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
 
             menu.findItem(R.id.locklist).setVisible(true);
-            menu.findItem(R.id.password).setVisible(true);
+            menu.findItem(R.id.passwordlist).setVisible(true);
 
 
 
@@ -1004,7 +1004,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
             //***************************
             menu.findItem(R.id.trash).setVisible(false);
             menu.findItem(R.id.locklist).setVisible(false);
-            menu.findItem(R.id.password).setVisible(false);
+            menu.findItem(R.id.passwordlist).setVisible(false);
 
             menu.findItem(R.id.extract).setVisible(false);
             if (f.contains("ProcessViewer")) menu.findItem(R.id.item10).setVisible(false);
@@ -1041,7 +1041,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
 
             //*******************************
             menu.findItem(R.id.trash).setVisible(false);
-            menu.findItem(R.id.password).setVisible(false);
+            menu.findItem(R.id.passwordlist).setVisible(false);
             menu.findItem(R.id.locklist).setVisible(false);
             menu.findItem(R.id.item10).setVisible(false);
             menu.findItem(R.id.hiddenitems).setVisible(false);
@@ -1148,7 +1148,7 @@ public class MainActivity extends BaseActivity implements OnRequestPermissionsRe
                 if (ma != null)
                     utils.showLockDialog(ma, getAppTheme());
                 break;
-            case R.id.password:
+            case R.id.passwordlist:
                 if (ma != null)
                     utils.showPasswordDialog(ma, getAppTheme());
                 break;

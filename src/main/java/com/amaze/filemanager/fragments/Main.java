@@ -68,6 +68,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.amaze.filemanager.R;
@@ -108,7 +109,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
+import android.widget.EditText;
 
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
@@ -655,7 +656,7 @@ public class Main extends android.support.v4.app.Fragment {
         // called when the user selects a contextual menu item
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             computeScroll();
-            ArrayList<Integer> plist = adapter.getCheckedItemPositions();
+           final ArrayList<Integer> plist = adapter.getCheckedItemPositions();
 
             switch (item.getItemId()) {
                 case R.id.openmulti:
@@ -804,98 +805,140 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
 
                 case R.id.password: // password ekleme
-
-
-                        Toast.makeText(getActivity(),"Creating Password",
-                                Toast.LENGTH_LONG).show();
-
                     MaterialDialog.Builder cpass = new MaterialDialog.Builder(getActivity());
-                    cpass.input("", inputPassword, false, new MaterialDialog.InputCallback() {
+
+
+                    cpass.input("",inputPassword, false, new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
                         }
                     });
-                    DataUtils.addPassword(inputPassword);// girilen password array'e atıldı.
-
                     cpass.theme(Theme.DARK);
                     cpass.title(" Enter your password ");
                     cpass.positiveText(R.string.ok);
                     cpass.negativeText(R.string.cancel);
                     cpass.build().show();
+                    cpass.onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+                           if(materialDialog.getInputEditText().getText().toString().length()<6)
+                           {
+                               Toast.makeText(getActivity(),"Password must contain at least 6 characters",
+                                       Toast.LENGTH_LONG).show();
+                           }
+                           else
+                           {
+                               inputPassword = materialDialog.getInputEditText().getText().toString();
+                               DataUtils.addPassword(inputPassword);    //girilen password array'e atıldı
+
+                               Toast.makeText(getActivity(),"Creating Password",
+                                       Toast.LENGTH_LONG).show();
+
+                           }
+                        }
+
+                    });
+
+
 
                     return true;
 
                 case R.id.lock2:
                      //dosya locklanırken.
-
+                    final MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
                     if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc()))
                     {
                         try
                         {
 
-                        DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
-                            Toast.makeText(getActivity(), getResources().getString(R.string.locking),
+                         DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+                                Toast.makeText(getActivity(), getResources().getString(R.string.locking),
                                     Toast.LENGTH_LONG).show();
-                        //path,octalNotation
-                        RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
+                         //path,octalNotation
+                          RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
 
-                        }catch (RootNotPermittedException e){
-                            e.printStackTrace();
-                            Log.e("Lock permission","exceptions"+e);
-                        }
+                         }catch (RootNotPermittedException e){
+                               e.printStackTrace();
+                                Log.e("Lock permission","exceptions"+e);
+                         }
                     }
 
                     else //dosya unlocklanırken
                     {
-                        //password yoksa önce password olusturulması gerektıgıyle ılgılı mesaj basılacak.Kullanıcı ilk önce gidip password olusturacak
+                        //password yoksa önce password olusturulması gerektıgıyle ılgılı mesaj basılacak.
+                        // Kullanıcı ilk önce gidip password olusturacak
                         if((DataUtils.passwordarr.isEmpty()))
+                        // if(checkPassword.equals(""))
                         {
                             Toast.makeText(getActivity(), "Create Password before unlocking",
                                     Toast.LENGTH_LONG).show();
-                            DataUtils.addPassword(LIST_ELEMENTS.get(plist.get(0)).getDesc());
-
-                        }//passwordun oldugu duruma geçiş
-                        else
-                        {
-                            if(!(DataUtils.passwordarr.get(0).equals(checkPassword)))   //unlock yapılırken girilen password yanlıs ise.
-                            {
-                                Toast.makeText(getActivity(), getResources().getString(R.string.wrongpassword),
-                                        Toast.LENGTH_LONG).show();
-                            }
-                            else   //unlock islemi yapılırken girilen password dogru ise dosya acılacak.
-                            {
-                                final MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
-                                l.input("", checkPassword, false, new MaterialDialog.InputCallback() {
-                                    @Override
-                                    public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-
-                                    }
-                                });
-                                try
-                                {
-                                    RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
-                                    // RootUtils.parsePermission("0rwxrwxrwx");
-                                }catch (RootNotPermittedException e){
-                                    e.printStackTrace();
-                                }
-                                l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-                                l.title(getResources().getString(R.string.unlock));
-
-                                l.positiveText(R.string.unlock);
-                                l.negativeText(R.string.cancel);
-                                int color = Color.parseColor(fabSkin);
-                                l.positiveColor(color).negativeColor(color).widgetColor(color);
-                                l.build().show();
-
-
-                                Toast.makeText(getActivity(), "UNLOCKING",
-                                        Toast.LENGTH_LONG).show();
-                                DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
-                            }
                         }
+                        else
+                        {   //password varsa
+
+                            l.input("", checkPassword, false, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+
+                                }
+                            });
+
+
+                            l.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+                            l.title(getResources().getString(R.string.unlock));
+
+                            l.positiveText(R.string.unlock);
+                            l.negativeText(R.string.cancel);
+                            int color = Color.parseColor(fabSkin);
+                            l.positiveColor(color).negativeColor(color).widgetColor(color);
+                            l.build().show();
+
+
+                            l.onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+
+                                    checkPassword = materialDialog.getInputEditText().getText().toString(); //inputu checkpassword'e attım
+                                   // if(!(inputPassword.equals(checkPassword)))
+                                     if (!(DataUtils.passwordarr.get(0).equals(checkPassword)))
+                                     {
+                                         Toast.makeText(getActivity(), "WRONG PASSWORD",
+                                                 Toast.LENGTH_LONG).show();
+                                     }
+                                     //sifre dogru dosyanın permissionını degistir ve locklistten cıkar
+                                     //else if(inputPassword.equals(checkPassword))
+                                     else if (DataUtils.passwordarr.get(0).equals(checkPassword))
+                                    {
+                                        DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
+
+                                        try {
+                                            RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
+                                            // RootUtils.parsePermission("0rwxrwxrwx");
+                                        } catch (RootNotPermittedException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        Toast.makeText(getActivity(), "UNLOCKING",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                            });
+
+                            /*
+                             while(DataUtils.passwordarr.listIterator().hasNext()==true)
+                            {
+                             inputPassword=DataUtils.passwordarr.listIterator().next().toString();
+
+                            }
+                            */
+
+                        }//password varsa end
 
                     }
+
+
 
                     return true;
 
