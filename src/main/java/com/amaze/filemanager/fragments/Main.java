@@ -105,6 +105,8 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -810,7 +812,7 @@ public class Main extends android.support.v4.app.Fragment {
                     MaterialDialog.Builder cpass = new MaterialDialog.Builder(getActivity());
 
 
-                    cpass.input("",inputPassword, false, new MaterialDialog.InputCallback() {
+                    cpass.input("","******", false, new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
@@ -832,7 +834,10 @@ public class Main extends android.support.v4.app.Fragment {
                            else if(DataUtils.passwordarr.isEmpty())
                            {
                                inputPassword = materialDialog.getInputEditText().getText().toString();
-                               DataUtils.addPassword(inputPassword);    //girilen password array'e atıldı
+
+
+                             // inputPassword =DataUtils.md5(materialDialog.getInputEditText().getText().toString());
+                               DataUtils.addPassword(inputPassword);        //girilen password array'e atıldı
 
                                Toast.makeText(getActivity(),"Creating Password",
                                        Toast.LENGTH_LONG).show();
@@ -841,6 +846,8 @@ public class Main extends android.support.v4.app.Fragment {
                            else if(!(DataUtils.passwordarr.isEmpty())) //önceki passwordu degistirme durumu
                            {
                                inputPassword = materialDialog.getInputEditText().getText().toString();
+
+                              // inputPassword = DataUtils.md5(materialDialog.getInputEditText().getText().toString());
                                DataUtils.addPassword(inputPassword);
                                Toast.makeText(getActivity(),"Changing Password",
                                        Toast.LENGTH_LONG).show();
@@ -882,6 +889,7 @@ public class Main extends android.support.v4.app.Fragment {
                     {
                         //password yoksa önce password olusturulması gerektıgıyle ılgılı mesaj basılacak.
                         // Kullanıcı ilk önce gidip password olusturacak
+
                         if((DataUtils.passwordarr.isEmpty()))
                         // if(checkPassword.equals(""))
                         {
@@ -891,7 +899,7 @@ public class Main extends android.support.v4.app.Fragment {
                         else
                         {   //password varsa
 
-                            l.input("", checkPassword, false, new MaterialDialog.InputCallback() {
+                            l.input("", "", false, new MaterialDialog.InputCallback() {
                                 @Override
                                 public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
 
@@ -913,17 +921,23 @@ public class Main extends android.support.v4.app.Fragment {
                                 @Override
                                 public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
 
+                                  //  checkPassword = DataUtils.md5(materialDialog.getInputEditText().getText().toString());
                                     checkPassword = materialDialog.getInputEditText().getText().toString(); //inputu checkpassword'e attım
-                                   // if(!(inputPassword.equals(checkPassword)))
-                                     if (!(DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1).equals(checkPassword)))
+
+
+                                    //arrayin son indexindeki string'in (passwordlist) md5 ile unlock yapılırken ki girilen passwordun md5'i karşılastırıldı.
+                                    //eger farklıysa yanlıs girilmiş demektir.
+                                    // if (!(DataUtils.md5(DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1)).equals(checkPassword)))
+                                    if(!(DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1)).equals(checkPassword))
                                      {
                                          Toast.makeText(getActivity(), "WRONG PASSWORD",
                                                  Toast.LENGTH_LONG).show();
                                      }
                                      //sifre dogru dosyanın permissionını degistir ve locklistten cıkar
-                                     //else if(inputPassword.equals(checkPassword))
-
-                                     else if (DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1).equals(checkPassword))
+                                    ////arrayin son indexindeki string'in (password) md5 ile unlock yapılırken ki girilen passwordun md5'i karşılastırıldı.
+                                     //eger aynı ise unlock islemi yapılır.
+                                    // else if (DataUtils.md5(DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1)).equals(checkPassword))
+                                    else if (DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1).equals(checkPassword))
                                     {
                                         DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
 
@@ -1980,4 +1994,7 @@ public class Main extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
+
+
 }

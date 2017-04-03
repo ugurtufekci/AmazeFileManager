@@ -6,6 +6,13 @@ import com.amaze.filemanager.ui.drawer.Item;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import android.util.Base64;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 /**
  * Created by arpitkh996 on 20-01-2016.
  */
@@ -26,7 +33,9 @@ public class DataUtils {
 
 
     public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>()
-    ,lock_array =new ArrayList<>(),passwordarr=new ArrayList<>();
+    ,lock_array =new ArrayList<>();
+
+    public static ArrayList<String> passwordarr =new ArrayList<>();
 
 
     public static ArrayList<String>  favorites = new ArrayList<>();
@@ -174,6 +183,7 @@ public class DataUtils {
 
     public static void addPassword(String i)
     {
+      //  passwordarr.add(md5(i));
         passwordarr.add(i);
         if(dataChangeListener!=null)
             dataChangeListener.onPassAdded(i);
@@ -461,5 +471,33 @@ public static void addHiddenFile2(BaseFile i)
         void onHiddenCleared();
 
         void onHiddenFileAdded2(BaseFile i);
+     }
+
+
+    public static final String md5(final String s) {
+        final String MD5 =  "MD5";
+
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
+
 }
