@@ -108,6 +108,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import android.widget.EditText;
 
@@ -805,6 +806,7 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
 
                 case R.id.password: // password ekleme
+
                     MaterialDialog.Builder cpass = new MaterialDialog.Builder(getActivity());
 
 
@@ -827,7 +829,7 @@ public class Main extends android.support.v4.app.Fragment {
                                Toast.makeText(getActivity(),"Password must contain at least 6 characters",
                                        Toast.LENGTH_LONG).show();
                            }
-                           else
+                           else if(DataUtils.passwordarr.isEmpty())
                            {
                                inputPassword = materialDialog.getInputEditText().getText().toString();
                                DataUtils.addPassword(inputPassword);    //girilen password array'e atıldı
@@ -836,6 +838,14 @@ public class Main extends android.support.v4.app.Fragment {
                                        Toast.LENGTH_LONG).show();
 
                            }
+                           else if(!(DataUtils.passwordarr.isEmpty())) //önceki passwordu degistirme durumu
+                           {
+                               inputPassword = materialDialog.getInputEditText().getText().toString();
+                               DataUtils.addPassword(inputPassword);
+                               Toast.makeText(getActivity(),"Changing Password",
+                                       Toast.LENGTH_LONG).show();
+                           }
+
                         }
 
                     });
@@ -855,13 +865,17 @@ public class Main extends android.support.v4.app.Fragment {
                          DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
                                 Toast.makeText(getActivity(), getResources().getString(R.string.locking),
                                     Toast.LENGTH_LONG).show();
-                         //path,octalNotation
-                          RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
+                         //path,octalNotatio
+                             RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
+                          //  Runtime.getRuntime().exec("chmod -R 222 " + LIST_ELEMENTS.get(plist.get(0)).getDesc());
 
                          }catch (RootNotPermittedException e){
                                e.printStackTrace();
                                 Log.e("Lock permission","exceptions"+e);
                          }
+                         /*catch (Exception e){
+                            e.printStackTrace();
+                        }*/
                     }
 
                     else //dosya unlocklanırken
@@ -901,14 +915,15 @@ public class Main extends android.support.v4.app.Fragment {
 
                                     checkPassword = materialDialog.getInputEditText().getText().toString(); //inputu checkpassword'e attım
                                    // if(!(inputPassword.equals(checkPassword)))
-                                     if (!(DataUtils.passwordarr.get(0).equals(checkPassword)))
+                                     if (!(DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1).equals(checkPassword)))
                                      {
                                          Toast.makeText(getActivity(), "WRONG PASSWORD",
                                                  Toast.LENGTH_LONG).show();
                                      }
                                      //sifre dogru dosyanın permissionını degistir ve locklistten cıkar
                                      //else if(inputPassword.equals(checkPassword))
-                                     else if (DataUtils.passwordarr.get(0).equals(checkPassword))
+
+                                     else if (DataUtils.passwordarr.get(DataUtils.passwordarr.size()-1).equals(checkPassword))
                                     {
                                         DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
 
