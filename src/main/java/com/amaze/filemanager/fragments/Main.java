@@ -866,20 +866,20 @@ public class Main extends android.support.v4.app.Fragment {
                     final MaterialDialog.Builder l = new MaterialDialog.Builder(getActivity());
                     if(!DataUtils.lock_array.contains(LIST_ELEMENTS.get(plist.get(0)).getDesc()))
                     {
-                        try
-                        {
+                       //try
+                       //{
 
                          DataUtils.addLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
                                 Toast.makeText(getActivity(), getResources().getString(R.string.locking),
                                     Toast.LENGTH_LONG).show();
                          //path,octalNotatio
-                             RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
+                            // RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
                           //  Runtime.getRuntime().exec("chmod -R 222 " + LIST_ELEMENTS.get(plist.get(0)).getDesc());
 
-                         }catch (RootNotPermittedException e){
+                       /*  }catch (RootNotPermittedException e){
                                e.printStackTrace();
                                 Log.e("Lock permission","exceptions"+e);
-                         }
+                         }*/
                          /*catch (Exception e){
                             e.printStackTrace();
                         }*/
@@ -941,12 +941,12 @@ public class Main extends android.support.v4.app.Fragment {
                                     {
                                         DataUtils.removeLockFile(LIST_ELEMENTS.get(plist.get(0)).getDesc());
 
-                                        try {
+                                      /*  try {
                                             RootUtils.chmod(LIST_ELEMENTS.get(plist.get(0)).getDesc(), 000);
                                             // RootUtils.parsePermission("0rwxrwxrwx");
                                         } catch (RootNotPermittedException e) {
                                             e.printStackTrace();
-                                        }
+                                        }*/
 
                                         Toast.makeText(getActivity(), "UNLOCKING",
                                                 Toast.LENGTH_LONG).show();

@@ -474,7 +474,7 @@ public static void addHiddenFile2(BaseFile i)
      }
 
 
-    public static final String md5(final String s) {
+   /* public static final String md5(final String s) {
         final String MD5 =  "MD5";
 
         try {
@@ -498,6 +498,6 @@ public static void addHiddenFile2(BaseFile i)
             e.printStackTrace();
         }
         return "";
-    }
+    }*/
 
 }
