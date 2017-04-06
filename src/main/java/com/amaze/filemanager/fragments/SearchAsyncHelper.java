@@ -151,8 +151,6 @@ public class SearchAsyncHelper extends Fragment {
         private void search(HFile file, String query) {
             query=query.trim();
             String filename="";
-            if(file.getName().contains("."))
-             filename=file.getName().substring(0,file.getName().indexOf('.'));
 
 
             /*
@@ -183,6 +181,8 @@ public class SearchAsyncHelper extends Fragment {
                     if (!isCancelled())
 
                         for (BaseFile x : f) {
+                            if(x.getName().contains("."))
+                                filename=x.getName().substring(0,x.getName().indexOf('.'));
                             if (!isCancelled()) {
                                 if (x.isDirectory()) {
 
@@ -258,6 +258,8 @@ public class SearchAsyncHelper extends Fragment {
                     if (!isCancelled())
 
                         for (BaseFile x : f) {
+                            if(x.getName().contains("."))
+                                filename=x.getName().substring(0,x.getName().indexOf('.'));
                             if (!isCancelled()) {
                                 if (x.isDirectory()) {
 
