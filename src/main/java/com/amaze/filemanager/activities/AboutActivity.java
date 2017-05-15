@@ -38,7 +38,7 @@ import java.util.Random;
 //first commit AYBİKEAYDEMİR...
 //first commit ugurtufekci...
 
-
+//asdfghjlkljhgfdsa
 public class AboutActivity extends BasicActivity implements View.OnClickListener {
 
     private static final int HEADER_HEIGHT = 1024;
